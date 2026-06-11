@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FITZONE | Documentation Technique Officielle</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #0a0a0a;
+            --bg-card: #141414;
+            --accent-red: #dc2626;
+            --accent-red-hover: #ef4444;
+            --text-main: #ffffff;
+            --text-muted: #a1a1aa;
+            --border-soft: #262626;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        /* Optimization for PDF */
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        .page-container {
+            width: 210mm;
+            min-height: 297mm;
+            margin: 0 auto;
+            padding: 20mm;
+            background-color: var(--bg-deep);
+            position: relative;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--accent-red);
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-family: 'Oswald', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .logo span {
+            color: var(--accent-red);
+        }
+
+        .doc-type {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            background: var(--bg-card);
+            padding: 5px 15px;
+            border-radius: 20px;
+            border: 1px solid var(--border-soft);
+        }
+
+        h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 36px;
+            text-transform: uppercase;
+            margin: 0 0 10px 0;
+        }
+
+        h2 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 24px;
+            color: var(--accent-red);
+            text-transform: uppercase;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h2::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: var(--border-soft);
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-soft);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            page-break-inside: avoid;
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title::before {
+            content: "";
+            width: 3px;
+            height: 15px;
+            background: var(--accent-red);
+            display: inline-block;
+        }
+
+        /* Tables matching Fitzone style */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th {
+            text-align: left;
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            padding: 10px 15px;
+            border-bottom: 1px solid var(--border-soft);
+        }
+
+        td {
+            padding: 12px 15px;
+            font-size: 13px;
+            border-bottom: 1px solid var(--border-soft);
+        }
+
+        .status-badge {
+            background: rgba(220, 38, 38, 0.1);
+            color: var(--accent-red);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        /* Mermaid Wrapper */
+        .diagram-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+        }
+
+        .mermaid {
+            background: transparent !important;
+        }
+
+        /* PDF specific fixes */
+        @media print {
+            body {
+                background-color: var(--bg-deep) !important;
+            }
+            .page-container {
+                width: 100%;
+                margin: 0;
+                padding: 15mm;
+                box-shadow: none;
+            }
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <header>
+            <div class="logo">FIT<span>ZONE</span></div>
+            <div class="doc-type">Rapport Technique Officiel</div>
+        </header>
+
+        <section>
+            <h1>Spécifications <span>Système</span></h1>
+            <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 30px;">
+                Documentation détaillée des flux, de l'architecture et des structures de données de la plateforme FITZONE.
+            </p>
+
+            <h2>01. Cas d'Utilisation</h2>
+            <div class="card">
+                <div class="card-title">Mappage des Fonctionnalités</div>
+                <div class="diagram-wrapper">
+                    <div class="mermaid">
+                    graph LR
+                        subgraph SYSTEME_FITZONE [FITZONE CORE ENGINE]
+                            direction TB
+                            UC1((S'AUTHENTIFIER))
+                            UC2((GÉRER PROFIL))
+                            UC3((COURS & PLANNING))
+                            UC4((RÉSERVATIONS))
+                            UC5((PAIEMENTS))
+                            UC6((VISITES))
+                            
+                            UC7((GESTION MEMBRES))
+                            UC8((CONFIG COURS))
+                            UC9((GESTION SALLES))
+                            UC10((SUIVI REVENUS))
+                            
+                            style UC1 fill:#141414,stroke:#dc2626,stroke-width:2px,color:#fff
+                            style UC2 fill:#141414,stroke:#dc2626,stroke-width:2px,color:#fff
+                            style UC3 fill:#141414,stroke:#dc2626,stroke-width:2px,color:#fff
+                            style UC4 fill:#141414,stroke:#dc2626,stroke-width:2px,color:#fff
+                            style UC5 fill:#141414,stroke:#dc2626,stroke-width:2px,color:#fff
+                            style UC6 fill:#141414,stroke:#dc2626,stroke-width:2px,color:#fff
+                            
+                            style UC7 fill:#dc2626,stroke:#fff,stroke-width:1px,color:#fff
+                            style UC8 fill:#dc2626,stroke:#fff,stroke-width:1px,color:#fff
+                            style UC9 fill:#dc2626,stroke:#fff,stroke-width:1px,color:#fff
+                            style UC10 fill:#dc2626,stroke:#fff,stroke-width:1px,color:#fff
+                        end
+
+                        Abonne((MEMBRE))
+                        Admin((ADMIN))
+
+                        Abonne --- UC1
+                        Abonne --- UC2
+                        Abonne --- UC3
+                        Abonne --- UC4
+                        Abonne --- UC5
+
+                        Admin --- UC1
+                        Admin --- UC7
+                        Admin --- UC8
+                        Admin --- UC9
+                        Admin --- UC10
+
+                        style Abonne fill:#262626,stroke:#dc2626,stroke-width:3px,color:#fff
+                        style Admin fill:#dc2626,stroke:#fff,stroke-width:2px,color:#fff
+                    </div>
+                </div>
+            </div>
+
+            <h2>02. Architecture Classes</h2>
+            <div class="card">
+                <div class="card-title">Diagramme de Classes</div>
+                <div class="diagram-wrapper">
+                    <div class="mermaid">
+                    classDiagram
+                        direction LR
+                        class User {
+                            +int id
+                            +string email
+                            +string role
+                            +auth()
+                        }
+                        class Cours {
+                            +int id
+                            +string titre
+                            +datetime date
+                        }
+                        class Salle {
+                            +int id
+                            +int capacite
+                        }
+                        class Abonnement {
+                            +int id
+                            +string statut
+                        }
+                        
+                        User "1" --> "*" Abonnement
+                        User "1" --> "*" Cours
+                        Cours "*" --> "1" Salle
+                        
+                        style User fill:#141414,stroke:#dc2626,color:#fff
+                        style Cours fill:#141414,stroke:#dc2626,color:#fff
+                        style Salle fill:#141414,stroke:#dc2626,color:#fff
+                        style Abonnement fill:#141414,stroke:#dc2626,color:#fff
+                    </div>
+                </div>
+            </div>
+
+            <h2>03. Flux de Réservation</h2>
+            <div class="card" style="padding: 40px 20px;">
+                <div class="card-title">Séquence Interactive (Large View)</div>
+                <div class="diagram-wrapper" style="min-height: 500px; transform: scale(1.1); transform-origin: center top;">
+                    <div class="mermaid">
+                    sequenceDiagram
+                        autonumber
+                        participant M as 👤 MEMBRE
+                        participant F as 💻 FRONTEND
+                        participant B as ⚙️ BACKEND
+                        participant D as 🗄️ DATABASE
+                        
+                        M->>F: Sélection cours
+                        F->>B: Requête (Token JWT)
+                        B->>D: Verif Places (SQL)
+                        D-->>B: OK
+                        B->>D: Enregistrer (INSERT)
+                        B-->>F: Succès (JSON)
+                        F-->>M: Notification Push
+                    </div>
+                </div>
+            </div>
+
+            <h2>04. Dictionnaire de Données</h2>
+            <div class="card">
+                <div class="card-title">Modèle Logique de Données (MLD)</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Table</th>
+                            <th>Attributs Clés</th>
+                            <th>Type / Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>users</strong></td><td><strong>id</strong>, email, role</td><td><span class="status-badge">Primary</span></td></tr>
+                        <tr><td><strong>salles</strong></td><td><strong>id</strong>, nom, capacite</td><td><span class="status-badge">Primary</span></td></tr>
+                        <tr><td><strong>cours</strong></td><td><strong>id</strong>, <strong>salle_id</strong></td><td><span class="status-badge">FK Assigned</span></td></tr>
+                        <tr><td><strong>abonnements</strong></td><td><strong>id</strong>, <strong>user_id</strong></td><td><span class="status-badge">FK Linked</span></td></tr>
+                        <tr><td><strong>paiements</strong></td><td><strong>id</strong>, montant</td><td><span class="status-badge">Financial</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#dc2626',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#fff',
+                lineColor: '#52525b',
+                secondaryColor: '#141414',
+                tertiaryColor: '#141414',
+                mainBkg: '#141414',
+                nodeBorder: '#dc2626'
+            }
+        });
+    </script>
+</body>
+</html>
