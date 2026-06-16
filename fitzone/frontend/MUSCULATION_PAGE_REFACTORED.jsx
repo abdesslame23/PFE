@@ -1,13 +1,5 @@
 /**
- * MusculationPage.jsx - NOUVELLE VERSION avec exerciseGifs.js
- * 
- * À utiliser une fois que les GIFs sont complétés dans src/data/exerciseGifs.js
- * 
- * Différences:
- * - Utilise la base de données centralisée exercisesDatabase
- * - URLs gérées au même endroit
- * - Plus facile à mettre à jour
- * - Séparation concerns (données vs présentation)
+ 
  */
 
 import React, { useState } from 'react';
@@ -56,7 +48,7 @@ function convertToMuscles() {
     nom: muscle,
     icon: iconsMap[muscle],
     zone: zonesMap[muscle],
-    gif: grouped[muscle]?.[0]?.gif || '', // Premier exercice comme représentant du groupe
+    gif: grouped[muscle]?.[0]?.gif || '', 
     exercices: grouped[muscle] || []
   }));
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\CoursController;
 use App\Http\Controllers\Api\AbonneController;
 use App\Http\Controllers\Api\SalleController;
 use App\Http\Controllers\Api\PaiementController;
+use App\Http\Controllers\Api\PointageController;
 
 Route::get('/', function () {
     return response()->json(['message' => 'Backend API en marche']);
@@ -31,7 +32,7 @@ Route::middleware('auth:api')->group(function () {
         Route::put('profile',         [AuthController::class, 'updateProfile']);
     });
 
-    // Paiements (abonné = les siens, admin = tous)
+    // Paiements (abonne = les siens, admin = tous)
     Route::prefix('paiements')->group(function () {
         Route::get('/',           [PaiementController::class, 'index']);
         Route::get('recap',       [PaiementController::class, 'recapAnnuel']);
@@ -65,5 +66,11 @@ Route::middleware('auth:api')->group(function () {
         Route::put('abonnes/{id}',           [AbonneController::class, 'update']);
         Route::delete('abonnes/{id}',        [AbonneController::class, 'destroy']);
         Route::post('abonnes/{id}/visite',   [AbonneController::class, 'ajouterVisite']);
+
+        Route::post('pointage/valider',     [PointageController::class, 'validerCode']);
+        Route::get('pointage/aujourd-hui',  [PointageController::class, 'pointagesDuJour']);
     });
+
+    // Code abonné
+      Route::get('pointage/mon-code', [PointageController::class, 'monCode']);
 });

@@ -1,13 +1,5 @@
 /**
- * 🧪 TEST RAPIDE DES GIFs
- * 
- * À utiliser dans la console navigateur (F12) pour valider les URLs
- * 
- * Usage:
- * 1. Ouvrir https://tenor.com/ ou n'importe quelle page
- * 2. F12 pour ouvrir la console
- * 3. Copier-coller ce script
- * 4. Vérifier les résultats ✅/❌
+ 
  */
 
 console.log('🔍 Test des URLs des exercices FitZone...\n');

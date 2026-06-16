@@ -3,12 +3,17 @@ import { abonneService, coursService, salleService, paiementService } from '../.
 import { Spinner, Modal, ConfirmDialog, PageHeader } from '../../components/UI';
 import { useToast } from '../../components/UI';
 import { useNavigate } from 'react-router-dom';
+import api from '../../services/api';
 
 export default function AdminPage() {
   const navigate = useNavigate();
   const [tab, setTab] = useState('abonnes');
 
   const tabs = [
+    
+  { id:'pointage',  label:'Pointage',  icon:'bi-123' },  
+  
+  
     { id:'abonnes',   label:'Abonnés',    icon:'bi-people' },
     { id:'cours',     label:'Cours',       icon:'bi-calendar-event' },
     { id:'salles',    label:'Salles',      icon:'bi-building' },
@@ -36,10 +41,219 @@ export default function AdminPage() {
       </aside>
 
       <main className="fz-main">
+        {tab === 'pointage' && <PointageTab />}
         {tab === 'abonnes'   && <AbonnesTab />}
         {tab === 'cours'     && <CoursTab />}
         {tab === 'salles'    && <SallesTab />}
       </main>
+    </div>
+  );
+}
+
+function PointageTab() {
+  const [code, setCode]               = useState('');
+  const [resultat, setResultat]       = useState(null);
+  const [loading, setLoading]         = useState(false);
+  const [visitesDuJour, setVisitesDuJour] = useState(null);
+  const [loadingJour, setLoadingJour] = useState(true);
+  const { show } = useToast();
+
+  const chargerJour = () => {
+    setLoadingJour(true);
+    api.get('/pointage/aujourd-hui')
+      .then(r => setVisitesDuJour(r.data))
+      .finally(() => setLoadingJour(false));
+  };
+
+  useEffect(() => { chargerJour(); }, []);
+
+  const valider = async () => {
+    if (!code.trim()) return;
+    setLoading(true);
+    setResultat(null);
+    try {
+      const res = await api.post('/pointage/valider', { code: code.trim() });
+      setResultat({ ...res.data, success: true });
+      if (!res.data.deja_pointe) {
+        show(`✓ Entrée validée — ${res.data.user?.nom}`, 'success');
+        chargerJour();
+      } else {
+        show(`⚠ ${res.data.user?.nom} déjà pointé aujourd'hui`, 'info');
+      }
+    } catch (e) {
+      setResultat({ message: e.response?.data?.message || 'Code invalide', success: false });
+      show('Code invalide', 'error');
+    } finally {
+      setLoading(false);
+      setCode('');
+    }
+  };
+
+  return (
+    <div>
+      <PageHeader eyebrow="Administration" title="Système de" accent="Pointage" />
+
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:20,padding:'24px 28px'}}>
+
+        {/* Colonne gauche — saisie code */}
+        <div className="fz-card" style={{padding:28,textAlign:'center'}}>
+          <div style={{
+            width:64,height:64,borderRadius:'50%',margin:'0 auto 16px',
+            background:'rgba(192,57,43,.12)',border:'2px solid var(--red)',
+            display:'flex',alignItems:'center',justifyContent:'center'
+          }}>
+            <i className="bi bi-123" style={{fontSize:28,color:'var(--red)'}}></i>
+          </div>
+
+          <div style={{fontFamily:'var(--font-heading)',fontSize:20,fontWeight:700,marginBottom:4}}>
+            Valider une entrée
+          </div>
+          <div style={{fontSize:12,color:'var(--text-muted)',marginBottom:24}}>
+            Tapez le code à 6 chiffres de l'abonné
+          </div>
+
+          <input
+            className="fz-input"
+            value={code}
+            onChange={e => setCode(e.target.value.replace(/\D/g,'').slice(0,6))}
+            onKeyDown={e => e.key === 'Enter' && valider()}
+            placeholder="_ _ _ _ _ _"
+            maxLength={6}
+            style={{
+              fontSize:32,fontWeight:700,letterSpacing:12,
+              textAlign:'center',marginBottom:16,fontFamily:'monospace',
+              padding:'14px'
+            }}
+            autoFocus
+          />
+
+          <button
+            className="fz-btn primary"
+            onClick={valider}
+            disabled={loading || code.length !== 6}
+            style={{width:'100%',justifyContent:'center',padding:'12px',fontSize:13}}
+          >
+            {loading
+              ? <><span className="spinner-border spinner-border-sm me-2"></span>Vérification...</>
+              : <><i className="bi bi-check2-circle me-2"></i>Valider l'entrée</>
+            }
+          </button>
+
+          {/* Résultat */}
+          {resultat && (
+            <div style={{
+              marginTop:20,borderRadius:12,padding:20,
+              background: resultat.success && !resultat.deja_pointe
+                ? 'rgba(39,174,96,.1)'
+                : resultat.deja_pointe
+                ? 'rgba(230,126,34,.1)'
+                : 'rgba(192,57,43,.1)',
+              border: `1px solid ${
+                resultat.success && !resultat.deja_pointe
+                  ? 'var(--green)'
+                  : resultat.deja_pointe ? 'var(--orange)' : 'var(--red)'
+              }`,
+            }}>
+              {resultat.success ? (
+                <>
+                  <i className={`bi ${resultat.deja_pointe ? 'bi-exclamation-triangle' : 'bi-check-circle-fill'}`}
+                    style={{fontSize:32,color:resultat.deja_pointe?'var(--orange)':'var(--green)',display:'block',marginBottom:8}}></i>
+                  <div style={{fontFamily:'var(--font-heading)',fontSize:18,fontWeight:700,marginBottom:4,
+                    color:resultat.deja_pointe?'var(--orange)':'var(--green)'}}>
+                    {resultat.deja_pointe ? 'Déjà pointé aujourd\'hui' : 'Entrée validée !'}
+                  </div>
+                  <div style={{fontSize:15,fontWeight:600}}>{resultat.user?.nom}</div>
+                  {!resultat.deja_pointe && (
+                    <div style={{fontSize:12,color:'var(--text-muted)',marginTop:4}}>
+                      <i className="bi bi-door-open me-1"></i>
+                      {resultat.user?.nb_visites} visite{resultat.user?.nb_visites > 1 ? 's' : ''} au total
+                    </div>
+                  )}
+                </>
+              ) : (
+                <>
+                  <i className="bi bi-x-circle-fill" style={{fontSize:32,color:'var(--red)',display:'block',marginBottom:8}}></i>
+                  <div style={{fontFamily:'var(--font-heading)',fontSize:18,fontWeight:700,color:'var(--red)'}}>Code invalide</div>
+                  <div style={{fontSize:12,color:'var(--text-muted)',marginTop:4}}>{resultat.message}</div>
+                </>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Colonne droite — entrées du jour */}
+        <div>
+          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:14}}>
+            <div className="section-title" style={{margin:0}}>
+              <i className="bi bi-calendar-check me-2"></i>Entrées du jour
+            </div>
+            <button className="fz-btn ghost sm" onClick={chargerJour}>
+              <i className="bi bi-arrow-clockwise me-1"></i>Actualiser
+            </button>
+          </div>
+
+          {visitesDuJour && (
+            <div style={{
+              background:'var(--surface)',border:'0.5px solid var(--border)',
+              borderRadius:10,padding:'14px 18px',marginBottom:14,
+              display:'flex',alignItems:'center',gap:14
+            }}>
+              <div style={{
+                width:48,height:48,borderRadius:10,
+                background:'rgba(192,57,43,.12)',border:'1px solid var(--red)',
+                display:'flex',alignItems:'center',justifyContent:'center'
+              }}>
+                <i className="bi bi-people" style={{fontSize:22,color:'var(--red)'}}></i>
+              </div>
+              <div>
+                <div style={{fontSize:28,fontFamily:'var(--font-heading)',fontWeight:700,lineHeight:1}}>
+                  {visitesDuJour.total}
+                </div>
+                <div style={{fontSize:11,color:'var(--text-muted)'}}>
+                  présence{visitesDuJour.total > 1 ? 's' : ''} — {visitesDuJour.date}
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="fz-card" style={{overflow:'hidden',padding:0,maxHeight:400,overflowY:'auto'}}>
+            {loadingJour ? <Spinner /> : (
+              visitesDuJour?.visites?.length === 0 ? (
+                <div style={{padding:32,textAlign:'center',color:'var(--text-dim)'}}>
+                  <i className="bi bi-inbox" style={{fontSize:32,display:'block',marginBottom:8}}></i>
+                  Aucune entrée aujourd'hui
+                </div>
+              ) : (
+                <table className="fz-table">
+                  <thead>
+                    <tr>
+                      <th><i className="bi bi-clock me-1"></i>Heure</th>
+                      <th>Abonné</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {visitesDuJour?.visites?.map(v => (
+                      <tr key={v.id}>
+                        <td>
+                          <span style={{
+                            fontFamily:'monospace',fontSize:14,fontWeight:700,
+                            color:'var(--red)',background:'rgba(192,57,43,.1)',
+                            padding:'3px 8px',borderRadius:5
+                          }}>{v.heure}</span>
+                        </td>
+                        <td>
+                          <div style={{fontWeight:600}}>{v.nom}</div>
+                          <div style={{fontSize:10,color:'var(--text-dim)'}}>{v.email}</div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

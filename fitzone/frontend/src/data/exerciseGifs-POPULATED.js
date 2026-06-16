@@ -1,15 +1,5 @@
 /**
- * ⭐ exerciseGifs-POPULATED.js
- * 
- * Version pré-remplie avec des URLs MuscleWiki et Tenor de référence
- * À VALIDER: Testez chaque URL avant d'utiliser en production
- * 
- * ÉTAPES:
- * 1. Ouvrir chaque URL dans un navigateur
- * 2. Vérifier que le GIF charge et montre le bon exercice
- * 3. Si l'URL ne fonctionne pas, chercher sur tenor.com ou musclewiki.com
- * 4. Remplacer les URLs vides ou invalides
- * 5. Tester dans l'app React
+
  */
 
 export const exercisesDatabase = {
@@ -22,7 +12,7 @@ export const exercisesDatabase = {
       muscle: 'Biceps',
       zone: 'Bras',
       series: '4×10',
-      gif: 'https://media.tenor.com/RL3CbJbPvhwAAAAd/standing-barbell-biceps-curl.gif',
+      gif: 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/master/videos/0031-25GPyDY.gif',
       source: 'Tenor',
       desc: 'Debout, barre en supination. Fléchir les coudes jusqu\'à la hauteur des épaules sans bouger les coudes.'
     },
@@ -33,7 +23,7 @@ export const exercisesDatabase = {
       muscle: 'Biceps',
       zone: 'Bras',
       series: '3×12',
-      gif: 'https://media.tenor.com/6uinYQq-1TYAAAAM/biceps-curl.gif',
+      gif: 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/master/videos/0294-NbVPDMW.gif',
       source: 'Tenor',
       desc: 'Alterner gauche-droite en contrôlant la descente. Tourner le poignet en haut du mouvement.'
     },
@@ -44,7 +34,7 @@ export const exercisesDatabase = {
       muscle: 'Biceps',
       zone: 'Bras',
       series: '3×12',
-      gif: 'https://media.tenor.com/kEGK-a7q__AAAAAd/hammar-curl.gif',
+      gif: 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/master/videos/0313-slDvUAU.gif',
       source: 'Tenor',
       desc: 'Prise neutre (pouce vers le haut). Cible aussi le brachial et l\'avant-bras.'
     },
@@ -55,7 +45,7 @@ export const exercisesDatabase = {
       muscle: 'Biceps',
       zone: 'Bras',
       series: '3×15',
-      gif: 'https://media.tenor.com/jaX3EUxaQGkAAAAM/rosca-concentrada-no-banco.gif',
+      gif: 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/master/videos/0297-gvsWLQw.gif',
       source: 'Tenor',
       desc: 'Assis, coude appuyé sur la cuisse. Excellent pour le pic du biceps.'
     }
@@ -70,7 +60,7 @@ export const exercisesDatabase = {
       muscle: 'Triceps',
       zone: 'Bras',
       series: '4×12',
-      gif: '',
+      gif: 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/master/videos/0814-X6C6i5Y.gif',
       source: 'Tenor',
       desc: 'Corps vertical, coudes près du corps. Plus efficace avec lest quand maîtrisé.'
     },
@@ -81,7 +71,7 @@ export const exercisesDatabase = {
       muscle: 'Triceps',
       zone: 'Bras',
       series: '3×12',
-      gif: '',
+      gif: 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/master/videos/2188-kont8Ut.gif',
       source: 'Tenor',
       desc: 'Haltère ou barre EZ derrière la tête. Cible le chef long du triceps.'
     },
@@ -92,7 +82,7 @@ export const exercisesDatabase = {
       muscle: 'Triceps',
       zone: 'Bras',
       series: '4×15',
-      gif: '',
+      gif: 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/master/videos/0201-3ZflifB.gif',
       source: 'Tenor',
       desc: 'Câble haute poulie, coudes fixes. Excellent pour la finition et le pump.'
     },
@@ -103,7 +93,7 @@ export const exercisesDatabase = {
       muscle: 'Triceps',
       zone: 'Bras',
       series: '3×15',
-      gif: '',
+      gif: 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/master/videos/0283-soIB2rj.gif',
       source: 'Tenor',
       desc: 'Mains en triangle sous le sternum. Variante au poids du corps très efficace.'
     }
@@ -118,7 +108,7 @@ export const exercisesDatabase = {
       muscle: 'Pectoraux',
       zone: 'Buste',
       series: '5×8',
-      gif: '',
+      gif: 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/master/videos/0025-EIeI8Vf.gif',
       source: 'Tenor',
       desc: 'Le roi des exercices de poitrine. Descendre la barre jusqu\'à effleurer le sternum.'
     },
@@ -129,7 +119,7 @@ export const exercisesDatabase = {
       muscle: 'Pectoraux',
       zone: 'Buste',
       series: '4×10',
-      gif: '',
+      gif: 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/master/videos/0047-3TZduzM.gif',
       source: 'Tenor',
       desc: 'Banc à 30-45°. Cible le faisceau supérieur pour un pec plus complet.'
     },
@@ -140,7 +130,7 @@ export const exercisesDatabase = {
       muscle: 'Pectoraux',
       zone: 'Buste',
       series: '3×12',
-      gif: '',
+      gif: 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/master/videos/0308-yz9nUhF.gif',
       source: 'Tenor',
       desc: 'Légère flexion des coudes. Mouvement d\'isolation, descente lente et contrôlée.'
     },
@@ -151,7 +141,7 @@ export const exercisesDatabase = {
       muscle: 'Pectoraux',
       zone: 'Buste',
       series: '3×15',
-      gif: '',
+      gif: 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/master/videos/1269-UKWTJWR.gif',
       source: 'Tenor',
       desc: 'Croisement des mains en bas. Étirement maximal du grand pectoral.'
     }
@@ -166,7 +156,7 @@ export const exercisesDatabase = {
       muscle: 'Dos',
       zone: 'Dos',
       series: '4×8',
-      gif: '',
+      gif: 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/master/videos/0652-lBDjFxJ.gif',
       source: 'Tenor',
       desc: 'Prise large pronation. Le squat du dos. Ajouter du lest progressivement.'
     },
@@ -177,7 +167,7 @@ export const exercisesDatabase = {
       muscle: 'Dos',
       zone: 'Dos',
       series: '4×10',
-      gif: '',
+      gif: 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/master/videos/0027-eZyBC3j.gif',
       source: 'Tenor',
       desc: 'Tronc parallèle au sol, tirer vers le nombril. Excellent pour l\'épaisseur.'
     },
@@ -188,7 +178,7 @@ export const exercisesDatabase = {
       muscle: 'Dos',
       zone: 'Dos',
       series: '3×12',
-      gif: 'https://media.tenor.com/AR6A1jMcnE8AAAAd/lat-pull-down.gif',
+      gif: 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/master/videos/2330-LEprlgG.gif',
       source: 'Tenor',
       desc: 'Tirer vers le haut du sternum. Alternatif aux tractions pour les débutants.'
     },
@@ -199,7 +189,7 @@ export const exercisesDatabase = {
       muscle: 'Dos',
       zone: 'Dos',
       series: '4×6',
-      gif: '',
+      gif: 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/master/videos/0032-ila4NZS.gif',
       source: 'Tenor',
       desc: 'Le mouvement roi. Dos droit, gainage total, poussée des talons dans le sol.'
     }
@@ -214,7 +204,7 @@ export const exercisesDatabase = {
       muscle: 'Épaules',
       zone: 'Épaules',
       series: '4×10',
-      gif: 'https://media.tenor.com/cy46UbnfUrkAAAAM/overhead-press.gif',
+      gif: 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/master/videos/1456-wdRZISl.gif',
       source: 'Tenor',
       desc: 'Debout ou assis, barre ou haltères. Cible le faisceau antérieur en priorité.'
     },
@@ -225,7 +215,7 @@ export const exercisesDatabase = {
       muscle: 'Épaules',
       zone: 'Épaules',
       series: '4×15',
-      gif: 'https://media.tenor.com/VdCASDhF7NMAAAAd/lateral-raise.gif',
+      gif: 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/master/videos/0334-DsgkuIt.gif',
       source: 'Tenor',
       desc: 'Petits poids, coudes légèrement fléchis. Faisceau latéral = épaules larges.'
     },
@@ -236,7 +226,7 @@ export const exercisesDatabase = {
       muscle: 'Épaules',
       zone: 'Épaules',
       series: '3×15',
-      gif: 'https://media.tenor.com/rogbjO9DVF8AAAAM/reverse-fly-rear-delt.gif',
+      gif: 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/master/videos/0383-EAs3xL9.gif',
       source: 'Tenor',
       desc: 'Tronc penché, bras en croix. Indispensable pour équilibrer posture et force.'
     },
@@ -247,7 +237,7 @@ export const exercisesDatabase = {
       muscle: 'Épaules',
       zone: 'Épaules',
       series: '4×12',
-      gif: 'https://media.tenor.com/Emm_nwKi5jAAAAAM/shrugs-trapeze.gif',
+      gif: 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/master/videos/0406-NJzBsGJ.gif',
       source: 'Tenor',
       desc: 'Haussement d\'épaules avec haltères ou barre. Cible les trapèzes supérieurs.'
     }
@@ -262,7 +252,7 @@ export const exercisesDatabase = {
       muscle: 'Jambes',
       zone: 'Jambes',
       series: '5×8',
-      gif: 'https://media.tenor.com/pdMmsiutWkcAAAAM/squat-gym.gif',
+      gif: 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/master/videos/0043-qXTaZnJ.gif',
       source: 'Tenor',
       desc: 'Le roi des exercices. Descendre cuisses parallèles, dos droit, genoux dans l\'axe.'
     },
@@ -273,7 +263,7 @@ export const exercisesDatabase = {
       muscle: 'Jambes',
       zone: 'Jambes',
       series: '4×12',
-      gif: '',
+      gif: 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/master/videos/0739-10Z2DXU.gif',
       source: 'Tenor',
       desc: 'Pieds hauts = ischios/fessiers. Pieds bas = quadriceps. Contrôler la montée.'
     },
@@ -284,7 +274,7 @@ export const exercisesDatabase = {
       muscle: 'Jambes',
       zone: 'Jambes',
       series: '3×10',
-      gif: '',
+      gif: 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/master/videos/1460-IZVHb27.gif',
       source: 'Tenor',
       desc: 'Chaque jambe. Grand pas, genou avant à 90°. Excellent pour l\'équilibre.'
     },
@@ -295,7 +285,7 @@ export const exercisesDatabase = {
       muscle: 'Jambes',
       zone: 'Jambes',
       series: '3×15',
-      gif: '',
+      gif: 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/master/videos/0585-my33uHU.gif',
       source: 'Tenor',
       desc: 'Isolation quadriceps. Finition en fin de séance pour le pump.'
     },
@@ -306,7 +296,7 @@ export const exercisesDatabase = {
       muscle: 'Jambes',
       zone: 'Jambes',
       series: '3×15',
-      gif: '',
+      gif: 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/master/videos/0586-17lJ1kr.gif',
       source: 'Tenor',
       desc: 'Isolation ischios-jambiers. Ne pas négliger les muscles postérieurs.'
     }
@@ -321,7 +311,7 @@ export const exercisesDatabase = {
       muscle: 'Abdominaux',
       zone: 'Core',
       series: '4×60s',
-      gif: '',
+      gif: 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/master/videos/2135-VBAWRPG.gif',
       source: 'Tenor',
       desc: 'Corps aligné, contractez abdos et fessiers. Base indispensable du gainage.'
     },
@@ -332,7 +322,7 @@ export const exercisesDatabase = {
       muscle: 'Abdominaux',
       zone: 'Core',
       series: '4×20',
-      gif: '',
+      gif: 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/master/videos/0175-WW95auq.gif',
       source: 'Tenor',
       desc: 'Plus efficace que le crunch classique car résistance constante sur tout le mouvement.'
     },
@@ -343,7 +333,7 @@ export const exercisesDatabase = {
       muscle: 'Abdominaux',
       zone: 'Core',
       series: '3×15',
-      gif: '',
+      gif: 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/master/videos/0620-WhuFnR7.gif',
       source: 'Tenor',
       desc: 'Suspendu ou allongé. Cible le bas du ventre (droit inférieur).'
     },
@@ -354,7 +344,7 @@ export const exercisesDatabase = {
       muscle: 'Abdominaux',
       zone: 'Core',
       series: '3×20',
-      gif: '',
+      gif: 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/master/videos/0687-XVDdcoj.gif',
       source: 'Tenor',
       desc: 'Avec médecine-ball ou haltère. Cible les obliques et la rotation du tronc.'
     }
@@ -369,7 +359,7 @@ export const exercisesDatabase = {
       muscle: 'Mollets',
       zone: 'Jambes',
       series: '5×20',
-      gif: 'https://media.tenor.com/JYsGi3a3Y_4AAAAC/single-leg-calf-raise.gif',
+      gif: 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/master/videos/1372-8ozhUIZ.gif',
       source: 'Tenor',
       desc: 'Amplitude complète, tenir 1s en haut. Les mollets récupèrent vite, volume élevé.'
     },
@@ -380,14 +370,14 @@ export const exercisesDatabase = {
       muscle: 'Mollets',
       zone: 'Jambes',
       series: '4×20',
-      gif: 'https://media.tenor.com/dE7yo5T973EAAAAC/calves-raise.gif',
+      gif: 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/master/videos/0594-bOOdeyc.gif',
       source: 'Tenor',
       desc: 'Cible le soléaire (muscle profond). Indispensable pour des mollets complets.'
     }
   ]
 };
 
-// Helpers (mêmes que dans exerciseGifs.js)
+
 export const getExercisesByMuscle = (muscle) => {
   const allExercises = Object.values(exercisesDatabase).flat();
   return allExercises.filter(ex => ex.muscle === muscle);

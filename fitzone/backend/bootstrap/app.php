@@ -3,6 +3,8 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+// Set timezone from .env (fallback to UTC)
+date_default_timezone_set(getenv('APP_TIMEZONE') ?: 'UTC');
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(

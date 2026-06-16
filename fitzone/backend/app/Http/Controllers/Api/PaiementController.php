@@ -76,12 +76,12 @@ class PaiementController extends Controller
                 'notes' => $request->notes,
             ]);
         } else {
-            // Créer un nouveau paiement
+           
             $paiement = Paiement::create([
                 'user_id' => $request->user_id,
                 'mois' => $request->mois,
                 'annee' => $request->annee,
-                'montant' => 350.00, // Montant par défaut
+                'montant' => 350.00, 
                 'statut' => $request->statut,
                 'date_paiement' => $request->statut === 'paye' ? now()->toDateString() : null,
                 'methode' => $request->methode,
@@ -119,7 +119,7 @@ class PaiementController extends Controller
         return response()->json(array_values($mois));
     }
 
-    // NOUVELLE METHODE: Liste des abonnés avec statut de paiement pour admin
+    
     public function gestionPaiements(Request $request)
     {
         $annee = $request->annee ?? now()->year;
