@@ -1,16 +1,24 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import { paiementService, authService } from '../../services/api';
 import { Spinner, PageHeader } from '../../components/UI';
 
 const MOIS_NOMS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
 
 export default function PaiementsPage() {
+  const { isAdmin } = useAuth();
+  const navigate = useNavigate();
   const [paiements, setPaiements] = useState([]);
   const [visites, setVisites] = useState([]);
   const [loading, setLoading] = useState(true);
   const annee = new Date().getFullYear();
 
   useEffect(() => {
+    if (isAdmin && isAdmin()) {
+      navigate('/admin/paiements', { replace: true });
+      return;
+    }
     Promise.all([
       paiementService.recap({ annee }),
       authService.me(),
@@ -18,7 +26,7 @@ export default function PaiementsPage() {
       setPaiements(p.data);
       setVisites(me.data.visites || []);
     }).finally(() => setLoading(false));
-  }, []);
+  }, [isAdmin, navigate, annee]);
 
   if (loading) return <Spinner />;
 

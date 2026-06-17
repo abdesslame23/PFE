@@ -9,11 +9,12 @@ const TYPE_ICONS = { boxe:'', mma:'', kickboxing:'', judo:'', jjb:'', autre:'' }
 const MOIS = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
 
 export default function DashboardPage() {
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
   const navigate = useNavigate();
   const [data, setData]           = useState(null);
   const [cours, setCours]         = useState([]);
   const [paiements, setPaiements] = useState([]);
+  const [unpaidPayments, setUnpaidPayments] = useState([]);
   const [loading, setLoading]     = useState(true);
   const [showCode, setShowCode]   = useState(false);
   const [codeData, setCodeData]   = useState(null);
@@ -21,16 +22,35 @@ export default function DashboardPage() {
   const [codeError, setCodeError] = useState(null);
 
   useEffect(() => {
-    Promise.all([
+    const isUserAdmin = user?.role === 'admin';
+    const promises = [
       authService.me(),
       coursService.getAll(),
-      paiementService.recap({ annee: new Date().getFullYear() }),
-    ]).then(([me, c, p]) => {
+      isUserAdmin 
+        ? paiementService.getAll({ statut: 'impaye' }) 
+        : paiementService.recap({ annee: new Date().getFullYear() })
+    ];
+
+    Promise.all(promises).then(([me, c, p]) => {
       setData(me.data);
       setCours(c.data.slice(0, 3));
-      setPaiements(p.data);
+      if (isUserAdmin) {
+        setUnpaidPayments(p.data.slice(0, 5));
+      } else {
+        setPaiements(p.data);
+      }
     }).finally(() => setLoading(false));
-  }, []);
+  }, [user?.role]);
+
+  const handleMarquerPaye = async (id) => {
+    try {
+      await paiementService.marquerPaye(id);
+      const res = await paiementService.getAll({ statut: 'impaye' });
+      setUnpaidPayments(res.data.slice(0, 5));
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const ouvrirCode = async () => {
     setShowCode(true);
@@ -54,6 +74,8 @@ export default function DashboardPage() {
   const nbVisites     = data?.nb_visites || 0;
   const nbImpayes     = paiements.filter(p => p.statut === 'impaye').length;
   const prochainCours = cours[0];
+  const isUserAdmin   = isAdmin && isAdmin();
+  const showAbonnementActif = isUserAdmin ? true : !!abonnement;
 
   return (
     <div>
@@ -71,51 +93,69 @@ export default function DashboardPage() {
           <div className="fz-stat-value">{nbVisites}</div>
           <div className="fz-stat-sub">Depuis inscription</div>
         </div>
-        <div className={`fz-stat ${abonnement ? 'green' : 'orange'}`}>
+        <div className={`fz-stat ${showAbonnementActif ? 'green' : 'orange'}`}>
           <div className="fz-stat-label"><i className="bi bi-patch-check me-1"></i>Abonnement</div>
-          <div className="fz-stat-value" style={{fontSize:16,color:abonnement?'var(--green)':'var(--orange)'}}>
-            {abonnement ? 'ACTIF' : 'INACTIF'}
+          <div className="fz-stat-value" style={{fontSize:16,color:showAbonnementActif?'var(--green)':'var(--orange)'}}>
+            {showAbonnementActif ? 'ACTIF' : 'INACTIF'}
           </div>
-          <div className="fz-stat-sub">{abonnement ? `Expire le ${new Date(abonnement.date_fin).toLocaleDateString('fr-MA')}` : 'Aucun abonnement actif'}</div>
+          <div className="fz-stat-sub">{isUserAdmin ? 'Accès Admin Illimité' : (abonnement ? `Expire le ${new Date(abonnement.date_fin).toLocaleDateString('fr-MA')}` : 'Aucun abonnement actif')}</div>
         </div>
-        <div className="fz-stat blue">
+        <div className={`fz-stat blue ${isUserAdmin ? 'clickable' : ''}`}
+             onClick={isUserAdmin ? () => navigate('/admin?tab=cours') : undefined}
+             style={{cursor: isUserAdmin ? 'pointer' : 'default'}}>
           <div className="fz-stat-label"><i className="bi bi-calendar-event me-1"></i>Prochain cours</div>
           <div className="fz-stat-value" style={{fontSize:15}}>{prochainCours ? prochainCours.titre : '—'}</div>
-          <div className="fz-stat-sub">{prochainCours ? `${new Date(prochainCours.date).toLocaleDateString('fr-MA')} à ${prochainCours.heure_debut?.slice(0,5)}` : 'Aucun cours à venir'}</div>
+          <div className="fz-stat-sub">{isUserAdmin ? 'Gérer les cours' : (prochainCours ? `${new Date(prochainCours.date).toLocaleDateString('fr-MA')} à ${prochainCours.heure_debut?.slice(0,5)}` : 'Aucun cours à venir')}</div>
         </div>
-        <div className={`fz-stat ${nbImpayes > 0 ? '' : 'green'}`}>
-          <div className="fz-stat-label"><i className="bi bi-credit-card me-1"></i>Mois impayés</div>
-          <div className="fz-stat-value" style={{color: nbImpayes > 0 ? 'var(--red-light)' : 'var(--green)'}}>{nbImpayes}</div>
-          <div className="fz-stat-sub">{nbImpayes > 0 ? 'Paiements en attente' : 'Tout est à jour ✓'}</div>
-        </div>
+        {isUserAdmin ? (
+          <div className={`fz-stat clickable ${unpaidPayments.length > 0 ? '' : 'green'}`} 
+               onClick={() => navigate('/admin/paiements')} 
+               style={{cursor:'pointer'}}>
+            <div className="fz-stat-label"><i className="bi bi-credit-card me-1"></i>Retards Paiement</div>
+            <div className="fz-stat-value" style={{color: unpaidPayments.length > 0 ? 'var(--red-light)' : 'var(--green)'}}>{unpaidPayments.length}</div>
+            <div className="fz-stat-sub">Gérer les paiements <i className="bi bi-arrow-right ms-1"></i></div>
+          </div>
+        ) : (
+          <div className={`fz-stat ${nbImpayes > 0 ? '' : 'green'}`}>
+            <div className="fz-stat-label"><i className="bi bi-credit-card me-1"></i>Mois impayés</div>
+            <div className="fz-stat-value" style={{color: nbImpayes > 0 ? 'var(--red-light)' : 'var(--green)'}}>{nbImpayes}</div>
+            <div className="fz-stat-sub">{nbImpayes > 0 ? 'Paiements en attente' : 'Tout est à jour ✓'}</div>
+          </div>
+        )}
       </div>
 
       {/* Paiements */}
-      <div style={{padding:'24px 28px 0'}}>
-        <div className="d-flex justify-content-between align-items-center mb-3">
-          <div className="section-title"><i className="bi bi-calendar3 me-2"></i>Paiements {new Date().getFullYear()}</div>
-          <button className="fz-btn ghost sm" onClick={() => navigate('/paiements')}>Voir tout <i className="bi bi-arrow-right ms-1"></i></button>
+      {!isUserAdmin && (
+        <div style={{padding:'24px 28px 0'}}>
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <div className="section-title"><i className="bi bi-calendar3 me-2"></i>Paiements {new Date().getFullYear()}</div>
+            <button className="fz-btn ghost sm" onClick={() => navigate('/paiements')}>Voir tout <i className="bi bi-arrow-right ms-1"></i></button>
+          </div>
+          <div className="month-grid">
+            {paiements.slice(0,8).map(p => (
+              <div key={p.mois} className={`month-tile ${p.statut === 'paye' ? 'paye' : 'impaye'}`}>
+                <div className="month-name">{MOIS[p.mois-1]}</div>
+                <div className="month-amount">{p.montant} DH</div>
+                <span className={`fz-badge ${p.statut === 'paye' ? 'paye' : 'impaye'}`}>
+                  {p.statut === 'paye'
+                    ? <><i className="bi bi-check-circle me-1"></i>Payé</>
+                    : <><i className="bi bi-x-circle me-1"></i>Impayé</>}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="month-grid">
-          {paiements.slice(0,8).map(p => (
-            <div key={p.mois} className={`month-tile ${p.statut === 'paye' ? 'paye' : 'impaye'}`}>
-              <div className="month-name">{MOIS[p.mois-1]}</div>
-              <div className="month-amount">{p.montant} DH</div>
-              <span className={`fz-badge ${p.statut === 'paye' ? 'paye' : 'impaye'}`}>
-                {p.statut === 'paye'
-                  ? <><i className="bi bi-check-circle me-1"></i>Payé</>
-                  : <><i className="bi bi-x-circle me-1"></i>Impayé</>}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
+      )}
+
+
 
       {/* Cours */}
       <div style={{padding:'24px 28px'}}>
         <div className="d-flex justify-content-between align-items-center mb-3">
           <div className="section-title"><i className="bi bi-lightning me-2"></i>Prochains cours collectifs</div>
-          <button className="fz-btn ghost sm" onClick={() => navigate('/cours')}>Voir tout <i className="bi bi-arrow-right ms-1"></i></button>
+          <button className="fz-btn ghost sm" onClick={() => navigate(isUserAdmin ? '/admin?tab=cours' : '/cours')}>
+            {isUserAdmin ? 'Gérer les cours' : 'Voir tout'} <i className="bi bi-arrow-right ms-1"></i>
+          </button>
         </div>
         <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:14}}>
           {cours.map(c => <CoursCard key={c.id} cours={c} />)}

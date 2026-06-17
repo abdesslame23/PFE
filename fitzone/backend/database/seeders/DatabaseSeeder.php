@@ -44,13 +44,14 @@ class DatabaseSeeder extends Seeder
         Cours::create(['titre'=>'JJB Gi','type'=>'jjb','salle_id'=>$salleC->id,'coach'=>'Coach Sara','date'=>$jours[4],'heure_debut'=>'18:30','heure_fin'=>'20:00','places_max'=>12,'places_reservees'=>7,'niveau'=>'debutant']);
 
         // Abonnement
-        Abonnement::create(['user_id'=>$abonne->id,'date_debut'=>'2025-01-01','date_fin'=>'2025-12-31','montant'=>350,'statut'=>'actif']);
+        $annee = date('Y');
+        Abonnement::create(['user_id'=>$abonne->id,'date_debut'=>"$annee-01-01",'date_fin'=>"$annee-12-31",'montant'=>350,'statut'=>'actif']);
 
         // Paiements
         for ($m = 1; $m <= 2; $m++) {
-            Paiement::create(['user_id'=>$abonne->id,'mois'=>$m,'annee'=>2025,'montant'=>350,'statut'=>'paye','date_paiement'=>"2025-0$m-05"]);
+            Paiement::create(['user_id'=>$abonne->id,'mois'=>$m,'annee'=>$annee,'montant'=>350,'statut'=>'paye','date_paiement'=>"$annee-0$m-05"]);
         }
-        Paiement::create(['user_id'=>$abonne->id,'mois'=>3,'annee'=>2025,'montant'=>350,'statut'=>'impaye']);
-        Paiement::create(['user_id'=>$abonne->id,'mois'=>4,'annee'=>2025,'montant'=>350,'statut'=>'impaye']);
+        Paiement::create(['user_id'=>$abonne->id,'mois'=>3,'annee'=>$annee,'montant'=>350,'statut'=>'impaye']);
+        Paiement::create(['user_id'=>$abonne->id,'mois'=>4,'annee'=>$annee,'montant'=>350,'statut'=>'impaye']);
     }
 }

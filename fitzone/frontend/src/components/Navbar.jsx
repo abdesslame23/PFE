@@ -28,11 +28,11 @@ export default function Navbar() {
           <NavLink to="/musculation" className={({ isActive }) => 'fz-nav-link' + (isActive ? ' active' : '')}>
             <i className="bi bi-lightning me-1"></i>Muscles
           </NavLink>
-          <NavLink to="/paiements" className={({ isActive }) => 'fz-nav-link' + (isActive ? ' active' : '')}>
+          <NavLink to={isAdmin() ? "/admin/paiements" : "/paiements"} className={({ isActive }) => 'fz-nav-link' + (isActive ? ' active' : '')}>
             <i className="bi bi-credit-card me-1"></i>Paiements
           </NavLink>
           {isAdmin() && (
-            <NavLink to="/admin" className={({ isActive }) => 'fz-nav-link' + (isActive ? ' active' : '')}>
+            <NavLink to="/admin" end className={({ isActive }) => 'fz-nav-link' + (isActive ? ' active' : '')}>
               <i className="bi bi-shield-lock me-1"></i>Admin
             </NavLink>
           )}

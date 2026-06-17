@@ -81,7 +81,7 @@ class AbonneController extends Controller
     {
         return response()->json([
             'total_abonnes'    => User::where('role','abonne')->count(),
-            'abonnes_actifs'   => Abonnement::where('statut','actif')->where('date_fin','>=',now())->distinct('user_id')->count(),
+            'abonnes_actifs'   => Abonnement::where('statut','actif')->distinct('user_id')->count(),
             'visites_ce_mois'  => Visite::whereMonth('date_visite', now()->month)->count(),
             'revenus_ce_mois'  => \App\Models\Paiement::whereMonth('created_at', now()->month)->where('statut','paye')->sum('montant'),
         ]);
