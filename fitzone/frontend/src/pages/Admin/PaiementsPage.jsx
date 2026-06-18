@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { paiementService } from '../../services/api';
 import { PageHeader, Spinner, useToast } from '../../components/UI';
 
@@ -79,7 +79,7 @@ const PaiementsPage = () => {
     <div style={{ padding: '24px 28px' }}>
       <PageHeader eyebrow="Administration" title="Gestion des" accent="Paiements" />
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 14, marginTop: 18, marginBottom: 26 }}>
+      <div className="fz-grid-3" style={{ marginTop: 18, marginBottom: 26 }}>
         <div className="fz-stat green">
           <div className="fz-stat-label">Payés</div>
           <div className="fz-stat-value">{nbPayes}</div>

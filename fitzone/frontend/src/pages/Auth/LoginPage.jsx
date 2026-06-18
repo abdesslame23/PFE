@@ -32,7 +32,7 @@ export default function LoginPage() {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <div className="auth-logo">FIT<span>ZONE</span></div>
+        <div className="auth-logo">FiT<span>zone</span></div>
         <p style={{fontSize:13,color:'var(--text-muted)',marginBottom:28}}>Accédez à votre espace membre</p>
 
         <div style={{display:'flex',gap:8,marginBottom:24}}>

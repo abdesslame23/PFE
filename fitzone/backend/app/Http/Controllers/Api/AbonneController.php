@@ -25,7 +25,8 @@ class AbonneController extends Controller
     public function show($id)
     {
         $user = User::with(['abonnements','paiements','visites.cours'])->withCount('visites')->findOrFail($id);
-        $user->abonnement_actif = $user->abonnementActif();
+        $user->abonnement_actif = $user->getStatutAbonnement();
+        $user->prochain_mois_a_payer = $user->getProchainMoisAPayer();
         return response()->json($user);
     }
 

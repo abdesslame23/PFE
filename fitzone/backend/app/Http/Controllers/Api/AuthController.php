@@ -55,7 +55,8 @@ class AuthController extends Controller
     {
         $user = auth()->user();
         $user->load(['abonnements', 'paiements', 'visites']);
-        $user->abonnement_actif = $user->abonnementActif();
+        $user->abonnement_actif = $user->getStatutAbonnement();
+        $user->prochain_mois_a_payer = $user->getProchainMoisAPayer();
         $user->nb_visites = $user->visites()->count();
         return response()->json($user);
     }

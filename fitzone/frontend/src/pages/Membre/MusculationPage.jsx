@@ -80,7 +80,7 @@ export default function Musculation() {
       </div>
 
       {/* Grille muscles */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 14, padding: '12px 28px 32px' }}>
+      <div className="fz-grid-4" style={{ padding: '12px 28px 32px' }}>
         {muscles.map(m => (
           <div key={m.id} className="fz-card hoverable" style={{ overflow: 'hidden', padding: 0 }} onClick={() => openMuscle(m)}>
             <div className="muscle-img-placeholder" style={{ overflow: 'hidden', background: '#111' }}>

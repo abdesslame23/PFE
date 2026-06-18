@@ -5,19 +5,19 @@ import { coursService, paiementService, authService } from '../../services/api';
 import { Spinner, PageHeader, Modal } from '../../components/UI';
 import api from '../../services/api';
 
-const TYPE_ICONS = { boxe:'', mma:'', kickboxing:'', judo:'', jjb:'', autre:'' };
-const MOIS = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+const TYPE_ICONS = { boxe: '', mma: '', kickboxing: '', judo: '', jjb: '', autre: '' };
+const MOIS = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'];
 
 export default function DashboardPage() {
   const { user, isAdmin } = useAuth();
   const navigate = useNavigate();
-  const [data, setData]           = useState(null);
-  const [cours, setCours]         = useState([]);
+  const [data, setData] = useState(null);
+  const [cours, setCours] = useState([]);
   const [paiements, setPaiements] = useState([]);
   const [unpaidPayments, setUnpaidPayments] = useState([]);
-  const [loading, setLoading]     = useState(true);
-  const [showCode, setShowCode]   = useState(false);
-  const [codeData, setCodeData]   = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [showCode, setShowCode] = useState(false);
+  const [codeData, setCodeData] = useState(null);
   const [loadingCode, setLoadingCode] = useState(false);
   const [codeError, setCodeError] = useState(null);
 
@@ -26,8 +26,8 @@ export default function DashboardPage() {
     const promises = [
       authService.me(),
       coursService.getAll(),
-      isUserAdmin 
-        ? paiementService.getAll({ statut: 'impaye' }) 
+      isUserAdmin
+        ? paiementService.getAll({ statut: 'impaye' })
         : paiementService.recap({ annee: new Date().getFullYear() })
     ];
 
@@ -70,71 +70,122 @@ export default function DashboardPage() {
 
   if (loading) return <Spinner />;
 
-  const abonnement    = data?.abonnement_actif;
-  const nbVisites     = data?.nb_visites || 0;
-  const nbImpayes     = paiements.filter(p => p.statut === 'impaye').length;
+  const abonnement = data?.abonnement_actif;  // { statut, date_fin, message }
+  const nbVisites = data?.nb_visites || 0;
+  const nbImpayes = paiements.filter(p => p.statut === 'impaye').length;
   const prochainCours = cours[0];
-  const isUserAdmin   = isAdmin && isAdmin();
-  const showAbonnementActif = isUserAdmin ? true : !!abonnement;
+  const isUserAdmin = isAdmin && isAdmin();
 
   return (
     <div>
       <PageHeader eyebrow="Bienvenue" title={`${user?.prenom}`} accent={user?.nom}>
-        <button className="fz-btn primary" onClick={ouvrirCode} style={{gap:8,padding:'10px 20px'}}>
-          <i className="bi bi-123" style={{fontSize:18}}></i>
+        <button className="fz-btn primary" onClick={ouvrirCode} style={{ gap: 8, padding: '10px 20px' }}>
+          <i className="bi bi-123" style={{ fontSize: 18 }}></i>
           Mon code d'entrée
         </button>
       </PageHeader>
 
       {/* Stats */}
-      <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:14,padding:'24px 28px 0'}}>
+      <div className="fz-grid-4" style={{ padding: '24px 28px 0' }}>
         <div className="fz-stat">
           <div className="fz-stat-label"><i className="bi bi-door-open me-1"></i>Total visites</div>
           <div className="fz-stat-value">{nbVisites}</div>
           <div className="fz-stat-sub">Depuis inscription</div>
         </div>
-        <div className={`fz-stat ${showAbonnementActif ? 'green' : 'orange'}`}>
-          <div className="fz-stat-label"><i className="bi bi-patch-check me-1"></i>Abonnement</div>
-          <div className="fz-stat-value" style={{fontSize:16,color:showAbonnementActif?'var(--green)':'var(--orange)'}}>
-            {showAbonnementActif ? 'ACTIF' : 'INACTIF'}
-          </div>
-          <div className="fz-stat-sub">{isUserAdmin ? 'Accès Admin Illimité' : (abonnement ? `Expire le ${new Date(abonnement.date_fin).toLocaleDateString('fr-MA')}` : 'Aucun abonnement actif')}</div>
-        </div>
+        {/* ── Abonnement card — 3 états : actif / derniere_chance / inactif ── */}
+        {(() => {
+          if (isUserAdmin) {
+            return (
+              <div className="fz-stat green">
+                <div className="fz-stat-label"><i className="bi bi-patch-check me-1"></i>Abonnement</div>
+                <div className="fz-stat-value" style={{ fontSize: 16, color: 'var(--green)' }}>ACTIF</div>
+                <div className="fz-stat-sub">Accès Admin Illimité</div>
+              </div>
+            );
+          }
+
+          const statut = abonnement?.statut ?? 'inactif';
+          const message = abonnement?.message ?? 'Aucun paiement enregistré';
+          const dateFin = abonnement?.date_fin;
+
+          if (statut === 'actif') {
+            return (
+              <div className="fz-stat green">
+                <div className="fz-stat-label"><i className="bi bi-patch-check me-1"></i>Abonnement</div>
+                <div className="fz-stat-value" style={{ fontSize: 16, color: 'var(--green)' }}>ACTIF</div>
+                <div className="fz-stat-sub">{message}</div>
+              </div>
+            );
+          }
+
+          if (statut === 'derniere_chance') {
+            return (
+              <div className="fz-stat orange">
+                <div className="fz-stat-label"><i className="bi bi-exclamation-triangle me-1"></i>Abonnement</div>
+                <div className="fz-stat-value" style={{ fontSize: 14, color: 'var(--orange)', lineHeight: 1.2 }}>
+                  DERNIÈRE CHANCE
+                </div>
+                <div className="fz-stat-sub" style={{ color: 'var(--orange)', fontWeight: 600 }}>
+                  {message}
+                </div>
+              </div>
+            );
+          }
+
+          // inactif
+          return (
+            <div className="fz-stat">
+              <div className="fz-stat-label"><i className="bi bi-patch-exclamation me-1"></i>Abonnement</div>
+              <div className="fz-stat-value" style={{ fontSize: 16, color: 'var(--red-light)' }}>INACTIF</div>
+              <div className="fz-stat-sub">
+                {dateFin
+                  ? `Expiré le ${new Date(dateFin).toLocaleDateString('fr-MA')}`
+                  : 'Aucun paiement enregistré'
+                }
+              </div>
+            </div>
+          );
+        })()}
         <div className={`fz-stat blue ${isUserAdmin ? 'clickable' : ''}`}
-             onClick={isUserAdmin ? () => navigate('/admin?tab=cours') : undefined}
-             style={{cursor: isUserAdmin ? 'pointer' : 'default'}}>
+          onClick={isUserAdmin ? () => navigate('/admin?tab=cours') : undefined}
+          style={{ cursor: isUserAdmin ? 'pointer' : 'default' }}>
           <div className="fz-stat-label"><i className="bi bi-calendar-event me-1"></i>Prochain cours</div>
-          <div className="fz-stat-value" style={{fontSize:15}}>{prochainCours ? prochainCours.titre : '—'}</div>
-          <div className="fz-stat-sub">{isUserAdmin ? 'Gérer les cours' : (prochainCours ? `${new Date(prochainCours.date).toLocaleDateString('fr-MA')} à ${prochainCours.heure_debut?.slice(0,5)}` : 'Aucun cours à venir')}</div>
+          <div className="fz-stat-value" style={{ fontSize: 15 }}>{prochainCours ? prochainCours.titre : '—'}</div>
+          <div className="fz-stat-sub">{isUserAdmin ? 'Gérer les cours' : (prochainCours ? `${new Date(prochainCours.date).toLocaleDateString('fr-MA')} à ${prochainCours.heure_debut?.slice(0, 5)}` : 'Aucun cours à venir')}</div>
         </div>
         {isUserAdmin ? (
-          <div className={`fz-stat clickable ${unpaidPayments.length > 0 ? '' : 'green'}`} 
-               onClick={() => navigate('/admin/paiements')} 
-               style={{cursor:'pointer'}}>
+          <div className={`fz-stat clickable ${unpaidPayments.length > 0 ? '' : 'green'}`}
+            onClick={() => navigate('/admin/paiements')}
+            style={{ cursor: 'pointer' }}>
             <div className="fz-stat-label"><i className="bi bi-credit-card me-1"></i>Retards Paiement</div>
-            <div className="fz-stat-value" style={{color: unpaidPayments.length > 0 ? 'var(--red-light)' : 'var(--green)'}}>{unpaidPayments.length}</div>
+            <div className="fz-stat-value" style={{ color: unpaidPayments.length > 0 ? 'var(--red-light)' : 'var(--green)' }}>{unpaidPayments.length}</div>
             <div className="fz-stat-sub">Gérer les paiements <i className="bi bi-arrow-right ms-1"></i></div>
           </div>
         ) : (
           <div className={`fz-stat ${nbImpayes > 0 ? '' : 'green'}`}>
             <div className="fz-stat-label"><i className="bi bi-credit-card me-1"></i>Mois impayés</div>
-            <div className="fz-stat-value" style={{color: nbImpayes > 0 ? 'var(--red-light)' : 'var(--green)'}}>{nbImpayes}</div>
-            <div className="fz-stat-sub">{nbImpayes > 0 ? 'Paiements en attente' : 'Tout est à jour ✓'}</div>
+            <div className="fz-stat-value" style={{ color: nbImpayes > 0 ? 'var(--red-light)' : 'var(--green)' }}>{nbImpayes}</div>
+            <div className="fz-stat-sub">
+              {data?.prochain_mois_a_payer
+                ? `Prochain : ${data.prochain_mois_a_payer.nom} ${data.prochain_mois_a_payer.annee}`
+                : (nbImpayes > 0 ? 'Paiements en attente' : 'Tout est à jour ✓')
+              }
+            </div>
           </div>
         )}
       </div>
 
       {/* Paiements */}
       {!isUserAdmin && (
-        <div style={{padding:'24px 28px 0'}}>
-          <div className="d-flex justify-content-between align-items-center mb-3">
-            <div className="section-title"><i className="bi bi-calendar3 me-2"></i>Paiements {new Date().getFullYear()}</div>
+        <div style={{ padding: '24px 28px 0' }}>
+          <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+            <div className="section-title mb-0"><i className="bi bi-calendar3 me-2"></i>Paiements {new Date().getFullYear()}</div>
             <button className="fz-btn ghost sm" onClick={() => navigate('/paiements')}>Voir tout <i className="bi bi-arrow-right ms-1"></i></button>
           </div>
           <div className="month-grid">
-            {paiements.slice(0,8).map(p => (
+            {paiements.slice(0, 8).map(p => (
               <div key={p.mois} className={`month-tile ${p.statut === 'paye' ? 'paye' : 'impaye'}`}>
-                <div className="month-name">{MOIS[p.mois-1]}</div>
+                <div className="month-name">{MOIS[p.mois - 1]}</div>
                 <div className="month-amount">{p.montant} DH</div>
                 <span className={`fz-badge ${p.statut === 'paye' ? 'paye' : 'impaye'}`}>
                   {p.statut === 'paye'
@@ -150,78 +201,78 @@ export default function DashboardPage() {
 
 
       {/* Cours */}
-      <div style={{padding:'24px 28px'}}>
-        <div className="d-flex justify-content-between align-items-center mb-3">
-          <div className="section-title"><i className="bi bi-lightning me-2"></i>Prochains cours collectifs</div>
+      <div style={{ padding: '24px 28px' }}>
+        <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+          <div className="section-title mb-0"><i className="bi bi-lightning me-2"></i>Prochains cours collectifs</div>
           <button className="fz-btn ghost sm" onClick={() => navigate(isUserAdmin ? '/admin?tab=cours' : '/cours')}>
             {isUserAdmin ? 'Gérer les cours' : 'Voir tout'} <i className="bi bi-arrow-right ms-1"></i>
           </button>
         </div>
-        <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:14}}>
+        <div className="fz-grid-3">
           {cours.map(c => <CoursCard key={c.id} cours={c} />)}
         </div>
       </div>
 
       {/* Modal code */}
       <Modal show={showCode} title="" onClose={() => setShowCode(false)}>
-        <div style={{textAlign:'center',padding:'16px 0'}}>
+        <div style={{ textAlign: 'center', padding: '16px 0' }}>
           <div style={{
-            display:'inline-flex',alignItems:'center',justifyContent:'center',
-            width:60,height:60,borderRadius:'50%',
-            background:'rgba(192,57,43,.15)',border:'1px solid var(--red)',marginBottom:16
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+            width: 60, height: 60, borderRadius: '50%',
+            background: 'rgba(192,57,43,.15)', border: '1px solid var(--red)', marginBottom: 16
           }}>
-            <i className="bi bi-123" style={{fontSize:28,color:'var(--red)'}}></i>
+            <i className="bi bi-123" style={{ fontSize: 28, color: 'var(--red)' }}></i>
           </div>
 
-          <div style={{fontFamily:'var(--font-heading)',fontSize:22,fontWeight:700,marginBottom:4}}>
+          <div style={{ fontFamily: 'var(--font-heading)', fontSize: 22, fontWeight: 700, marginBottom: 4 }}>
             Mon code d'entrée
           </div>
-          <div style={{fontSize:12,color:'var(--text-muted)',marginBottom:28}}>
+          <div style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 28 }}>
             Donnez ce code à la réception pour valider votre entrée
           </div>
 
           {loadingCode ? (
-            <div className="spinner-border" style={{color:'var(--red)'}}></div>
+            <div className="spinner-border" style={{ color: 'var(--red)' }}></div>
           ) : codeError ? (
-            <div style={{color:'var(--red)',padding:12,background:'rgba(192,57,43,.06)',borderRadius:8}}>
+            <div style={{ color: 'var(--red)', padding: 12, background: 'rgba(192,57,43,.06)', borderRadius: 8 }}>
               {codeError}
             </div>
           ) : codeData && (
             <>
               {/* Le code bien lisible */}
               <div style={{
-                background:'var(--surface2)',
-                border:'2px solid var(--red)',
-                borderRadius:16,padding:'24px 40px',
-                marginBottom:20,display:'inline-block',
+                background: 'var(--surface2)',
+                border: '2px solid var(--red)',
+                borderRadius: 16, padding: '24px 40px',
+                marginBottom: 20, display: 'inline-block',
               }}>
                 <div style={{
-                  fontFamily:'monospace',
-                  fontSize:52,
-                  fontWeight:700,
-                  letterSpacing:12,
-                  color:'var(--text)',
-                  lineHeight:1,
+                  fontFamily: 'monospace',
+                  fontSize: 52,
+                  fontWeight: 700,
+                  letterSpacing: 12,
+                  color: 'var(--text)',
+                  lineHeight: 1,
                 }}>
                   {codeData.code}
                 </div>
               </div>
 
               <div style={{
-                background:'var(--surface2)',border:'0.5px solid var(--border)',
-                borderRadius:10,padding:'10px 20px',marginBottom:16,
+                background: 'var(--surface2)', border: '0.5px solid var(--border)',
+                borderRadius: 10, padding: '10px 20px', marginBottom: 16,
               }}>
-                <div style={{fontSize:10,color:'var(--text-dim)',textTransform:'uppercase',letterSpacing:'.08em',marginBottom:2}}>Abonné</div>
-                <div style={{fontFamily:'var(--font-heading)',fontSize:17,fontWeight:700}}>{codeData.nom_complet}</div>
+                <div style={{ fontSize: 10, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '.08em', marginBottom: 2 }}>Abonné</div>
+                <div style={{ fontFamily: 'var(--font-heading)', fontSize: 17, fontWeight: 700 }}>{codeData.nom_complet}</div>
               </div>
 
               <div style={{
-                background:'rgba(192,57,43,.08)',border:'0.5px solid rgba(192,57,43,.3)',
-                borderRadius:8,padding:'10px 14px',
-                fontSize:12,color:'var(--text-muted)',
-                display:'flex',alignItems:'center',gap:8
+                background: 'rgba(192,57,43,.08)', border: '0.5px solid rgba(192,57,43,.3)',
+                borderRadius: 8, padding: '10px 14px',
+                fontSize: 12, color: 'var(--text-muted)',
+                display: 'flex', alignItems: 'center', gap: 8
               }}>
-                <i className="bi bi-shield-lock" style={{color:'var(--red)'}}></i>
+                <i className="bi bi-shield-lock" style={{ color: 'var(--red)' }}></i>
                 Code personnel — ne le partagez pas
               </div>
             </>
@@ -237,25 +288,25 @@ function CoursCard({ cours }) {
   const pct = Math.round((cours.places_reservees / cours.places_max) * 100);
   const complet = cours.places_disponibles === 0;
   return (
-    <div className="fz-card hoverable p-0" onClick={() => navigate('/cours')} style={{overflow:'hidden'}}>
-      <div style={{background:'var(--surface2)',borderBottom:'0.5px solid var(--border)',padding:'12px 14px',display:'flex',alignItems:'center',gap:8}}>
-        <span style={{fontSize:20}}>{TYPE_ICONS[cours.type] || ''}</span>
-        <div style={{flex:1}}>
-          <div style={{fontSize:13,fontWeight:600}}>{cours.titre}</div>
-          <div style={{fontSize:10,color:'var(--text-muted)'}}>{cours.coach}</div>
+    <div className="fz-card hoverable p-0" onClick={() => navigate('/cours')} style={{ overflow: 'hidden' }}>
+      <div style={{ background: 'var(--surface2)', borderBottom: '0.5px solid var(--border)', padding: '12px 14px', display: 'flex', alignItems: 'center', gap: 8 }}>
+        <span style={{ fontSize: 20 }}>{TYPE_ICONS[cours.type] || ''}</span>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontSize: 13, fontWeight: 600 }}>{cours.titre}</div>
+          <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>{cours.coach}</div>
         </div>
         <span className="fz-badge type">{cours.type.toUpperCase()}</span>
       </div>
-      <div style={{padding:'12px 14px'}}>
-        <div style={{fontSize:11,color:'var(--text-muted)',marginBottom:4}}><i className="bi bi-calendar3 me-1"></i>{new Date(cours.date).toLocaleDateString('fr-MA',{weekday:'long',day:'numeric',month:'short'})}</div>
-        <div style={{fontSize:11,color:'var(--text-muted)',marginBottom:4}}><i className="bi bi-clock me-1"></i>{cours.heure_debut?.slice(0,5)} – {cours.heure_fin?.slice(0,5)}</div>
-        <div style={{fontSize:11,color:'var(--text-muted)',marginBottom:8}}><i className="bi bi-geo-alt me-1"></i>{cours.salle?.nom}</div>
+      <div style={{ padding: '12px 14px' }}>
+        <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 4 }}><i className="bi bi-calendar3 me-1"></i>{new Date(cours.date).toLocaleDateString('fr-MA', { weekday: 'long', day: 'numeric', month: 'short' })}</div>
+        <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 4 }}><i className="bi bi-clock me-1"></i>{cours.heure_debut?.slice(0, 5)} – {cours.heure_fin?.slice(0, 5)}</div>
+        <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 8 }}><i className="bi bi-geo-alt me-1"></i>{cours.salle?.nom}</div>
         <div className="cours-places-bar">
-          <div className={`cours-places-fill ${complet ? 'danger' : pct < 60 ? 'ok' : ''}`} style={{width:`${pct}%`}}></div>
+          <div className={`cours-places-fill ${complet ? 'danger' : pct < 60 ? 'ok' : ''}`} style={{ width: `${pct}%` }}></div>
         </div>
-        <div style={{display:'flex',justifyContent:'space-between',fontSize:10,color:'var(--text-dim)'}}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, color: 'var(--text-dim)' }}>
           <span>{cours.places_reservees}/{cours.places_max} inscrits</span>
-          <span style={{color: complet ? 'var(--red-light)' : 'var(--green)'}}>{complet ? 'Complet' : `${cours.places_disponibles} places`}</span>
+          <span style={{ color: complet ? 'var(--red-light)' : 'var(--green)' }}>{complet ? 'Complet' : `${cours.places_disponibles} places`}</span>
         </div>
       </div>
     </div>

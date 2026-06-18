@@ -49,6 +49,16 @@ export default function AdminPage() {
         ))}
       </aside>
 
+      {/* Mobile Tabs */}
+      <div className="fz-mobile-tabs">
+        {tabs.map(t => (
+          <button key={t.id} className={`fz-mobile-tab-link ${tab === t.id ? 'active' : ''}`} onClick={() => handleTabChange(t.id)}>
+            <i className={`bi ${t.icon}`}></i>
+            <span>{t.label}</span>
+          </button>
+        ))}
+      </div>
+
       <main className="fz-main">
         {tab === 'pointage' && <PointageTab />}
         {tab === 'abonnes' && <AbonnesTab />}
@@ -102,7 +112,7 @@ function PointageTab() {
     <div>
       <PageHeader eyebrow="Administration" title="Système de" accent="Pointage" />
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, padding: '24px 28px' }}>
+      <div className="fz-grid-2" style={{ padding: '24px 28px' }}>
 
         {/* Colonne gauche — saisie code */}
         <div className="fz-card" style={{ padding: 28, textAlign: 'center' }}>
@@ -158,8 +168,8 @@ function PointageTab() {
                   ? 'rgba(230,126,34,.1)'
                   : 'rgba(192,57,43,.1)',
               border: `1px solid ${resultat.success && !resultat.deja_pointe
-                  ? 'var(--green)'
-                  : resultat.deja_pointe ? 'var(--orange)' : 'var(--red)'
+                ? 'var(--green)'
+                : resultat.deja_pointe ? 'var(--orange)' : 'var(--red)'
                 }`,
             }}>
               {resultat.success ? (
@@ -314,9 +324,8 @@ function AbonnesTab() {
         <button className="fz-btn primary" onClick={openAdd}><i className="bi bi-plus"></i>Ajouter</button>
       </PageHeader>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 14, padding: '20px 28px 0' }}>
+      <div className="fz-grid-3" style={{ padding: '20px 28px 0' }}>
         <div className="fz-stat"><div className="fz-stat-label">Total abonnés</div><div className="fz-stat-value">{stats.total_abonnes || 0}</div></div>
-        <div className="fz-stat green"><div className="fz-stat-label">Actifs</div><div className="fz-stat-value">{stats.abonnes_actifs || 0}</div></div>
         <div className="fz-stat blue"><div className="fz-stat-label">Visites ce mois</div><div className="fz-stat-value">{stats.visites_ce_mois || 0}</div></div>
         <div className="fz-stat orange"><div className="fz-stat-label">Revenus ce mois</div><div className="fz-stat-value" style={{ fontSize: 18 }}>{stats.revenus_ce_mois || 0} DH</div></div>
       </div>
@@ -327,7 +336,7 @@ function AbonnesTab() {
         </div>
 
         {loading ? <Spinner /> : (
-          <div className="fz-card" style={{ overflow: 'hidden', padding: 0 }}>
+          <div className="fz-card" style={{ overflowX: 'auto', padding: 0 }}>
             <table className="fz-table">
               <thead><tr><th>Nom</th><th>Email</th><th>Téléphone</th><th>Visites</th><th>Actions</th></tr></thead>
               <tbody>
@@ -407,7 +416,7 @@ function CoursTab() {
       </PageHeader>
       <div style={{ padding: '20px 28px' }}>
         {loading ? <Spinner /> : (
-          <div className="fz-card" style={{ overflow: 'hidden', padding: 0 }}>
+          <div className="fz-card" style={{ overflowX: 'auto', padding: 0 }}>
             <table className="fz-table">
               <thead><tr><th>Titre</th><th>Type</th><th>Salle</th><th>Date</th><th>Horaire</th><th>Places</th><th>Actions</th></tr></thead>
               <tbody>
@@ -494,7 +503,7 @@ function SallesTab() {
       </PageHeader>
       <div style={{ padding: '20px 28px' }}>
         {loading ? <Spinner /> : (
-          <div className="fz-card" style={{ overflow: 'hidden', padding: 0 }}>
+          <div className="fz-card" style={{ overflowX: 'auto', padding: 0 }}>
             <table className="fz-table">
               <thead><tr><th>Nom</th><th>Capacité</th><th>Équipements</th><th>Statut</th><th>Actions</th></tr></thead>
               <tbody>
@@ -566,7 +575,7 @@ function PaiementsTab() {
         </div>
 
         {loading ? <Spinner /> : (
-          <div className="fz-card" style={{ overflow: 'hidden', padding: 0 }}>
+          <div className="fz-card" style={{ overflowX: 'auto', padding: 0 }}>
             <table className="fz-table">
               <thead><tr><th>Abonné</th><th>Période</th><th>Montant</th><th>Statut</th><th>Date paiement</th><th>Actions</th></tr></thead>
               <tbody>

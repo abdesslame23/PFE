@@ -108,15 +108,84 @@ class PaiementController extends Controller
     public function recapAnnuel(Request $request)
     {
         $user = auth()->user();
-        $userId = $user->isAdmin() ? $request->user_id : $user->id;
-        $annee = $request->annee ?? now()->year;
+        $userId = ($user->isAdmin() && $request->filled('user_id')) ? $request->user_id : $user->id;
+        $annee = (int)($request->annee ?? now()->year);
 
-        $paiements = Paiement::where('user_id', $userId)->where('annee', $annee)->get()->keyBy('mois');
-        $mois = [];
-        for ($m = 1; $m <= 12; $m++) {
-            $mois[$m] = $paiements->get($m) ?? ['mois' => $m, 'annee' => $annee, 'statut' => 'impaye', 'montant' => 350];
+        $member = \App\Models\User::find($userId);
+        if (!$member) {
+            return response()->json([]);
         }
-        return response()->json(array_values($mois));
+
+        // Déterminer le mois et l'année de début (inscription ou premier paiement)
+        $created = $member->created_at ?? now();
+        $userDebutYear = (int)$created->year;
+        $userDebutMonth = (int)$created->month;
+
+        $premierPaiement = Paiement::where('user_id', $userId)
+            ->orderBy('annee', 'asc')
+            ->orderBy('mois', 'asc')
+            ->first();
+
+        if ($premierPaiement) {
+            $pYear = (int)$premierPaiement->annee;
+            $pMonth = (int)$premierPaiement->mois;
+            if ($pYear < $userDebutYear || ($pYear === $userDebutYear && $pMonth < $userDebutMonth)) {
+                $userDebutYear = $pYear;
+                $userDebutMonth = $pMonth;
+            }
+        }
+
+        // Si l'année demandée est antérieure à l'année de début
+        if ($annee < $userDebutYear) {
+            return response()->json([]);
+        }
+
+        $moisDebut = ($annee === $userDebutYear) ? $userDebutMonth : 1;
+
+        // Déterminer le mois de fin
+        $currentYear = (int)now()->year;
+        if ($annee === $currentYear) {
+            $moisFin = (int)now()->month;
+            // Prendre en compte les paiements futurs payés de cette année
+            $dernierPaiementDeLAnnee = Paiement::where('user_id', $userId)
+                ->where('annee', $annee)
+                ->where('statut', 'paye')
+                ->orderBy('mois', 'desc')
+                ->first();
+            if ($dernierPaiementDeLAnnee && (int)$dernierPaiementDeLAnnee->mois > $moisFin) {
+                $moisFin = (int)$dernierPaiementDeLAnnee->mois;
+            }
+        } elseif ($annee < $currentYear) {
+            $moisFin = 12;
+        } else {
+            // Année future : uniquement les mois payés d'avance
+            $dernierPaiementDeLAnnee = Paiement::where('user_id', $userId)
+                ->where('annee', $annee)
+                ->where('statut', 'paye')
+                ->orderBy('mois', 'desc')
+                ->first();
+            if (!$dernierPaiementDeLAnnee) {
+                return response()->json([]);
+            }
+            $moisFin = (int)$dernierPaiementDeLAnnee->mois;
+        }
+
+        $paiements = Paiement::where('user_id', $userId)
+            ->where('annee', $annee)
+            ->get()
+            ->keyBy('mois');
+
+        $mois = [];
+        for ($m = $moisDebut; $m <= $moisFin; $m++) {
+            $mois[] = $paiements->get($m) ?? [
+                'mois' => $m,
+                'annee' => $annee,
+                'statut' => 'impaye',
+                'montant' => 350
+            ];
+        }
+
+        return response()->json($mois);
     }
 
     

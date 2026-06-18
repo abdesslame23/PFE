@@ -10,6 +10,7 @@ import MusculationPage from './pages/Membre/MusculationPage';
 import PaiementsPage from './pages/Membre/PaiementsPage';
 import GestionPaiementsPage from './pages/Admin/PaiementsPage';
 import AdminPage from './pages/Admin/AdminPage';
+import HomePage from './pages/Home/HomePage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './assets/styles.css';
@@ -29,7 +30,7 @@ function AppRoutes() {
       <Navbar />
       <Routes>
         <Route path="/login" element={user ? <Navigate to="/dashboard" /> : <LoginPage />} />
-        <Route path="/" element={<Navigate to={user ? '/dashboard' : '/login'} />} />
+        <Route path="/" element={<HomePage />} />
 
         <Route path="/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
         <Route path="/cours" element={<PrivateRoute><CoursPage /></PrivateRoute>} />
