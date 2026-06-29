@@ -38,6 +38,7 @@ Route::middleware('auth:api')->group(function () {
         Route::get('recap',       [PaiementController::class, 'recapAnnuel']);
         Route::get('gestion',     [PaiementController::class, 'gestionPaiements'])->middleware('admin');
         Route::post('mensuel',    [PaiementController::class, 'marquerPaiementMensuel'])->middleware('admin');
+        Route::post('annuel',     [PaiementController::class, 'validerAnneeEntiere'])->middleware('admin');
         Route::post('{id}/payer', [PaiementController::class, 'marquerPaye']);
         Route::post('store',      [PaiementController::class, 'store'])->middleware('admin');
         Route::put('{id}',        [PaiementController::class, 'update'])->middleware('admin');

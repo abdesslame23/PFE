@@ -1,0 +1,1916 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapport de Projet de Fin de Formation — FITZONE | OFPPT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --blue-dark:  #111827;
+            --blue-mid:   #DC2626;
+            --blue-light: #EF4444;
+            --green:      #991B1B;
+            --gold:       #DC2626;
+            --gray-light: #F9FAFB;
+            --gray-border:#E5E7EB;
+            --text:       #111827;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important; }
+
+        body {
+            font-family: 'EB Garamond', Georgia, serif;
+            background: #CBD5E0;
+            color: var(--text);
+            font-size: 12pt;
+            line-height: 1.75;
+        }
+
+        /* ── PAGE ── */
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            margin: 24px auto;
+            background: #ffffff;
+            padding: 18mm 18mm 22mm 22mm;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.25);
+            position: relative;
+            page-break-after: always;
+        }
+
+        /* Bordure latérale bleue décorative */
+        .page::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--blue-dark), var(--blue-light), var(--green));
+            border-radius: 0;
+        }
+
+        @media print {
+            body { background: #fff; }
+            .page {
+                margin: 0 !important;
+                box-shadow: none !important;
+                width: 210mm !important;
+                padding: 18mm 18mm 22mm 22mm !important;
+            }
+        }
+
+        /* ── EN-TÊTE COURANT ── */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1.5px solid var(--blue-mid);
+            padding-bottom: 5px;
+            margin-bottom: 16px;
+            font-size: 8.5pt;
+            color: var(--blue-mid);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        /* ── PIED DE PAGE ── */
+        .page-footer {
+            position: absolute;
+            bottom: 10mm;
+            left: 22mm; right: 18mm;
+            display: flex;
+            justify-content: space-between;
+            border-top: 1.5px solid var(--blue-mid);
+            padding-top: 5px;
+            font-size: 8.5pt;
+            color: var(--blue-mid);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        /* ── TITRES ── */
+        h1.chapter {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 22pt;
+            font-weight: 800;
+            color: var(--blue-dark);
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 50mm;
+            margin-bottom: 6mm;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--gold);
+        }
+        h1.chapter .sub { font-size: 14pt; font-weight: 600; color: var(--blue-mid); display: block; margin-top: 6px; letter-spacing: 0.5px; }
+
+        h1.section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16pt;
+            font-weight: 800;
+            color: var(--blue-dark);
+            text-align: center;
+            border-bottom: 3px solid var(--gold);
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+            margin-top: 6mm;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 11.5pt;
+            font-weight: 700;
+            color: #fff;
+            background: var(--blue-dark);
+            padding: 5px 12px;
+            margin-top: 18px;
+            margin-bottom: 10px;
+            border-left: 5px solid var(--gold);
+            letter-spacing: 0.3px;
+        }
+
+        h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 10.5pt;
+            font-weight: 600;
+            color: var(--blue-mid);
+            margin-top: 12px;
+            margin-bottom: 6px;
+            padding-left: 10px;
+            border-left: 3px solid var(--blue-light);
+        }
+
+        p {
+            text-align: justify;
+            margin-bottom: 10px;
+            text-indent: 1.2cm;
+        }
+        p.no-indent { text-indent: 0; }
+
+        ul, ol {
+            margin-left: 1.8cm;
+            margin-bottom: 12px;
+        }
+        li { margin-bottom: 4px; }
+
+        /* ── TABLEAUX ── */
+        table.academic {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 14px 0;
+            font-size: 10pt;
+            font-family: 'Montserrat', sans-serif;
+        }
+        table.academic thead tr {
+            background: var(--blue-dark);
+            color: #fff;
+        }
+        table.academic th {
+            border: 1px solid var(--blue-dark);
+            padding: 7px 10px;
+            font-weight: 600;
+            text-align: center;
+            font-size: 9.5pt;
+        }
+        table.academic td {
+            border: 1px solid var(--gray-border);
+            padding: 6px 10px;
+        }
+        table.academic tbody tr:nth-child(even) {
+            background: var(--gray-light);
+        }
+
+        /* ── TABLE DES MATIÈRES ── */
+        .toc-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 2px;
+            border-bottom: 1px dotted var(--gray-border);
+            font-size: 10.5pt;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .toc-row.main {
+            font-weight: 700;
+            color: var(--blue-dark);
+            text-transform: uppercase;
+            font-size: 10pt;
+            margin-top: 10px;
+            border-bottom: 1px solid var(--blue-mid);
+            padding-bottom: 3px;
+        }
+        .toc-row.main .pg { color: var(--blue-mid); }
+        .toc-row.sub { padding-left: 20px; color: #333; }
+        .toc-row.subsub { padding-left: 38px; font-style: italic; color: #555; font-size: 10pt; }
+
+        /* ── FIGURES ── */
+        .figure {
+            text-align: center;
+            margin: 16px 0;
+            page-break-inside: avoid;
+        }
+        .figure img {
+            max-width: 93%;
+            max-height: 105mm;
+            border: 1px solid var(--gray-border);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+        }
+        .figure-caption {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 9pt;
+            font-style: italic;
+            margin-top: 7px;
+            color: var(--blue-mid);
+        }
+
+        /* ── DIAGRAMME ── */
+        .diagram-box {
+            border: 1px solid var(--gray-border);
+            background: var(--gray-light);
+            padding: 12px;
+            margin: 14px 0;
+            text-align: center;
+            border-radius: 4px;
+        }
+
+        /* ── BLOC CODE ── */
+        pre.code-block {
+            background: #1E2938;
+            color: #A9D8A2;
+            border-left: 4px solid var(--green);
+            padding: 12px 16px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 9pt;
+            white-space: pre-wrap;
+            margin: 12px 0;
+            line-height: 1.6;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* ══════════════════════════════════════
+           PAGE DE GARDE
+        ══════════════════════════════════════ */
+        .cover-page {
+            padding: 0 !important;
+            display: flex;
+            flex-direction: column;
+            min-height: 297mm;
+        }
+        /* Bandeau supérieur bleu foncé */
+        .cover-banner {
+            background: var(--blue-dark);
+            padding: 18px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .cover-banner-text { color: #fff; }
+        .cover-banner-text .inst { font-family: 'Montserrat', sans-serif; font-size: 11pt; font-weight: 700; letter-spacing: 0.3px; }
+        .cover-banner-text .dept { font-family: 'Montserrat', sans-serif; font-size: 9pt; font-weight: 400; color: #CBD5E0; margin-top: 3px; }
+        .cover-banner-logo {
+            width: 64px; height: 64px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 10pt;
+            font-weight: 800;
+            color: var(--blue-dark);
+            letter-spacing: -1px;
+            flex-shrink: 0;
+        }
+
+        /* Corps de la page de garde */
+        .cover-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0 32px;
+            text-align: center;
+        }
+        .cover-type {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 10pt;
+            font-weight: 600;
+            color: var(--blue-mid);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 14px;
+            border: 1.5px solid var(--blue-light);
+            padding: 5px 18px;
+            border-radius: 20px;
+        }
+        .cover-logo-box {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 52pt;
+            font-weight: 800;
+            color: var(--blue-dark);
+            letter-spacing: 8px;
+            line-height: 1;
+            margin: 18px 0 6px;
+        }
+        .cover-logo-accent {
+            width: 80px; height: 5px;
+            background: linear-gradient(90deg, var(--blue-light), var(--gold));
+            margin: 0 auto 20px;
+            border-radius: 3px;
+        }
+        .cover-main-title {
+            font-family: 'EB Garamond', Georgia, serif;
+            font-size: 13.5pt;
+            font-weight: 600;
+            color: var(--text);
+            line-height: 1.5;
+            max-width: 82%;
+            margin: 0 auto 10px;
+        }
+        .cover-sub-title {
+            font-family: 'EB Garamond', Georgia, serif;
+            font-size: 10.5pt;
+            font-style: italic;
+            color: #555;
+            margin-bottom: 30px;
+        }
+        /* Séparateur doré */
+        .cover-divider {
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 18px 0;
+        }
+        /* Grille auteur / encadrant */
+        .cover-meta {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 9.5pt;
+            gap: 20px;
+            text-align: left;
+        }
+        .cover-meta-box {
+            flex: 1;
+            background: var(--gray-light);
+            border: 1px solid var(--gray-border);
+            border-top: 3px solid var(--blue-mid);
+            padding: 10px 14px;
+            border-radius: 0 0 4px 4px;
+        }
+        .cover-meta-box .label {
+            font-size: 8pt;
+            font-weight: 700;
+            color: var(--blue-mid);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        .cover-meta-box .name { font-weight: 700; color: var(--blue-dark); font-size: 10.5pt; }
+        .cover-meta-box .role { color: #555; font-size: 9pt; }
+
+        /* Bandeau inférieur */
+        .cover-footer-band {
+            background: var(--blue-dark);
+            padding: 10px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .cover-footer-band span {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 9pt;
+            color: #fff;
+            font-weight: 600;
+        }
+        .cover-footer-band .year { color: var(--gold); font-weight: 700; }
+
+        /* ── REMERCIEMENTS / DÉDICACES ── */
+        .italic-block {
+            font-style: italic;
+            line-height: 2.1;
+            font-size: 12pt;
+            padding: 20px 0 20px 30%;
+            color: #333;
+        }
+
+        /* ── BADGE DE RÉSUMÉ ── */
+        .kw-badge {
+            display: inline-block;
+            background: var(--blue-dark);
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 8pt;
+            font-weight: 600;
+            padding: 2px 9px;
+            border-radius: 12px;
+            margin: 2px 3px 2px 0;
+        }
+
+        /* ── NOTE DE BAS CHAPITRE ── */
+        .chapter-intro {
+            background: var(--gray-light);
+            border-left: 4px solid var(--blue-light);
+            padding: 10px 16px;
+            margin-bottom: 18px;
+            font-style: italic;
+            font-size: 11.5pt;
+            color: #444;
+            border-radius: 0 4px 4px 0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ================================================================= -->
+<!-- PAGE 1 : PAGE DE GARDE -->
+<!-- ================================================================= -->
+<div class="page cover-page">
+    <!-- Bandeau supérieur -->
+    <div class="cover-banner">
+        <div class="cover-banner-text">
+            <div class="inst">OFPPT — Office de la Formation Professionnelle et de la Promotion du Travail</div>
+            <div class="dept">Rapport de Projet de Fin de Formation</div>
+        </div>
+        <img src="logo_ofppt.png" style="width: 68px; height: 68px; border-radius: 50%; object-fit: cover; background: #ffffff; border: 2px solid #ffffff;" alt="Logo OFPPT">
+    </div>
+
+    <!-- Corps -->
+    <div class="cover-body">
+        <div class="cover-type">Rapport de Projet de Fin de Formation</div>
+
+        <div class="cover-logo-box">FITZONE</div>
+        <div class="cover-logo-accent"></div>
+
+        <div class="cover-main-title">
+            Conception et Réalisation d'une Plateforme Web Interactive<br>
+            de Gestion Administrative et de Pointage Physique<br>
+            pour Salle de Sport
+        </div>
+        <div class="cover-sub-title">
+            Présenté en vue de l'obtention du Diplôme de Technicien Spécialisé en Développement Digital
+        </div>
+
+        <div class="cover-divider"></div>
+
+        <div class="cover-meta">
+            <div class="cover-meta-box">
+                <div class="label">Réalisé par</div>
+                <div class="name">Abdessalame CHRAIBI</div>
+                <div class="role">Stagiaire — Développement Digital</div>
+            </div>
+            <div class="cover-meta-box" style="text-align:right;">
+                <div class="label">Encadrant</div>
+                <div class="name">Monsieur DAIF</div>
+                <div class="role">Formateur — OFPPT</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bandeau inférieur -->
+    <div class="cover-footer-band">
+        <span>Filière : Développement Digital</span>
+        <span class="year">Année de Formation : 2025 – 2026</span>
+    </div>
+</div>
+
+<!-- ================================================================= -->
+<!-- PAGE 2 : DÉDICACES -->
+<!-- ================================================================= -->
+<div class="page">
+    <h1 class="section-title" style="margin-top:45mm;">Dédicaces</h1>
+    <div class="italic-block">
+        <p class="no-indent">À mes chers parents,</p>
+        <p class="no-indent">Pour leurs sacrifices sans limites, leurs encouragements constants et leurs prières tout au long de ma formation à l'OFPPT.</p>
+        <p class="no-indent">À mes frères et sœurs,</p>
+        <p class="no-indent">Pour leur soutien indéfectible et leur confiance en mes capacités.</p>
+        <p class="no-indent">À mes formateurs de l'OFPPT,</p>
+        <p class="no-indent">Qui ont guidé mes pas sur le chemin du savoir numérique et du développement web.</p>
+        <p class="no-indent">À mes collègues stagiaires,</p>
+        <p class="no-indent">En souvenir des moments partagés de travail et d'entraide tout au long de cette formation.</p>
+    </div>
+    <div class="page-footer">
+        <span>FITZONE — Rapport de Projet de Fin de Formation</span>
+        <span>Page i</span>
+    </div>
+</div>
+
+<!-- ================================================================= -->
+<!-- PAGE 3 : REMERCIEMENTS -->
+<!-- ================================================================= -->
+<div class="page">
+    <h1 class="section-title">Remerciements</h1>
+    <p>
+        Avant tout développement dans ce rapport, il me semble opportun de commencer par remercier ceux qui m'ont beaucoup appris au cours de cette formation, ceux qui m'ont accompagné dans mes travaux et ont toujours su répondre à mes interrogations techniques.
+    </p>
+    <p>
+        Je tiens en premier lieu à exprimer ma profonde gratitude et mes sincères remerciements à mon encadrant, <strong>Monsieur DAIF</strong>, formateur à l'OFPPT, pour sa disponibilité à toute épreuve, ses conseils avisés et sa rigueur pédagogique qui ont guidé mes réflexions tout au long de la conception et de la réalisation de ce projet de fin de formation.
+    </p>
+    <p>
+        Je remercie également l'ensemble des formateurs de l'<strong>Office de la Formation Professionnelle et de la Promotion du Travail (OFPPT)</strong> pour la qualité de l'enseignement dispensé tout au long de mon parcours en Développement Digital, me dotant des connaissances nécessaires pour aborder avec sérénité un projet de cette envergure.
+    </p>
+    <p>
+        Mes remerciements s'adressent aussi à l'<strong>Office de la Formation Professionnelle et de la Promotion du Travail (OFPPT)</strong> pour l'encadrement institutionnel et les ressources pédagogiques mises à ma disposition.
+    </p>
+    <p>
+        Enfin, j'exprime ma reconnaissance la plus profonde à ma famille pour son soutien moral et matériel continu, sans lequel la réalisation de ce projet aurait été impossible.
+    </p>
+    <div class="page-footer">
+        <span>FITZONE — Rapport de Projet de Fin de Formation</span>
+        <span>Page ii</span>
+    </div>
+</div>
+
+<!-- ================================================================= -->
+<!-- PAGE 4 : RÉSUMÉ / ABSTRACT -->
+<!-- ================================================================= -->
+<div class="page">
+    <h1 class="section-title">Résumé</h1>
+    <p>
+        Ce rapport de fin de formation décrit la conception et le développement de la plateforme web <strong>FITZONE</strong>, un système intégré de gestion administrative conçu pour moderniser les opérations des complexes sportifs et centres de fitness. L'application offre un portail interactif aux abonnés pour consulter les plannings de cours collectifs, s'inscrire en ligne et accéder à un guide d'entraînement par groupe musculaire.
+    </p>
+    <p>
+        La fonctionnalité phare du système est un mécanisme de pointage physique à l'entrée de la salle reposant sur un <strong>code personnel unique à 6 chiffres</strong> attribué à chaque abonné actif, validé en temps réel par l'API backend. Le système a été réalisé avec une architecture découplée associant un backend REST API sous le framework <strong>Laravel (PHP)</strong> et un frontend dynamique Single Page Application sous <strong>React (JavaScript)</strong>, avec une base de données relationnelle <strong>MySQL</strong>.
+    </p>
+    <h1 class="section-title" style="margin-top:22px;">Abstract</h1>
+    <p>
+        This end-of-training report presents the design and development of the <strong>FITZONE</strong> web platform, an integrated management system designed to modernize the administrative operations of fitness and sports centers. The application provides members with an interactive portal to view group class schedules, register online and access a muscle-group training guide.
+    </p>
+    <p>
+        The flagship feature is a physical entry check-in mechanism based on a <strong>unique 6-digit personal code</strong> assigned to each active subscriber, validated in real time by the backend API. The full system was built using a decoupled architecture combining a REST API backend powered by <strong>Laravel (PHP)</strong> and a SPA frontend using <strong>React (JavaScript)</strong>, with a relational <strong>MySQL</strong> database.
+    </p>
+
+    <div class="page-footer">
+        <span>FITZONE — Rapport de Projet de Fin de Formation</span>
+        <span>Page iii</span>
+    </div>
+</div>
+
+<!-- ================================================================= -->
+<!-- PAGE 5 : TABLE DES MATIÈRES -->
+<!-- ================================================================= -->
+<div class="page">
+    <h1 class="section-title">Table des Matières</h1>
+
+    <div class="toc-row main"><span>Pages préliminaires</span><span class="pg">i – iii</span></div>
+    <div class="toc-row main"><span>Introduction Générale</span><span class="pg">1</span></div>
+    <div class="toc-row main"><span>Chapitre 1 — Cadrage du Projet</span><span class="pg">3</span></div>
+    <div class="toc-row sub"><span>1.1 Contexte et problématique</span><span>3</span></div>
+    <div class="toc-row sub"><span>1.2 Objectifs du projet</span><span>4</span></div>
+    <div class="toc-row sub"><span>1.3 Besoins fonctionnels et non fonctionnels</span><span>5</span></div>
+    <div class="toc-row sub"><span>1.4 Méthodologie adoptée (Agile / SCRUM)</span><span>6</span></div>
+    <div class="toc-row sub"><span>1.5 Planification (Backlog produit + Gantt)</span><span>7</span></div>
+    <div class="toc-row main"><span>Chapitre 2 — Étude Préliminaire et Technologies</span><span class="pg">9</span></div>
+    <div class="toc-row sub"><span>2.1 Étude des solutions existantes</span><span>9</span></div>
+    <div class="toc-row sub"><span>2.2 Technologies et frameworks retenus</span><span>10</span></div>
+    <div class="toc-row subsub"><span>2.2.1 Frontend : React (JavaScript)</span><span>10</span></div>
+    <div class="toc-row subsub"><span>2.2.2 Backend : Laravel REST API (PHP)</span><span>11</span></div>
+    <div class="toc-row subsub"><span>2.2.3 Base de données : MySQL</span><span>11</span></div>
+    <div class="toc-row sub"><span>2.3 Outils de développement et de collaboration</span><span>12</span></div>
+    <div class="toc-row main"><span>Chapitre 3 — Analyse et Conception</span><span class="pg">13</span></div>
+    <div class="toc-row sub"><span>3.1 Identification des acteurs</span><span>13</span></div>
+    <div class="toc-row sub"><span>3.2 Diagrammes de cas d'utilisation</span><span>13</span></div>
+    <div class="toc-row sub"><span>3.3 Diagrammes de séquence</span><span>14</span></div>
+    <div class="toc-row sub"><span>3.4 Diagramme de classes UML</span><span>15</span></div>
+    <div class="toc-row sub"><span>3.5 Modèle Conceptuel de Données (MCD)</span><span>16</span></div>
+    <div class="toc-row sub"><span>3.6 Modèle Logique de Données (MLD)</span><span>16b</span></div>
+    <div class="toc-row sub"><span>3.7 Modèle physique de données (Dictionnaire)</span><span>17</span></div>
+    <div class="toc-row main"><span>Chapitre 4 — Réalisation et Implémentation</span><span class="pg">19</span></div>
+    <div class="toc-row sub"><span>4.1 Environnement de développement</span><span>19</span></div>
+    <div class="toc-row sub"><span>4.2 Architecture générale</span><span>20</span></div>
+    <div class="toc-row sub"><span>4.3 Implémentation du backend Laravel</span><span>21</span></div>
+    <div class="toc-row sub"><span>4.4 Interfaces utilisateurs réelles</span><span>22</span></div>
+    <div class="toc-row sub"><span>4.5 Tests et validation</span><span>24</span></div>
+    <div class="toc-row sub"><span>4.6 Difficultés et solutions</span><span>25</span></div>
+    <div class="toc-row main"><span>Conclusion Générale et Perspectives</span><span class="pg">26</span></div>
+    <div class="toc-row main"><span>Références Bibliographiques</span><span class="pg">27</span></div>
+    <div class="toc-row main"><span>Annexes</span><span class="pg">28</span></div>
+
+    <div class="page-footer">
+        <span>FITZONE — Rapport de Projet de Fin de Formation</span>
+        <span>Page iv</span>
+    </div>
+</div>
+
+<!-- ================================================================= -->
+<!-- PAGE 6 : LISTE DES FIGURES ET TABLEAUX -->
+<!-- ================================================================= -->
+<div class="page">
+    <h1 class="section-title">Liste des Figures</h1>
+    <div class="toc-row"><span>Figure 1.1 — Diagramme de Gantt prévisionnel du projet</span><span>8</span></div>
+    <div class="toc-row"><span>Figure 3.1 — Diagramme de cas d'utilisation global de FITZONE</span><span>14</span></div>
+    <div class="toc-row"><span>Figure 3.2 — Diagramme de séquence : Authentification JWT</span><span>15</span></div>
+    <div class="toc-row"><span>Figure 3.3 — Diagramme de séquence : Validation du pointage à 6 chiffres</span><span>16</span></div>
+    <div class="toc-row"><span>Figure 3.4 — Diagramme de classes UML global</span><span>17</span></div>
+    <div class="toc-row"><span>Figure 4.1 — Page d'accueil publique FITZONE (Hero Section)</span><span>22</span></div>
+    <div class="toc-row"><span>Figure 4.2 — Interface de connexion et authentification sécurisée</span><span>22</span></div>
+    <div class="toc-row"><span>Figure 4.3 — Tableau de bord de l'abonné connecté</span><span>23</span></div>
+    <div class="toc-row"><span>Figure 4.4 — Interface de pointage par code personnel à 6 chiffres</span><span>23</span></div>
+    <div class="toc-row"><span>Figure 4.5 — Planning et réservation des cours collectifs</span><span>23</span></div>
+    <div class="toc-row"><span>Figure 4.6 — Guide d'exercices par groupe musculaire</span><span>24</span></div>
+    <div class="toc-row"><span>Figure 4.7 — Gestion des abonnés (vue administrateur)</span><span>24</span></div>
+    <div class="toc-row"><span>Figure 4.8 — Module de gestion des paiements</span><span>24</span></div>
+
+    <h1 class="section-title" style="margin-top:20px;">Liste des Tableaux</h1>
+    <div class="toc-row"><span>Tableau 1.1 — Product Backlog et priorités des User Stories</span><span>7</span></div>
+    <div class="toc-row"><span>Tableau 2.1 — Comparatif des solutions de gestion sportive existantes</span><span>9</span></div>
+    <div class="toc-row"><span>Tableau 2.2 — Technologies et outils retenus</span><span>12</span></div>
+    <div class="toc-row"><span>Tableau 3.1 — Fiche détaillée du cas d'utilisation « Réserver un cours »</span><span>14</span></div>
+    <div class="toc-row"><span>Tableau 3.2 — Dictionnaire de données : table USERS</span><span>18</span></div>
+    <div class="toc-row"><span>Tableau 4.1 — Récapitulatif des tests fonctionnels</span><span>25</span></div>
+
+    <div class="page-footer">
+        <span>FITZONE — Rapport de Projet de Fin de Formation</span>
+        <span>Page v</span>
+    </div>
+</div>
+
+<!-- ================================================================= -->
+<!-- PAGE 7 : INTRODUCTION GÉNÉRALE -->
+<!-- ================================================================= -->
+<div class="page">
+    <h1 class="section-title">Introduction Générale</h1>
+    <p>
+        L'essor considérable du secteur de la santé et du bien-être physique, conjugué à l'évolution rapide des technologies numériques, a profondément transformé les attentes des consommateurs vis-à-vis des services sportifs. Aujourd'hui, un abonné d'une salle de sport ne se contente plus d'un accès physique à des équipements : il recherche une expérience numérique fluide, intégrée et personnalisée qui prolonge sa relation avec l'établissement bien au-delà de ses séances d'entraînement.
+    </p>
+    <p>
+        Face à cet impératif de modernisation, les complexes sportifs qui maintiennent des processus manuels de gestion — registres papier, fiches d'abonnement, plannings affichés statiquement — se retrouvent en situation de désavantage compétitif croissant. Ils font face à des problèmes opérationnels récurrents : fraude aux abonnements par prêt de badges physiques, difficultés de suivi des paiements, impossibilité de réguler les inscriptions aux cours collectifs et manque de données analytiques exploitables.
+    </p>
+    <p>
+        C'est précisément dans ce contexte que s'inscrit le présent projet de fin de formation, réalisé au sein de l'<strong>Office de la Formation Professionnelle et de la Promotion du Travail (OFPPT)</strong>, dont l'objet central est la conception et la réalisation de la plateforme <strong>FITZONE</strong>. Cette application web intégrée vise à centraliser l'ensemble des flux administratifs d'une salle de sport au sein d'un écosystème numérique unique, accessible depuis tout navigateur.
+    </p>
+    <p>
+        La problématique centrale de ce projet réside dans la sécurisation du contrôle d'accès physique. Mon approche innove en proposant un système de <strong>pointage par code personnel à 6 chiffres</strong>, généré à la création de chaque compte membre et validé en temps réel par une API sécurisée. Ce dispositif élimine les coûts liés aux badges physiques et rend impossible le prêt d'accès entre abonnés.
+    </p>
+    <p>
+        Ce rapport s'articule autour de quatre chapitres. Le <strong>Chapitre 1</strong> pose le cadrage du projet et présente la planification Agile adoptée. Le <strong>Chapitre 2</strong> analyse les solutions du marché et justifie mes choix technologiques. Le <strong>Chapitre 3</strong> détaille ma modélisation UML. Enfin, le <strong>Chapitre 4</strong> présente la réalisation concrète avec les interfaces réelles et les résultats des tests.
+    </p>
+    <div class="page-footer">
+        <span>FITZONE — Rapport de Projet de Fin de Formation</span>
+        <span>Page 1</span>
+    </div>
+</div>
+
+<!-- ================================================================= -->
+<!-- PAGE 8 : CHAPITRE 1 – COUVERTURE -->
+<!-- ================================================================= -->
+<div class="page">
+    <h1 class="chapter">Chapitre 1<br><span class="sub">Cadrage du Projet</span></h1>
+
+    <div class="chapter-intro">
+        Ce chapitre pose les fondations conceptuelles du projet FITZONE, réalisé dans le cadre de ma formation en Développement Digital à l'OFPPT. Il couvre le contexte général, la problématique, les objectifs, les besoins fonctionnels et non fonctionnels, la méthodologie Agile/SCRUM adoptée ainsi que la planification à travers un backlog produit et un diagramme de Gantt.
+    </div>
+
+    <h2>1.1 Contexte et Problématique</h2>
+    <p>
+        La gestion opérationnelle d'une salle de sport moderne implique la coordination simultanée de plusieurs activités : enregistrement des abonnements, planification des cours collectifs, contrôle des accès à l'entrée et gestion des encaissements mensuels.
+    </p>
+    <p>
+        En l'absence d'un système d'information centralisé, ces tâches génèrent inévitablement des erreurs humaines coûteuses. La problématique du contrôle d'accès est particulièrement sensible : les solutions matérielles traditionnelles (badges magnétiques, bracelets RFID) impliquent un investissement initial important et présentent des failles de sécurité notoires — notamment le prêt ou la copie illicite des badges entre abonnés et personnes non inscrites.
+    </p>
+    <p>
+        Le manque de visibilité en temps réel sur les statistiques d'affluence et les revenus mensuels empêche également la direction de prendre des décisions opérationnelles éclairées. Ces constats justifient le développement d'une solution logicielle dédiée, économique et sécurisée.
+    </p>
+
+    <h2>1.2 Objectifs du Projet</h2>
+    <p>L'objectif global de FITZONE est de fournir une plateforme web complète permettant d'automatiser et de sécuriser la gestion d'un centre sportif. Les objectifs spécifiques sont :</p>
+    <ul>
+        <li><strong>Portail membre self-service :</strong> Gestion du profil en autonomie, consultation de l'historique et réservation de cours.</li>
+        <li><strong>Système de pointage innovant :</strong> Code personnel à 6 chiffres unique, validé instantanément par l'API Laravel.</li>
+        <li><strong>Planning dynamique des cours :</strong> Vue interactive du calendrier avec gestion automatique des quotas de places.</li>
+        <li><strong>Tableau de bord analytique :</strong> Indicateurs clés en temps réel pour l'administrateur (visites, revenus, abonnements).</li>
+        <li><strong>Guide d'entraînement intégré :</strong> Catalogue d'exercices classés par groupe musculaire.</li>
+    </ul>
+
+    <div class="page-footer">
+        <span>FITZONE — Rapport de Projet de Fin de Formation</span>
+        <span>Page 3</span>
+    </div>
+</div>
+
+<!-- ================================================================= -->
+<!-- PAGE 9 : CHAPITRE 1 SUITE -->
+<!-- ================================================================= -->
+<div class="page">
+    <div class="page-header">
+        <span>FITZONE — OFPPT</span>
+        <span>Chapitre 1 : Cadrage du Projet</span>
+    </div>
+
+    <h2>1.3 Besoins Fonctionnels et Non Fonctionnels</h2>
+    <h3>Besoins Fonctionnels</h3>
+    <table class="academic">
+        <thead><tr><th>ID</th><th>Besoin fonctionnel</th></tr></thead>
+        <tbody>
+            <tr><td><strong>BF-01</strong></td><td>Inscription d'un nouveau membre avec génération automatique d'un code de pointage unique à 6 chiffres.</td></tr>
+            <tr><td><strong>BF-02</strong></td><td>Authentification sécurisée par email/mot de passe avec délivrance d'un jeton JWT.</td></tr>
+            <tr><td><strong>BF-03</strong></td><td>Validation d'un code de pointage à l'entrée avec vérification du statut d'abonnement actif.</td></tr>
+            <tr><td><strong>BF-04</strong></td><td>Consultation et réservation de cours collectifs avec contrôle de capacité.</td></tr>
+            <tr><td><strong>BF-05</strong></td><td>Enregistrement et suivi des paiements mensuels par l'administrateur.</td></tr>
+            <tr><td><strong>BF-06</strong></td><td>Gestion CRUD complète des membres (création, lecture, mise à jour, suppression).</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Besoins Non Fonctionnels</h3>
+    <table class="academic">
+        <thead><tr><th>ID</th><th>Besoin non fonctionnel</th></tr></thead>
+        <tbody>
+            <tr><td><strong>BNF-01</strong></td><td>Sécurité : mots de passe hachés avec bcrypt ; communication HTTPS ; API protégée par JWT.</td></tr>
+            <tr><td><strong>BNF-02</strong></td><td>Performance : réponse de l'API de pointage inférieure à 500 ms.</td></tr>
+            <tr><td><strong>BNF-03</strong></td><td>Ergonomie : interface Responsive, optimisée pour tablettes tactiles utilisées à l'accueil.</td></tr>
+            <tr><td><strong>BNF-04</strong></td><td>Maintenabilité : architecture découplée Laravel/React facilitant les évolutions indépendantes.</td></tr>
+        </tbody>
+    </table>
+
+    <h2>1.4 Méthodologie Adoptée (Agile / SCRUM)</h2>
+    <p>
+        Pour conduire ce projet, nous avons opté pour le cadre de développement <strong>Agile SCRUM</strong>. Notre projet a été découpé en <strong>trois sprints de deux semaines</strong>, chacun donnant lieu à une revue fonctionnelle avec l'encadrant.
+    </p>
+    <ul>
+        <li><strong>Sprint 1 :</strong> Authentification JWT, génération du code de pointage, gestion des membres (CRUD).</li>
+        <li><strong>Sprint 2 :</strong> Module de cours collectifs, réservation en ligne, validation du pointage à l'entrée.</li>
+        <li><strong>Sprint 3 :</strong> Tableau de bord analytique, gestion des paiements, guide musculaire, tests et corrections.</li>
+    </ul>
+
+    <div class="page-footer">
+        <span>FITZONE — Rapport de Projet de Fin de Formation</span>
+        <span>Page 4</span>
+    </div>
+</div>
+
+<!-- ================================================================= -->
+<!-- PAGE 10 : CHAPITRE 1 – BACKLOG + GANTT -->
+<!-- ================================================================= -->
+<div class="page">
+    <div class="page-header">
+        <span>FITZONE — OFPPT</span>
+        <span>Chapitre 1 : Cadrage du Projet</span>
+    </div>
+
+    <h2>1.5 Planification — Backlog Produit et Diagramme de Gantt</h2>
+    <table class="academic">
+        <thead>
+            <tr><th>ID</th><th>User Story</th><th>Priorité</th><th>Sprint</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>US-01</td><td>Se connecter de manière sécurisée avec email et mot de passe</td><td>Must</td><td>1</td></tr>
+            <tr><td>US-02</td><td>Disposer d'un code de pointage unique à 6 chiffres à l'inscription</td><td>Must</td><td>1</td></tr>
+            <tr><td>US-03</td><td>Consulter et réserver un cours collectif en ligne</td><td>Must</td><td>2</td></tr>
+            <tr><td>US-04</td><td>Valider une entrée physique avec le code à 6 chiffres</td><td>Must</td><td>2</td></tr>
+            <tr><td>US-05</td><td>Suivre les revenus et abonnements depuis un tableau de bord</td><td>Should</td><td>3</td></tr>
+            <tr><td>US-06</td><td>Accéder à un guide d'exercices par groupe musculaire</td><td>Could</td><td>3</td></tr>
+        </tbody>
+    </table>
+
+    <div class="diagram-box">
+        <div class="mermaid">
+gantt
+    title Planification du Projet FITZONE (Avril – Juin 2026)
+    dateFormat  YYYY-MM-DD
+    axisFormat  %d/%m
+    section Initialisation
+    Cadrage et Analyse des besoins     :done, 2026-04-15, 2026-04-30
+    section Conception
+    Modélisation UML et Base de données :done, 2026-05-01, 2026-05-20
+    section Développement
+    Sprint 1 — Auth et Membres         :done, 2026-05-21, 2026-06-03
+    Sprint 2 — Cours et Pointage       :done, 2026-06-04, 2026-06-17
+    Sprint 3 — Paiements et Dashboard  :done, 2026-06-18, 2026-06-27
+    section Recette
+    Tests et Corrections finales       :done, 2026-06-28, 2026-06-29
+        </div>
+        <div class="figure-caption">Figure 1.1 — Diagramme de Gantt prévisionnel du projet FITZONE</div>
+    </div>
+
+    <p>
+        <strong>Conclusion du chapitre :</strong> Ce premier chapitre a permis de définir clairement le périmètre fonctionnel et les exigences qualitatives du projet FITZONE. La planification Agile en trois sprints assure une livraison progressive et contrôlée des fonctionnalités. Dans le chapitre suivant, nous analyserons les solutions existantes et justifierons nos choix technologiques.
+    </p>
+
+    <div class="page-footer">
+        <span>FITZONE — Rapport de Projet de Fin de Formation</span>
+        <span>Page 5</span>
+    </div>
+</div>
+
+<!-- ================================================================= -->
+<!-- PAGE 11 : CHAPITRE 2 – COUVERTURE -->
+<!-- ================================================================= -->
+<div class="page">
+    <h1 class="chapter">Chapitre 2<br><span class="sub">Étude Préliminaire et Technologies</span></h1>
+
+    <div class="chapter-intro">
+        Ce chapitre effectue une analyse comparative des progiciels de gestion sportive existants, puis présente et argumente le choix de notre stack technique — React, Laravel et MySQL — ainsi que les outils de développement et de collaboration utilisés tout au long du projet.
+    </div>
+
+    <h2>2.1 Étude des Solutions Existantes</h2>
+    <table class="academic">
+        <thead>
+            <tr><th>Solution</th><th>Points Forts</th><th>Limites pour notre contexte</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Mindbody</strong></td>
+                <td>Riche en fonctionnalités, application mobile dédiée</td>
+                <td>Coût mensuel élevé, lecteurs de badges matériels requis</td>
+            </tr>
+            <tr>
+                <td><strong>Resamania</strong></td>
+                <td>Gestion planning avancée, multi-sites</td>
+                <td>Interface complexe, pas de pointage sans badge physique</td>
+            </tr>
+            <tr>
+                <td><strong>Virtuagym</strong></td>
+                <td>Bonne gestion des plannings et suivi nutritionnel</td>
+                <td>Abonnement coûteux, interface utilisateur surchargée pour les membres</td>
+            </tr>
+            <tr>
+                <td><strong>FITZONE (mon application)</strong></td>
+                <td>Pointage autonome sécurisé sans badge, réservation instantanée, dashboard d'administration réactif, 100% responsive, coût d'infrastructure nul.</td>
+                <td>Aucune limite. Solution sur mesure éliminant les coûts matériels et parfaitement alignée avec les besoins de la salle.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>2.2 Technologies et Frameworks Retenus</h2>
+    <h3>2.2.1 Frontend : React (JavaScript)</h3>
+    <p>
+        React est une bibliothèque JavaScript open-source maintenue par Meta. Fondée sur un système de composants UI réutilisables et un DOM virtuel, elle permet de concevoir des interfaces dynamiques Single Page Application (SPA) sans rechargement complet de page. Son large écosystème (React Router, Axios, Context API) et sa facilité de structuration en composants fonctionnels avec Hooks en font le choix idéal pour notre frontend interactif.
+    </p>
+    <h3>2.2.2 Backend : Laravel REST API (PHP)</h3>
+    <p>
+        Laravel est un framework PHP suivant l'architecture MVC. Il offre un routage API expressif, un ORM puissant (Eloquent) pour les interactions avec MySQL, un système d'authentification JWT et des outils de migration de schéma versionnés. Sa maturité et son excellente documentation en font un choix solide pour des API REST sécurisées.
+    </p>
+    <h3>2.2.3 Base de Données : MySQL</h3>
+    <p>
+        MySQL est un SGBD relationnel open-source. Sa robustesse, sa compatibilité native avec Laravel via Eloquent ORM et ses capacités de jointure entre tables (Utilisateurs, Abonnements, Visites, Cours) en font le choix optimal. Les index sur la colonne <code>code_pointage</code> garantissent des temps de réponse inférieurs à 50 ms pour la validation des accès.
+    </p>
+
+    <div class="page-footer">
+        <span>FITZONE — Rapport de Projet de Fin de Formation</span>
+        <span>Page 9</span>
+    </div>
+</div>
+
+<!-- ================================================================= -->
+<!-- PAGE 12 : CHAPITRE 2 SUITE -->
+<!-- ================================================================= -->
+<div class="page">
+    <div class="page-header">
+        <span>FITZONE — OFPPT</span>
+        <span>Chapitre 2 : Technologies</span>
+    </div>
+
+    <h2>2.3 Outils de Développement et de Collaboration</h2>
+    <table class="academic">
+        <thead>
+            <tr><th>Outil</th><th>Rôle dans le projet</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Visual Studio Code</strong></td><td>Éditeur principal (PHP Intelephense, ES7 React Snippets, GitLens)</td></tr>
+            <tr><td><strong>Postman</strong></td><td>Test et débogage des endpoints de l'API Laravel</td></tr>
+            <tr><td><strong>Git &amp; GitHub</strong></td><td>Versionnement du code source et sauvegarde distante</td></tr>
+            <tr><td><strong>XAMPP / MySQL Workbench</strong></td><td>Administration locale de la base de données MySQL</td></tr>
+            <tr><td><strong>npm / Composer</strong></td><td>Gestion des dépendances JavaScript (React) et PHP (Laravel)</td></tr>
+            <tr><td><strong>Mermaid / draw.io</strong></td><td>Conception des diagrammes UML et de séquence</td></tr>
+        </tbody>
+    </table>
+
+    <p>
+        <strong>Conclusion du chapitre :</strong> L'analyse comparative des solutions du marché confirme la pertinence d'une solution développée sur mesure. La stack Laravel/React/MySQL offre un équilibre optimal entre productivité de développement, performance en production et facilité de maintenance. Le chapitre suivant détaille la modélisation UML de notre application.
+    </p>
+
+    <div class="page-footer">
+        <span>FITZONE — Rapport de Projet de Fin de Formation</span>
+        <span>Page 10</span>
+    </div>
+</div>
+
+<!-- ================================================================= -->
+<!-- PAGE 13 : CHAPITRE 3 – COUVERTURE -->
+<!-- ================================================================= -->
+<div class="page">
+    <h1 class="chapter">Chapitre 3<br><span class="sub">Analyse et Conception</span></h1>
+
+    <div class="chapter-intro">
+        Ce chapitre traduit les exigences métier en artefacts UML formels : diagrammes de cas d'utilisation, de séquence et de classes, ainsi que le modèle physique de la base de données. Ces modèles ont guidé l'ensemble des décisions d'implémentation.
+    </div>
+
+    <h2>3.1 Identification des Acteurs</h2>
+    <ul>
+        <li><strong>Le Membre (Abonné) :</strong> Personne inscrite à la salle, rôle <code>abonne</code>. Accède au planning, réserve des cours, visualise son code de pointage et consulte le guide musculaire.</li>
+        <li><strong>L'Administrateur :</strong> Gérant ou personnel d'accueil, rôle <code>admin</code>. Accès total au panneau d'administration pour gérer les membres, valider les pointages, enregistrer les paiements et planifier les cours.</li>
+    </ul>
+
+    <h2>3.2 Diagrammes de Cas d'Utilisation</h2>
+    <div class="diagram-box" style="background: #ffffff; padding: 15px; border: 1.5px solid var(--blue-mid); border-radius: 6px;">
+        <svg viewBox="0 0 800 480" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <pattern id="lightGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+                    <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(0,58,112,0.03)" stroke-width="1"/>
+                </pattern>
+                <linearGradient id="academicBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#003A70" />
+                    <stop offset="100%" stop-color="#0075C9" />
+                </linearGradient>
+                <linearGradient id="academicGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#C89B2A" />
+                    <stop offset="100%" stop-color="#EAA810" />
+                </linearGradient>
+            </defs>
+            <rect width="100%" height="100%" fill="#ffffff"/>
+            <rect width="100%" height="100%" fill="url(#lightGrid)"/>
+
+            <!-- System Boundary Box -->
+            <rect x="180" y="20" width="440" height="440" rx="10" fill="#F8F9FA" stroke="#003A70" stroke-width="2"/>
+            <text x="400" y="45" fill="#003A70" font-family="'Montserrat', sans-serif" font-size="13px" font-weight="700" letter-spacing="1px" text-anchor="middle">SISTÈME FITZONE</text>
+
+            <!-- Connections - Admin (Black on Left) -->
+            <path d="M 80 210 L 310 75" stroke="rgba(17, 24, 39, 0.4)" stroke-width="2" fill="none"/>
+            <path d="M 80 210 L 310 140" stroke="rgba(17, 24, 39, 0.5)" stroke-width="2" fill="none"/>
+            <path d="M 80 210 L 310 210" stroke="rgba(17, 24, 39, 0.5)" stroke-width="2" fill="none"/>
+            <path d="M 80 210 L 310 280" stroke="rgba(17, 24, 39, 0.5)" stroke-width="2" fill="none"/>
+            <path d="M 80 210 L 310 350" stroke="rgba(17, 24, 39, 0.5)" stroke-width="2" fill="none"/>
+            <path d="M 80 210 L 310 410" stroke="rgba(17, 24, 39, 0.5)" stroke-width="2" fill="none"/>
+
+            <!-- Connections - Membre (Red on Right) -->
+            <path d="M 720 210 L 490 75" stroke="rgba(220, 38, 38, 0.4)" stroke-width="2" fill="none"/>
+            <path d="M 720 210 L 490 140" stroke="rgba(220, 38, 38, 0.5)" stroke-width="2" fill="none"/>
+            <path d="M 720 210 L 490 210" stroke="rgba(220, 38, 38, 0.5)" stroke-width="2" fill="none"/>
+            <path d="M 720 210 L 490 280" stroke="rgba(220, 38, 38, 0.5)" stroke-width="2" fill="none"/>
+            <path d="M 720 210 L 490 350" stroke="rgba(220, 38, 38, 0.5)" stroke-width="2" fill="none"/>
+
+            <!-- Actor: Admin (Left) -->
+            <g transform="translate(0, 0)">
+                <circle cx="80" cy="170" r="18" fill="url(#academicGold)"/>
+                <line x1="80" y1="188" x2="80" y2="238" stroke="url(#academicGold)" stroke-width="4"/>
+                <line x1="55" y1="205" x2="105" y2="205" stroke="url(#academicGold)" stroke-width="4" stroke-linecap="round"/>
+                <line x1="80" y1="238" x2="60" y2="285" stroke="url(#academicGold)" stroke-width="4" stroke-linecap="round"/>
+                <line x1="80" y1="238" x2="100" y2="285" stroke="url(#academicGold)" stroke-width="4" stroke-linecap="round"/>
+                <text x="80" y="315" fill="#111827" font-family="'Montserrat', sans-serif" font-size="13px" font-weight="700" text-anchor="middle">Admin</text>
+            </g>
+
+            <!-- Actor: Membre (Right) -->
+            <g transform="translate(0, 0)">
+                <circle cx="720" cy="170" r="18" fill="url(#academicBlue)"/>
+                <line x1="720" y1="188" x2="720" y2="238" stroke="url(#academicBlue)" stroke-width="4"/>
+                <line x1="695" y1="205" x2="745" y2="205" stroke="url(#academicBlue)" stroke-width="4" stroke-linecap="round"/>
+                <line x1="720" y1="238" x2="700" y2="285" stroke="url(#academicBlue)" stroke-width="4" stroke-linecap="round"/>
+                <line x1="720" y1="238" x2="740" y2="285" stroke="url(#academicBlue)" stroke-width="4" stroke-linecap="round"/>
+                <text x="720" y="315" fill="#DC2626" font-family="'Montserrat', sans-serif" font-size="13px" font-weight="700" text-anchor="middle">Membre</text>
+            </g>
+
+            <!-- Use Cases (Shared & Specific) -->
+            <!-- Shared -->
+            <g>
+                <rect x="310" y="55" width="180" height="40" rx="20" fill="#ffffff" stroke="#DC2626" stroke-width="2"/>
+                <text x="400" y="79" fill="#1A1A2E" font-family="'Montserrat', sans-serif" font-size="11px" font-weight="600" text-anchor="middle">Se connecter (Auth)</text>
+            </g>
+
+            <!-- Admin specific (Left Column) -->
+            <g>
+                <rect x="220" y="120" width="180" height="40" rx="20" fill="#ffffff" stroke="#111827" stroke-width="1.5"/>
+                <text x="310" y="144" fill="#1A1A2E" font-family="'Montserrat', sans-serif" font-size="11px" font-weight="600" text-anchor="middle">Gérer les membres</text>
+            </g>
+            <g>
+                <rect x="220" y="190" width="180" height="40" rx="20" fill="#ffffff" stroke="#111827" stroke-width="1.5"/>
+                <text x="310" y="214" fill="#1A1A2E" font-family="'Montserrat', sans-serif" font-size="11px" font-weight="600" text-anchor="middle">Configurer les cours</text>
+            </g>
+            <g>
+                <rect x="220" y="260" width="180" height="40" rx="20" fill="#ffffff" stroke="#111827" stroke-width="1.5"/>
+                <text x="310" y="284" fill="#1A1A2E" font-family="'Montserrat', sans-serif" font-size="11px" font-weight="600" text-anchor="middle">Gérer les salles</text>
+            </g>
+            <g>
+                <rect x="220" y="330" width="180" height="40" rx="20" fill="#ffffff" stroke="#111827" stroke-width="1.5"/>
+                <text x="310" y="354" fill="#1A1A2E" font-family="'Montserrat', sans-serif" font-size="11px" font-weight="600" text-anchor="middle">Enregistrer les visites</text>
+            </g>
+            <g>
+                <rect x="220" y="390" width="180" height="40" rx="20" fill="#ffffff" stroke="#111827" stroke-width="1.5"/>
+                <text x="310" y="414" fill="#1A1A2E" font-family="'Montserrat', sans-serif" font-size="11px" font-weight="600" text-anchor="middle">Suivre les revenus</text>
+            </g>
+
+            <!-- Membre specific (Right Column) -->
+            <g>
+                <rect x="400" y="120" width="180" height="40" rx="20" fill="#ffffff" stroke="#DC2626" stroke-width="1.5"/>
+                <text x="490" y="144" fill="#1A1A2E" font-family="'Montserrat', sans-serif" font-size="11px" font-weight="600" text-anchor="middle">Gérer son profil</text>
+            </g>
+            <g>
+                <rect x="400" y="190" width="180" height="40" rx="20" fill="#ffffff" stroke="#DC2626" stroke-width="1.5"/>
+                <text x="490" y="214" fill="#1A1A2E" font-family="'Montserrat', sans-serif" font-size="11px" font-weight="600" text-anchor="middle">Consulter le planning</text>
+            </g>
+            <g>
+                <rect x="400" y="260" width="180" height="40" rx="20" fill="#ffffff" stroke="#DC2626" stroke-width="1.5"/>
+                <text x="490" y="284" fill="#1A1A2E" font-family="'Montserrat', sans-serif" font-size="11px" font-weight="600" text-anchor="middle">Réserver un cours</text>
+            </g>
+            <g>
+                <rect x="400" y="330" width="180" height="40" rx="20" fill="#ffffff" stroke="#DC2626" stroke-width="1.5"/>
+                <text x="490" y="354" fill="#1A1A2E" font-family="'Montserrat', sans-serif" font-size="11px" font-weight="600" text-anchor="middle">Consulter code pointage</text>
+            </g>
+        </svg>
+        <div class="figure-caption">Figure 3.1 — Diagramme de cas d'utilisation global de FITZONE</div>
+    </div>
+
+    <h3>Fiche détaillée — « Réserver un cours »</h3>
+    <table class="academic">
+        <tbody>
+            <tr><td style="width:150px;font-weight:bold;">Acteur principal</td><td>Membre authentifié avec abonnement actif</td></tr>
+            <tr><td><strong>Pré-conditions</strong></td><td>Le membre est connecté ; son abonnement est en cours de validité</td></tr>
+            <tr><td><strong>Scénario nominal</strong></td><td>1. Le membre consulte les cours. 2. Il sélectionne et clique sur « S'inscrire ». 3. Le backend vérifie la disponibilité. 4. L'inscription est validée.</td></tr>
+            <tr><td><strong>Scénario alternatif</strong></td><td>3a. Cours complet → HTTP 409 « Cours complet », aucune inscription créée.</td></tr>
+            <tr><td><strong>Post-conditions</strong></td><td>La réservation est enregistrée ; le planning est mis à jour en temps réel.</td></tr>
+        </tbody>
+    </table>
+
+    <div class="page-footer">
+        <span>FITZONE — Rapport de Projet de Fin de Formation</span>
+        <span>Page 13</span>
+    </div>
+</div>
+
+<!-- ================================================================= -->
+<!-- PAGE 14 : CHAPITRE 3 – SÉQUENCES -->
+<!-- ================================================================= -->
+<div class="page">
+    <div class="page-header">
+        <span>FITZONE — OFPPT</span>
+        <span>Chapitre 3 : Analyse et Conception</span>
+    </div>
+
+    <h2>3.3 Diagramme de Séquence — Validation du Pointage</h2>
+    <div class="diagram-box" style="background: #ffffff; padding: 15px; border: 1.5px solid var(--blue-mid); border-radius: 6px;">
+        <svg viewBox="0 0 800 450" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <!-- Markers for sequence arrows -->
+            <defs>
+                <marker id="seqArrowAcad" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#003A70"/>
+                </marker>
+                <marker id="seqArrowReturnAcad" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#555555"/>
+                </marker>
+                <marker id="seqArrowRedAcad" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#D32F2F"/>
+                </marker>
+            </defs>
+
+            <!-- Participant Lifelines -->
+            <g stroke="#D0D5DD" stroke-width="1.5" stroke-dasharray="4 4">
+                <line x1="100" y1="60" x2="100" y2="410" />
+                <line x1="280" y1="60" x2="280" y2="410" />
+                <line x1="480" y1="60" x2="480" y2="410" />
+                <line x1="680" y1="60" x2="680" y2="410" />
+            </g>
+
+            <!-- Participant Headers -->
+            <g font-family="'Montserrat', sans-serif" font-size="11px" font-weight="700" text-anchor="middle" fill="#ffffff">
+                <!-- Membre -->
+                <rect x="30" y="20" width="140" height="30" rx="4" fill="url(#academicBlue)"/>
+                <text x="100" y="38">Membre</text>
+                
+                <!-- Opérateur Accueil -->
+                <rect x="210" y="20" width="140" height="30" rx="4" fill="url(#academicBlue)"/>
+                <text x="280" y="38">Opérateur Accueil</text>
+                
+                <!-- API Backend (Laravel) -->
+                <rect x="410" y="20" width="140" height="30" rx="4" fill="url(#academicBlue)"/>
+                <text x="480" y="38">Laravel API</text>
+                
+                <!-- Base MySQL -->
+                <rect x="610" y="20" width="140" height="30" rx="4" fill="url(#academicBlue)"/>
+                <text x="680" y="38">Base MySQL</text>
+            </g>
+
+            <!-- Messages & Activations -->
+            <!-- 1. Code énonce -->
+            <path d="M 100 90 L 280 90" stroke="#003A70" stroke-width="1.5" fill="none" marker-end="url(#seqArrowAcad)"/>
+            <text x="190" y="83" fill="#1A1A2E" font-family="'EB Garamond', Georgia, serif" font-size="12px" text-anchor="middle">1. Énonce son code (ex: 472819)</text>
+
+            <!-- 2. POST Validation -->
+            <path d="M 280 120 L 480 120" stroke="#003A70" stroke-width="1.5" fill="none" marker-end="url(#seqArrowAcad)"/>
+            <text x="380" y="113" fill="#1A1A2E" font-family="'EB Garamond', Georgia, serif" font-size="12px" text-anchor="middle">2. POST /api/pointage/valider</text>
+
+            <!-- 3. Query -->
+            <path d="M 480 150 L 680 150" stroke="#003A70" stroke-width="1.5" fill="none" marker-end="url(#seqArrowAcad)"/>
+            <text x="580" y="143" fill="#1A1A2E" font-family="'EB Garamond', Georgia, serif" font-size="12px" text-anchor="middle">3. SELECT * FROM users...</text>
+
+            <!-- 4. Result -->
+            <path d="M 680 180 L 480 180" stroke="#555555" stroke-width="1.5" stroke-dasharray="2 2" fill="none" marker-end="url(#seqArrowReturnAcad)"/>
+            <text x="580" y="173" fill="#555555" font-family="'EB Garamond', Georgia, serif" font-size="12px" text-anchor="middle">4. Données + Abonnement</text>
+
+            <!-- ALT BOX -->
+            <rect x="40" y="195" width="700" height="210" rx="6" fill="#FFF9F9" stroke="#D32F2F" stroke-width="1.2" stroke-dasharray="3 3"/>
+            <rect x="40" y="195" width="230" height="20" rx="3" fill="#D32F2F"/>
+            <text x="50" y="209" fill="#ffffff" font-family="'Montserrat', sans-serif" font-size="10px" font-weight="700">ALT : Abonnement expiré ou inactif</text>
+
+            <!-- 5. Denied -->
+            <path d="M 480 230 L 280 230" stroke="#D32F2F" stroke-width="1.5" stroke-dasharray="2 2" fill="none" marker-end="url(#seqArrowRedAcad)"/>
+            <text x="380" y="223" fill="#D32F2F" font-family="'EB Garamond', Georgia, serif" font-size="12px" text-anchor="middle">5. HTTP 400 Access Denied</text>
+
+            <!-- 6. Physical Denied -->
+            <path d="M 280 255 L 100 255" stroke="#D32F2F" stroke-width="1.5" stroke-dasharray="2 2" fill="none" marker-end="url(#seqArrowRedAcad)"/>
+            <text x="190" y="250" fill="#D32F2F" font-family="'EB Garamond', Georgia, serif" font-size="12px" text-anchor="middle">6. Refus d'accès</text>
+
+            <!-- Separation line -->
+            <line x1="40" y1="275" x2="740" y2="275" stroke="#D0D5DD" stroke-width="1"/>
+            <text x="50" y="292" fill="#00875A" font-family="'Montserrat', sans-serif" font-size="10px" font-weight="700">[ Sinon : Abonnement actif ]</text>
+
+            <!-- 7. Insert Visite -->
+            <path d="M 480 310 L 680 310" stroke="#003A70" stroke-width="1.5" fill="none" marker-end="url(#seqArrowAcad)"/>
+            <text x="580" y="305" fill="#1A1A2E" font-family="'EB Garamond', Georgia, serif" font-size="12px" text-anchor="middle">7. INSERT INTO visites</text>
+
+            <!-- 8. DB OK -->
+            <path d="M 680 335 L 480 335" stroke="#555555" stroke-width="1.5" stroke-dasharray="2 2" fill="none" marker-end="url(#seqArrowReturnAcad)"/>
+            <text x="580" y="330" fill="#555555" font-family="'EB Garamond', Georgia, serif" font-size="12px" text-anchor="middle">8. Confirmation</text>
+
+            <!-- 9. HTTP 200 -->
+            <path d="M 480 360 L 280 360" stroke="#003A70" stroke-width="1.5" stroke-dasharray="2 2" fill="none" marker-end="url(#seqArrowReturnAcad)"/>
+            <text x="380" y="355" fill="#1A1A2E" font-family="'EB Garamond', Georgia, serif" font-size="12px" text-anchor="middle">9. HTTP 200 Accès autorisé</text>
+
+            <!-- 10. Open -->
+            <path d="M 280 385 L 100 385" stroke="#003A70" stroke-width="1.5" stroke-dasharray="2 2" fill="none" marker-end="url(#seqArrowReturnAcad)"/>
+            <text x="190" y="380" fill="#1A1A2E" font-family="'EB Garamond', Georgia, serif" font-size="12px" text-anchor="middle">10. Bienvenue, accès accordé</text>
+        </svg>
+        <div class="figure-caption">Figure 3.3 — Diagramme de séquence : Validation du pointage à 6 chiffres</div>
+    </div>
+
+    <div class="page-footer">
+        <span>FITZONE — Rapport de Projet de Fin de Formation</span>
+        <span>Page 14</span>
+    </div>
+</div>
+
+<!-- ================================================================= -->
+<!-- PAGE 15 : CHAPITRE 3 – CLASSE UML -->
+<!-- ================================================================= -->
+<div class="page">
+    <div class="page-header">
+        <span>FITZONE — OFPPT</span>
+        <span>Chapitre 3 : Analyse et Conception</span>
+    </div>
+
+    <h2>3.4 Diagramme de Classes UML</h2>
+    <div class="diagram-box" style="background: #ffffff; padding: 15px; border: 1.5px solid var(--blue-mid); border-radius: 6px;">
+        <svg viewBox="0 0 800 420" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <rect width="100%" height="100%" fill="#ffffff"/>
+            <rect width="100%" height="100%" fill="url(#lightGrid)"/>
+
+            <!-- Markers for Arrows -->
+            <defs>
+                <marker id="arrowAcad" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#003A70"/>
+                </marker>
+            </defs>
+
+            <!-- Class: User (Left) -->
+            <g transform="translate(40, 110)">
+                <rect width="180" height="180" rx="6" fill="#F8F9FA" stroke="#003A70" stroke-width="2"/>
+                <rect width="180" height="30" rx="6" fill="url(#academicBlue)"/>
+                <text x="90" y="20" fill="#ffffff" font-family="'Montserrat', sans-serif" font-size="13px" font-weight="700" text-anchor="middle">User</text>
+                
+                <!-- Attributes -->
+                <text x="10" y="50" fill="#1A1A2E" font-family="monospace" font-size="11px">+int id</text>
+                <text x="10" y="68" fill="#1A1A2E" font-family="monospace" font-size="11px">+string nom</text>
+                <text x="10" y="86" fill="#1A1A2E" font-family="monospace" font-size="11px">+string email</text>
+                <text x="10" y="104" fill="#1A1A2E" font-family="monospace" font-size="11px">+string role</text>
+                <text x="10" y="122" fill="#1A1A2E" font-family="monospace" font-size="11px">+string code_pointage</text>
+                
+                <line x1="0" y1="135" x2="180" y2="135" stroke="#003A70" stroke-dasharray="2 2"/>
+                
+                <!-- Methods -->
+                <text x="10" y="152" fill="#1A1A2E" font-family="monospace" font-size="10px">+validerPointage()</text>
+                <text x="10" y="168" fill="#1A1A2E" font-family="monospace" font-size="10px">+reserverCours()</text>
+            </g>
+
+            <!-- Class: Abonnement (Top Middle) -->
+            <g transform="translate(310, 20)">
+                <rect width="180" height="140" rx="6" fill="#F8F9FA" stroke="#003A70" stroke-width="2"/>
+                <rect width="180" height="30" rx="6" fill="url(#academicBlue)"/>
+                <text x="90" y="20" fill="#ffffff" font-family="'Montserrat', sans-serif" font-size="13px" font-weight="700" text-anchor="middle">Abonnement</text>
+                
+                <!-- Attributes -->
+                <text x="10" y="50" fill="#1A1A2E" font-family="monospace" font-size="11px">+int id</text>
+                <text x="10" y="68" fill="#1A1A2E" font-family="monospace" font-size="11px">+string type</text>
+                <text x="10" y="86" fill="#1A1A2E" font-family="monospace" font-size="11px">+date date_fin</text>
+                <text x="10" y="104" fill="#1A1A2E" font-family="monospace" font-size="11px">+string statut</text>
+                
+                <line x1="0" y1="115" x2="180" y2="115" stroke="#003A70" stroke-dasharray="2 2"/>
+                
+                <!-- Methods -->
+                <text x="10" y="130" fill="#1A1A2E" font-family="monospace" font-size="10px">+estValide(): bool</text>
+            </g>
+
+            <!-- Class: Visite (Bottom Middle) -->
+            <g transform="translate(310, 260)">
+                <rect width="180" height="120" rx="6" fill="#F8F9FA" stroke="#003A70" stroke-width="2"/>
+                <rect width="180" height="30" rx="6" fill="url(#academicBlue)"/>
+                <text x="90" y="20" fill="#ffffff" font-family="'Montserrat', sans-serif" font-size="13px" font-weight="700" text-anchor="middle">Visite</text>
+                
+                <!-- Attributes -->
+                <text x="10" y="50" fill="#1A1A2E" font-family="monospace" font-size="11px">+int id</text>
+                <text x="10" y="68" fill="#1A1A2E" font-family="monospace" font-size="11px">+datetime date_visite</text>
+                <text x="10" y="86" fill="#1A1A2E" font-family="monospace" font-size="11px">+string type</text>
+                
+                <line x1="0" y1="98" x2="180" y2="98" stroke="#003A70" stroke-dasharray="2 2"/>
+                
+                <!-- Methods -->
+                <text x="10" y="112" fill="#1A1A2E" font-family="monospace" font-size="10px">+enregistrer(): bool</text>
+            </g>
+
+            <!-- Class: Cours (Right) -->
+            <g transform="translate(580, 50)">
+                <rect width="180" height="150" rx="6" fill="#F8F9FA" stroke="#003A70" stroke-width="2"/>
+                <rect width="180" height="30" rx="6" fill="url(#academicBlue)"/>
+                <text x="90" y="20" fill="#ffffff" font-family="'Montserrat', sans-serif" font-size="13px" font-weight="700" text-anchor="middle">Cours</text>
+                
+                <!-- Attributes -->
+                <text x="10" y="50" fill="#1A1A2E" font-family="monospace" font-size="11px">+int id</text>
+                <text x="10" y="68" fill="#1A1A2E" font-family="monospace" font-size="11px">+string titre</text>
+                <text x="10" y="86" fill="#1A1A2E" font-family="monospace" font-size="11px">+datetime date_heure</text>
+                <text x="10" y="104" fill="#1A1A2E" font-family="monospace" font-size="11px">+int places_max</text>
+                
+                <line x1="0" y1="115" x2="180" y2="115" stroke="#003A70" stroke-dasharray="2 2"/>
+                
+                <!-- Methods -->
+                <text x="10" y="130" fill="#1A1A2E" font-family="monospace" font-size="10px">+verifierDispo(): bool</text>
+                <text x="10" y="142" fill="#1A1A2E" font-family="monospace" font-size="10px">+incrementerReservees()</text>
+            </g>
+
+            <!-- Class: Salle (Right Bottom) -->
+            <g transform="translate(580, 260)">
+                <rect width="180" height="120" rx="6" fill="#F8F9FA" stroke="#003A70" stroke-width="2"/>
+                <rect width="180" height="30" rx="6" fill="url(#academicBlue)"/>
+                <text x="90" y="20" fill="#ffffff" font-family="'Montserrat', sans-serif" font-size="13px" font-weight="700" text-anchor="middle">Salle</text>
+                
+                <!-- Attributes -->
+                <text x="10" y="50" fill="#1A1A2E" font-family="monospace" font-size="11px">+int id</text>
+                <text x="10" y="68" fill="#1A1A2E" font-family="monospace" font-size="11px">+string nom</text>
+                <text x="10" y="86" fill="#1A1A2E" font-family="monospace" font-size="11px">+int capacite</text>
+                
+                <line x1="0" y1="98" x2="180" y2="98" stroke="#003A70" stroke-dasharray="2 2"/>
+                
+                <!-- Methods -->
+                <text x="10" y="112" fill="#1A1A2E" font-family="monospace" font-size="10px">+estDisponible(): bool</text>
+            </g>
+
+            <!-- Associations & Cardinalities -->
+            <!-- User to Abonnement -->
+            <path d="M 220 130 L 310 90" stroke="#005BAA" stroke-width="1.5" fill="none" marker-end="url(#arrowAcad)"/>
+            <text x="230" y="120" fill="#555555" font-family="'Montserrat', sans-serif" font-size="11px">1</text>
+            <text x="290" y="105" fill="#555555" font-family="'Montserrat', sans-serif" font-size="11px">0..*</text>
+            <text x="265" y="95" fill="#003A70" font-family="'Montserrat', sans-serif" font-size="10px" font-weight="600" text-anchor="middle">possède</text>
+
+            <!-- User to Visite -->
+            <path d="M 220 230 L 310 275" stroke="#005BAA" stroke-width="1.5" fill="none" marker-end="url(#arrowAcad)"/>
+            <text x="230" y="245" fill="#555555" font-family="'Montserrat', sans-serif" font-size="11px">1</text>
+            <text x="290" y="295" fill="#555555" font-family="'Montserrat', sans-serif" font-size="11px">0..*</text>
+            <text x="265" y="265" fill="#003A70" font-family="'Montserrat', sans-serif" font-size="10px" font-weight="600" text-anchor="middle">effectue</text>
+
+            <!-- User to Cours -->
+            <path d="M 220 180 Q 400 190 580 140" stroke="#005BAA" stroke-width="1.5" fill="none" marker-end="url(#arrowAcad)"/>
+            <text x="230" y="195" fill="#555555" font-family="'Montserrat', sans-serif" font-size="11px">*</text>
+            <text x="560" y="155" fill="#555555" font-family="'Montserrat', sans-serif" font-size="11px">*</text>
+            <text x="400" y="178" fill="#003A70" font-family="'Montserrat', sans-serif" font-size="10px" font-weight="600" text-anchor="middle">réserve</text>
+        </svg>
+        <div class="figure-caption">Figure 3.4 — Diagramme de classes UML global de l'application FITZONE</div>
+    </div>
+
+    <div class="page-footer">
+        <span>FITZONE — Rapport de Projet de Fin de Formation</span>
+        <span>Page 15</span>
+    </div>
+</div>
+
+<!-- ================================================================= -->
+<!-- PAGE 15B : CHAPITRE 3 – MCD & MLD -->
+<!-- ================================================================= -->
+<div class="page">
+    <div class="page-header">
+        <span>FITZONE — OFPPT</span>
+        <span>Chapitre 3 : Analyse et Conception</span>
+    </div>
+
+    <h2>3.5 Modèle Conceptuel de Données (MCD)</h2>
+    <p>
+        Le schéma ci-dessous structure les entités conceptuelles et définit leurs associations ainsi que leurs cardinalités minimales et maximales.
+    </p>
+    <div class="diagram-box" style="background: #ffffff; padding: 12px; border: 1.5px solid var(--blue-mid); border-radius: 6px; margin-bottom: 15px; display: block;">
+        <svg viewBox="0 0 900 500" style="width: 100%; height: auto; display: block;" xmlns="http://www.w3.org/2000/svg">
+            <rect width="100%" height="100%" fill="#ffffff"/>
+            <rect width="100%" height="100%" fill="url(#lightGrid)"/>
+
+            <defs>
+                <linearGradient id="acadPurple" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#005BAA" />
+                    <stop offset="100%" stop-color="#0075C9" />
+                </linearGradient>
+            </defs>
+
+            <!-- Entities -->
+            <!-- USERS (Center) -->
+            <g transform="translate(370, 200)">
+                <rect width="160" height="100" rx="5" fill="#F8F9FA" stroke="#003A70" stroke-width="2"/>
+                <rect width="160" height="25" rx="5" fill="url(#academicBlue)"/>
+                <text x="80" y="17" fill="#ffffff" font-family="'Montserrat', sans-serif" font-size="12px" font-weight="700" text-anchor="middle">USERS</text>
+                <text x="10" y="42" fill="#1A1A2E" font-family="monospace" font-size="10px" text-decoration="underline">id</text>
+                <text x="10" y="58" fill="#1A1A2E" font-family="monospace" font-size="10px">nom</text>
+                <text x="10" y="74" fill="#1A1A2E" font-family="monospace" font-size="10px">email</text>
+                <text x="10" y="90" fill="#1A1A2E" font-family="monospace" font-size="10px">code_pointage</text>
+            </g>
+
+            <!-- ABONNEMENTS (Top) -->
+            <g transform="translate(370, 15)">
+                <rect width="160" height="80" rx="5" fill="#F8F9FA" stroke="#003A70" stroke-width="2"/>
+                <rect width="160" height="25" rx="5" fill="url(#academicBlue)"/>
+                <text x="80" y="17" fill="#ffffff" font-family="'Montserrat', sans-serif" font-size="12px" font-weight="700" text-anchor="middle">ABONNEMENTS</text>
+                <text x="10" y="42" fill="#1A1A2E" font-family="monospace" font-size="10px" text-decoration="underline">id</text>
+                <text x="10" y="58" fill="#1A1A2E" font-family="monospace" font-size="10px">type</text>
+                <text x="10" y="74" fill="#1A1A2E" font-family="monospace" font-size="10px">statut</text>
+            </g>
+
+            <!-- VISITES (Bottom) -->
+            <g transform="translate(370, 395)">
+                <rect width="160" height="80" rx="5" fill="#F8F9FA" stroke="#003A70" stroke-width="2"/>
+                <rect width="160" height="25" rx="5" fill="url(#academicBlue)"/>
+                <text x="80" y="17" fill="#ffffff" font-family="'Montserrat', sans-serif" font-size="12px" font-weight="700" text-anchor="middle">VISITES</text>
+                <text x="10" y="42" fill="#1A1A2E" font-family="monospace" font-size="10px" text-decoration="underline">id</text>
+                <text x="10" y="58" fill="#1A1A2E" font-family="monospace" font-size="10px">date_visite</text>
+            </g>
+
+            <!-- PAIEMENTS (Left) -->
+            <g transform="translate(40, 205)">
+                <rect width="160" height="90" rx="5" fill="#F8F9FA" stroke="#003A70" stroke-width="2"/>
+                <rect width="160" height="25" rx="5" fill="url(#academicBlue)"/>
+                <text x="80" y="17" fill="#ffffff" font-family="'Montserrat', sans-serif" font-size="12px" font-weight="700" text-anchor="middle">PAIEMENTS</text>
+                <text x="10" y="42" fill="#1A1A2E" font-family="monospace" font-size="10px" text-decoration="underline">id</text>
+                <text x="10" y="58" fill="#1A1A2E" font-family="monospace" font-size="10px">montant</text>
+                <text x="10" y="74" fill="#1A1A2E" font-family="monospace" font-size="10px">statut</text>
+            </g>
+
+            <!-- COURS (Right Top) -->
+            <g transform="translate(690, 205)">
+                <rect width="160" height="90" rx="5" fill="#F8F9FA" stroke="#003A70" stroke-width="2"/>
+                <rect width="160" height="25" rx="5" fill="url(#academicBlue)"/>
+                <text x="80" y="17" fill="#ffffff" font-family="'Montserrat', sans-serif" font-size="12px" font-weight="700" text-anchor="middle">COURS</text>
+                <text x="10" y="42" fill="#1A1A2E" font-family="monospace" font-size="10px" text-decoration="underline">id</text>
+                <text x="10" y="58" fill="#1A1A2E" font-family="monospace" font-size="10px">titre</text>
+                <text x="10" y="74" fill="#1A1A2E" font-family="monospace" font-size="10px">date_heure</text>
+            </g>
+
+            <!-- SALLES (Right Bottom) -->
+            <g transform="translate(690, 395)">
+                <rect width="160" height="80" rx="5" fill="#F8F9FA" stroke="#003A70" stroke-width="2"/>
+                <rect width="160" height="25" rx="5" fill="url(#academicBlue)"/>
+                <text x="80" y="17" fill="#ffffff" font-family="'Montserrat', sans-serif" font-size="12px" font-weight="700" text-anchor="middle">SALLES</text>
+                <text x="10" y="42" fill="#1A1A2E" font-family="monospace" font-size="10px" text-decoration="underline">id</text>
+                <text x="10" y="58" fill="#1A1A2E" font-family="monospace" font-size="10px">nom</text>
+                <text x="10" y="74" fill="#1A1A2E" font-family="monospace" font-size="10px">capacite</text>
+            </g>
+
+            <!-- Associations & Lines -->
+            <!-- Users - Abonnements -->
+            <line x1="450" y1="200" x2="450" y2="95" stroke="#555" stroke-width="1.5"/>
+            <g transform="translate(450, 145)">
+                <ellipse rx="45" ry="14" fill="#ffffff" stroke="#C89B2A" stroke-width="1.5"/>
+                <text x="0" y="3" fill="#1A1A2E" font-family="'Montserrat', sans-serif" font-size="10px" font-weight="600" text-anchor="middle">possède</text>
+            </g>
+            <text x="465" y="185" fill="#555" font-size="10px" font-weight="600">0,N</text>
+            <text x="465" y="115" fill="#555" font-size="10px" font-weight="600">1,1</text>
+
+            <!-- Users - Visites -->
+            <line x1="450" y1="300" x2="450" y2="395" stroke="#555" stroke-width="1.5"/>
+            <g transform="translate(450, 350)">
+                <ellipse rx="45" ry="14" fill="#ffffff" stroke="#C89B2A" stroke-width="1.5"/>
+                <text x="0" y="3" fill="#1A1A2E" font-family="'Montserrat', sans-serif" font-size="10px" font-weight="600" text-anchor="middle">effectue</text>
+            </g>
+            <text x="465" y="320" fill="#555" font-size="10px" font-weight="600">0,N</text>
+            <text x="465" y="385" fill="#555" font-size="10px" font-weight="600">1,1</text>
+
+            <!-- Users - Paiements -->
+            <line x1="370" y1="250" x2="200" y2="250" stroke="#555" stroke-width="1.5"/>
+            <g transform="translate(285, 250)">
+                <ellipse rx="42" ry="14" fill="#ffffff" stroke="#C89B2A" stroke-width="1.5"/>
+                <text x="0" y="3" fill="#1A1A2E" font-family="'Montserrat', sans-serif" font-size="10px" font-weight="600" text-anchor="middle">règle</text>
+            </g>
+            <text x="340" y="242" fill="#555" font-size="10px" font-weight="600">0,N</text>
+            <text x="215" y="242" fill="#555" font-size="10px" font-weight="600">1,1</text>
+
+            <!-- Users - Cours -->
+            <line x1="530" y1="250" x2="690" y2="250" stroke="#555" stroke-width="1.5"/>
+            <g transform="translate(610, 250)">
+                <ellipse rx="42" ry="14" fill="#ffffff" stroke="#C89B2A" stroke-width="1.5"/>
+                <text x="0" y="3" fill="#1A1A2E" font-family="'Montserrat', sans-serif" font-size="10px" font-weight="600" text-anchor="middle">réserve</text>
+            </g>
+            <text x="545" y="242" fill="#555" font-size="10px" font-weight="600">0,N</text>
+            <text x="665" y="242" fill="#555" font-size="10px" font-weight="600">0,N</text>
+
+            <!-- Cours - Salles -->
+            <line x1="770" y1="295" x2="770" y2="395" stroke="#555" stroke-width="1.5"/>
+            <g transform="translate(770, 345)">
+                <ellipse rx="45" ry="14" fill="#ffffff" stroke="#C89B2A" stroke-width="1.5"/>
+                <text x="0" y="3" fill="#1A1A2E" font-family="'Montserrat', sans-serif" font-size="10px" font-weight="600" text-anchor="middle">se déroule</text>
+            </g>
+            <text x="785" y="315" fill="#555" font-size="10px" font-weight="600">1,1</text>
+            <text x="785" y="385" fill="#555" font-size="10px" font-weight="600">0,N</text>
+        </svg>
+        <div class="figure-caption">Figure 3.5 — Modèle Conceptuel de Données (MCD) FITZONE</div>
+    </div>
+
+    <div class="page-footer">
+        <span>FITZONE — Rapport de Projet de Fin de Formation</span>
+        <span>Page 16</span>
+    </div>
+</div>
+
+<!-- ================================================================= -->
+<!-- PAGE 15C : CHAPITRE 3 – MLD -->
+<!-- ================================================================= -->
+<div class="page">
+    <div class="page-header">
+        <span>FITZONE — OFPPT</span>
+        <span>Chapitre 3 : Analyse et Conception</span>
+    </div>
+
+    <h2>3.6 Modèle Logique de Données (MLD)</h2>
+    <p>
+        Le modèle logique de données traduit le MCD en tables relationnelles structurées avec clés primaires (PK) et clés étrangères (FK) reliant les entités entre elles.
+    </p>
+
+    <!-- MLD Light Grid -->
+    <style>
+        .mld-grid-acad {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .mld-table-card-acad {
+            background-color: #F8F9FA;
+            border: 1.5px solid var(--blue-mid);
+            border-radius: 6px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .mld-table-header-acad {
+            background-color: var(--blue-dark);
+            color: white;
+            padding: 6px 12px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-align: center;
+            font-size: 11px;
+            border-bottom: 2px solid var(--gold);
+            letter-spacing: 0.5px;
+        }
+        .mld-table-rows-acad {
+            padding: 6px 0;
+        }
+        .mld-table-row-acad {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 12px;
+            font-size: 11px;
+            border-bottom: 1px solid rgba(0,0,0,0.04);
+            font-family: monospace;
+        }
+        .mld-table-row-acad:last-child {
+            border-bottom: none;
+        }
+        .badge-pk-acad {
+            background: var(--gold);
+            color: #000;
+            font-size: 8px;
+            font-weight: bold;
+            padding: 1px 4px;
+            border-radius: 3px;
+        }
+        .badge-fk-acad {
+            background: var(--blue-light);
+            color: #fff;
+            font-size: 8px;
+            font-weight: bold;
+            padding: 1px 4px;
+            border-radius: 3px;
+        }
+    </style>
+
+    <div class="mld-grid-acad">
+        <!-- USERS -->
+        <div class="mld-table-card-acad">
+            <div class="mld-table-header-acad">USERS</div>
+            <div class="mld-table-rows-acad">
+                <div class="mld-table-row-acad"><span>int id</span> <span class="badge-pk-acad">PK</span></div>
+                <div class="mld-table-row-acad"><span>varchar nom</span></div>
+                <div class="mld-table-row-acad"><span>varchar email</span></div>
+                <div class="mld-table-row-acad"><span>varchar password</span></div>
+                <div class="mld-table-row-acad"><span>varchar role</span></div>
+                <div class="mld-table-row-acad"><span>varchar code_pointage</span></div>
+            </div>
+        </div>
+
+        <!-- ABONNEMENTS -->
+        <div class="mld-table-card-acad">
+            <div class="mld-table-header-acad">ABONNEMENTS</div>
+            <div class="mld-table-rows-acad">
+                <div class="mld-table-row-acad"><span>int id</span> <span class="badge-pk-acad">PK</span></div>
+                <div class="mld-table-row-acad"><span>int user_id</span> <span class="badge-fk-acad">FK &rarr; USERS</span></div>
+                <div class="mld-table-row-acad"><span>varchar type</span></div>
+                <div class="mld-table-row-acad"><span>date date_debut</span></div>
+                <div class="mld-table-row-acad"><span>date date_fin</span></div>
+                <div class="mld-table-row-acad"><span>varchar statut</span></div>
+            </div>
+        </div>
+
+        <!-- VISITES -->
+        <div class="mld-table-card-acad">
+            <div class="mld-table-header-acad">VISITES</div>
+            <div class="mld-table-rows-acad">
+                <div class="mld-table-row-acad"><span>int id</span> <span class="badge-pk-acad">PK</span></div>
+                <div class="mld-table-row-acad"><span>int user_id</span> <span class="badge-fk-acad">FK &rarr; USERS</span></div>
+                <div class="mld-table-row-acad"><span>datetime date_visite</span></div>
+            </div>
+        </div>
+
+        <!-- PAIEMENTS -->
+        <div class="mld-table-card-acad">
+            <div class="mld-table-header-acad">PAIEMENTS</div>
+            <div class="mld-table-rows-acad">
+                <div class="mld-table-row-acad"><span>int id</span> <span class="badge-pk-acad">PK</span></div>
+                <div class="mld-table-row-acad"><span>int user_id</span> <span class="badge-fk-acad">FK &rarr; USERS</span></div>
+                <div class="mld-table-row-acad"><span>decimal montant</span></div>
+                <div class="mld-table-row-acad"><span>varchar statut</span></div>
+            </div>
+        </div>
+
+        <!-- COURS -->
+        <div class="mld-table-card-acad" style="grid-column: span 2; width: 60%; margin: 0 auto;">
+            <div class="mld-table-header-acad">COURS</div>
+            <div class="mld-table-rows-acad">
+                <div class="mld-table-row-acad"><span>int id</span> <span class="badge-pk-acad">PK</span></div>
+                <div class="mld-table-row-acad"><span>varchar titre</span></div>
+                <div class="mld-table-row-acad"><span>datetime date_heure</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-footer">
+        <span>FITZONE — Rapport de Projet de Fin de Formation</span>
+        <span>Page 16b</span>
+    </div>
+</div>
+
+<!-- ================================================================= -->
+<!-- PAGE 15D : CHAPITRE 3 – MPD -->
+<!-- ================================================================= -->
+<div class="page">
+    <div class="page-header">
+        <span>FITZONE — OFPPT</span>
+        <span>Chapitre 3 : Analyse et Conception</span>
+    </div>
+
+    <h2>3.7 Modèle Physique de Données — Dictionnaire de la table USERS</h2>
+    <table class="academic">
+        <thead>
+            <tr><th>Champ</th><th>Type SQL</th><th>Clé</th><th>Nullable</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><code>id</code></td><td>INT AUTO_INCREMENT</td><td>PK</td><td>Non</td><td>Identifiant unique</td></tr>
+            <tr><td><code>nom</code></td><td>VARCHAR(100)</td><td>—</td><td>Non</td><td>Nom complet du membre</td></tr>
+            <tr><td><code>email</code></td><td>VARCHAR(150)</td><td>UNIQUE</td><td>Non</td><td>Adresse de connexion</td></tr>
+            <tr><td><code>password</code></td><td>VARCHAR(255)</td><td>—</td><td>Non</td><td>Hash bcrypt du mot de passe</td></tr>
+            <tr><td><code>role</code></td><td>ENUM('abonne','admin')</td><td>—</td><td>Non</td><td>Rôle système</td></tr>
+            <tr><td><code>telephone</code></td><td>VARCHAR(20)</td><td>—</td><td>Oui</td><td>Numéro de contact</td></tr>
+            <tr><td><code>code_pointage</code></td><td>VARCHAR(6)</td><td>UNIQUE</td><td>Oui</td><td>Code d'accès physique à 6 chiffres</td></tr>
+        </tbody>
+    </table>
+
+    <p>
+        <strong>Conclusion du chapitre :</strong> La phase de conception a permis de formaliser l'ensemble des interactions du système FITZONE à travers des modèles UML rigoureux et un dictionnaire de données complet. Ces artefacts ont servi de référence tout au long de la phase d'implémentation, décrite dans le chapitre suivant.
+    </p>
+
+    <div class="page-footer">
+        <span>FITZONE — Rapport de Projet de Fin de Formation</span>
+        <span>Page 17</span>
+    </div>
+</div>
+
+<!-- ================================================================= -->
+<!-- PAGE 16 : CHAPITRE 4 – COUVERTURE -->
+<!-- ================================================================= -->
+<div class="page">
+    <h1 class="chapter">Chapitre 4<br><span class="sub">Réalisation et Implémentation</span></h1>
+
+    <div class="chapter-intro">
+        Ce dernier chapitre présente les conditions de mise en place de l'environnement de développement, l'architecture logicielle, les détails d'implémentation clés, les captures d'écran réelles de l'application en fonctionnement, les résultats des tests et les difficultés techniques rencontrées.
+    </div>
+
+    <h2>4.1 Environnement de Développement</h2>
+    <p>Le projet FITZONE fonctionne avec deux serveurs distincts démarrés simultanément :</p>
+    <ul>
+        <li><strong>Serveur Backend Laravel :</strong> Port <code>8000</code> via <code>php artisan serve</code>. Expose l'API REST JSON et communique avec MySQL.</li>
+        <li><strong>Serveur Frontend React :</strong> Port <code>3000</code> via <code>npm start</code>. Les appels API sont centralisés dans un client Axios pointant vers <code>http://localhost:8000/api</code>.</li>
+    </ul>
+    <p>
+        La communication cross-origin est gérée par le middleware CORS configuré dans <code>config/cors.php</code> de Laravel.
+    </p>
+
+    <h2>4.2 Architecture Générale</h2>
+    <p>
+        L'application suit une architecture découplée client-serveur stricte. Le frontend React ne contient aucune logique métier : toutes les règles de validation, de sécurité et de persistance sont déléguées au backend Laravel. Cette séparation garantit une maintenabilité optimale et permet de faire évoluer les deux composants indépendamment.
+    </p>
+
+    <h2>4.3 Implémentation du Backend et du Frontend</h2>
+    <p>Ci-dessous les extraits de code clés illustrant les algorithmes principaux de l'application FITZONE :</p>
+    
+    <h3 style="color:var(--text);font-size:10pt;margin-top:8px;">1. Validation du Pointage Physique (Laravel API)</h3>
+    <pre class="code-block" style="font-size:9pt;padding:8px 12px;margin:6px 0;">// PointageController.php
+public function valider(Request $request) {
+    $user = User::where('code_pointage', $request->code)->with('abonnements')->firstOrFail();
+    $abonnementActif = $user->abonnements->where('statut', 'paye')->where('date_fin', '>=', now())->first();
+
+    if (!$abonnementActif) {
+        return response()->json(['error' => 'Abonnement inactif'], 400);
+    }
+    Visite::create(['user_id' => $user->id, 'date_visite' => now()]);
+    return response()->json(['nom' => $user->nom, 'status' => 'Accès autorisé']);
+}</pre>
+
+    <h3 style="color:var(--text);font-size:10pt;margin-top:8px;">2. Authentification & Génération du Code à 6 Chiffres (Laravel JWT)</h3>
+    <pre class="code-block" style="font-size:9pt;padding:8px 12px;margin:6px 0;">// AuthController.php
+public function register(Request $request) {
+    $codeUnique = str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
+    $user = User::create([
+        'name' => $request->name, 'email' => $request->email,
+        'password' => Hash::make($request->password), 'code_pointage' => $codeUnique
+    ]);
+    $token = auth()->login($user);
+    return response()->json(['token' => $token, 'user' => $user], 201);
+}</pre>
+
+    <h3 style="color:var(--text);font-size:10pt;margin-top:8px;">3. Intercepteur Axios Client avec Injection JWT (React Frontend)</h3>
+    <pre class="code-block" style="font-size:9pt;padding:8px 12px;margin:6px 0;">// src/services/api.js
+import axios from 'axios';
+const api = axios.create({ baseURL: 'http://localhost:8000/api' });
+
+api.interceptors.request.use((config) => {
+    const token = localStorage.getItem('token');
+    if (token) { config.headers.Authorization = `Bearer ${token}`; }
+    return config;
+});
+export default api;</pre>
+
+    <div class="page-footer">
+        <span>FITZONE — Rapport de Projet de Fin de Formation</span>
+        <span>Page 19</span>
+    </div>
+</div>
+
+<!-- ================================================================= -->
+<!-- PAGE 17 : INTERFACES RÉELLES 1 -->
+<!-- ================================================================= -->
+<div class="page">
+    <div class="page-header">
+        <span>FITZONE — OFPPT</span>
+        <span>Chapitre 4 : Réalisation</span>
+    </div>
+
+    <h2>4.4 Interfaces Utilisateurs Réelles</h2>
+
+    <div class="figure">
+        <img src="screen_home.png" alt="Page d'accueil FITZONE">
+        <div class="figure-caption">Figure 4.1 — Page d'accueil publique FITZONE (Hero Section)</div>
+    </div>
+
+    <div class="figure">
+        <img src="screen_login.png" alt="Interface de connexion FITZONE">
+        <div class="figure-caption">Figure 4.2 — Interface de connexion et authentification sécurisée JWT</div>
+    </div>
+
+    <div class="figure">
+        <img src="screen_dashboard.png" alt="Dashboard abonné">
+        <div class="figure-caption">Figure 4.3 — Tableau de bord de l'abonné : statistiques, abonnement et cours à venir</div>
+    </div>
+
+    <div class="page-footer">
+        <span>FITZONE — Rapport de Projet de Fin de Formation</span>
+        <span>Page 21</span>
+    </div>
+</div>
+
+<!-- ================================================================= -->
+<!-- PAGE 18 : INTERFACES RÉELLES 2 -->
+<!-- ================================================================= -->
+<div class="page">
+    <div class="page-header">
+        <span>FITZONE — OFPPT</span>
+        <span>Chapitre 4 : Réalisation</span>
+    </div>
+
+    <div class="figure">
+        <img src="screen_pointage.png" alt="Interface de pointage">
+        <div class="figure-caption">Figure 4.4 — Interface de validation du pointage physique par code à 6 chiffres</div>
+    </div>
+
+    <div class="figure">
+        <img src="screen_cours.png" alt="Planning des cours">
+        <div class="figure-caption">Figure 4.5 — Planning interactif de cours collectifs avec réservation en ligne</div>
+    </div>
+
+    <div class="figure">
+        <img src="screen_muscles.png" alt="Guide musculaire">
+        <div class="figure-caption">Figure 4.6 — Guide d'exercices interactif classé par groupe musculaire</div>
+    </div>
+
+    <div class="page-footer">
+        <span>FITZONE — Rapport de Projet de Fin de Formation</span>
+        <span>Page 22</span>
+    </div>
+</div>
+
+<!-- ================================================================= -->
+<!-- PAGE 19 : INTERFACES RÉELLES 3 -->
+<!-- ================================================================= -->
+<div class="page">
+    <div class="page-header">
+        <span>FITZONE — OFPPT</span>
+        <span>Chapitre 4 : Réalisation</span>
+    </div>
+
+    <div class="figure">
+        <img src="screen_abonnes.png" alt="Gestion des abonnés">
+        <div class="figure-caption">Figure 4.7 — Interface d'administration : gestion des abonnés et statistiques</div>
+    </div>
+
+    <div class="figure">
+        <img src="screen_paiements.png" alt="Gestion des paiements">
+        <div class="figure-caption">Figure 4.8 — Module de suivi et de validation des paiements mensuels</div>
+    </div>
+
+    <div class="page-footer">
+        <span>FITZONE — Rapport de Projet de Fin de Formation</span>
+        <span>Page 23</span>
+    </div>
+</div>
+
+<!-- ================================================================= -->
+<!-- PAGE 20 : TESTS + DIFFICULTÉS -->
+<!-- ================================================================= -->
+<div class="page">
+    <div class="page-header">
+        <span>FITZONE — OFPPT</span>
+        <span>Chapitre 4 : Réalisation</span>
+    </div>
+
+    <h2>4.5 Tests et Validation</h2>
+    <table class="academic">
+        <thead>
+            <tr><th>Cas de test</th><th>Données testées</th><th>Résultat attendu</th><th>Résultat</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Connexion valide</td><td>Email + mot de passe corrects</td><td>JWT renvoyé, accès dashboard</td><td>✅ Conforme</td></tr>
+            <tr><td>Connexion invalide</td><td>Mauvais mot de passe</td><td>HTTP 401 Unauthorized</td><td>✅ Conforme</td></tr>
+            <tr><td>Pointage code valide</td><td>Code 6 chiffres + abonnement actif</td><td>Accès autorisé, visite enregistrée</td><td>✅ Conforme</td></tr>
+            <tr><td>Pointage abonnement expiré</td><td>Code valide + abonnement expiré</td><td>HTTP 400 « Abonnement inactif »</td><td>✅ Conforme</td></tr>
+            <tr><td>Réservation cours plein</td><td>Cours à 0 places disponibles</td><td>HTTP 409 « Cours complet »</td><td>✅ Conforme</td></tr>
+            <tr><td>Brute-force pointage</td><td>6+ tentatives / minute</td><td>HTTP 429 après 5 tentatives</td><td>✅ Conforme</td></tr>
+        </tbody>
+    </table>
+
+    <h2>4.6 Difficultés Rencontrées et Solutions Apportées</h2>
+    <h3>Difficulté 1 — Anti-brute-force sur le code de pointage</h3>
+    <p>
+        Le clavier de saisie étant accessible sans authentification, nous avons configuré le Rate Limiting de Laravel, bloquant toute IP émettant plus de 5 requêtes par minute vers <code>/api/pointage/valider</code>.
+    </p>
+    <h3>Difficulté 2 — Race condition lors des réservations simultanées</h3>
+    <p>
+        Deux membres pouvaient réserver la dernière place d'un cours au même instant. Nous avons implémenté un verrou exclusif SQL (<code>lockForUpdate()</code> d'Eloquent) dans une transaction atomique pour éliminer ce risque.
+    </p>
+
+    <p>
+        <strong>Conclusion du chapitre :</strong> L'application FITZONE est aujourd'hui pleinement opérationnelle et répond à l'ensemble des exigences fonctionnelles définies en phase de cadrage. Tous les tests fonctionnels ont été validés avec succès.
+    </p>
+
+    <div class="page-footer">
+        <span>FITZONE — Rapport de Projet de Fin de Formation</span>
+        <span>Page 24</span>
+    </div>
+</div>
+
+<!-- ================================================================= -->
+<!-- PAGE 21 : CONCLUSION GÉNÉRALE -->
+<!-- ================================================================= -->
+<div class="page">
+    <h1 class="section-title">Conclusion Générale et Perspectives</h1>
+
+    <h2>Bilan du Projet</h2>
+    <p>
+        Au terme de ce projet de fin de formation réalisé à l'<strong>ISAG OFPPT</strong> dans le cadre de la filière <strong>Développement Digital</strong>, nous avons conçu et livré une plateforme web de gestion sportive complète et pleinement opérationnelle. L'application FITZONE répond à l'intégralité des exigences fonctionnelles définies dans notre cahier des charges, en particulier la fonctionnalité centrale de pointage physique à l'entrée de la salle par code personnel à 6 chiffres, qui constitue l'innovation principale de ce projet.
+    </p>
+    <p>
+        L'architecture découplée Laravel/React a prouvé son efficacité en permettant un développement parallèle et indépendant du backend et du frontend. Les tests fonctionnels confirment le bon comportement du système dans tous les scénarios nominaux et alternatifs identifiés lors de l'analyse.
+    </p>
+
+    <h2>Limites et Améliorations Futures</h2>
+    <ul>
+        <li><strong>Paiement en ligne :</strong> Intégration d'une passerelle (Stripe, PayPal) pour le renouvellement d'abonnement sans intervention de l'administrateur.</li>
+        <li><strong>Application mobile native :</strong> Développement React Native pour iOS et Android avec notifications push de rappel.</li>
+        <li><strong>Couplage IoT :</strong> Connecter l'API de pointage à un microcontrôleur (Arduino/Raspberry Pi) pour déclencher l'ouverture physique d'une barrière automatique.</li>
+    </ul>
+
+    <h2>Compétences Développées</h2>
+    <p>
+        Ce projet m'a permis de consolider des compétences transversales essentielles pour un technicien spécialisé en développement digital : la modélisation UML orientée objet, la conception et sécurisation d'une API REST, la gestion de l'état global dans une SPA React, la manipulation des transactions SQL et l'application des principes Agile en situation réelle. Ces acquis, réalisés sous l'encadrement bienveillant de <strong>Monsieur DAIF</strong> au sein de l'<strong>ISAG OFPPT</strong>, constituent un socle précieux pour ma future carrière professionnelle dans le développement web.
+    </p>
+
+    <div class="page-footer">
+        <span>FITZONE — Rapport de Projet de Fin de Formation</span>
+        <span>Page 25</span>
+    </div>
+</div>
+
+<!-- ================================================================= -->
+<!-- PAGE 22 : RÉFÉRENCES -->
+<!-- ================================================================= -->
+<div class="page">
+    <h1 class="section-title">Références Bibliographiques et Webographiques</h1>
+
+    <h2>Bibliographie</h2>
+    <ol style="line-height:2.2; font-size:11pt; margin-left:1.5cm;">
+        <li>FOWLER, M. (2004). <em>UML Distilled: A Brief Guide to the Standard Object Modeling Language</em> (3rd ed.). Addison-Wesley.</li>
+        <li>GAMMA, E., HELM, R., JOHNSON, R., &amp; VLISSIDES, J. (1994). <em>Design Patterns: Elements of Reusable Object-Oriented Software</em>. Addison-Wesley.</li>
+        <li>SCHWABER, K., &amp; SUTHERLAND, J. (2020). <em>Le Guide Scrum — La référence définitive</em>. Scrum.org.</li>
+    </ol>
+
+    <h2>Webographie</h2>
+    <ol style="line-height:2.2; font-size:11pt; margin-left:1.5cm;">
+        <li>Documentation officielle React — <em>https://react.dev</em> (Consulté en Avril 2026).</li>
+        <li>Documentation officielle Laravel 11 — <em>https://laravel.com/docs/11.x</em> (Consulté en Mai 2026).</li>
+        <li>Documentation MySQL 8.0 — <em>https://dev.mysql.com/doc/refman/8.0/en</em> (Consulté en Mai 2026).</li>
+        <li>RFC 7519 — JSON Web Token (JWT) Standard — <em>https://tools.ietf.org/html/rfc7519</em>.</li>
+        <li>OWASP Top 10 — Guide de sécurité applications web — <em>https://owasp.org/www-project-top-ten</em>.</li>
+    </ol>
+
+    <div class="page-footer">
+        <span>FITZONE — Rapport de Projet de Fin de Formation</span>
+        <span>Page 26</span>
+    </div>
+</div>
+
+<!-- ================================================================= -->
+<!-- PAGE 23 : ANNEXES -->
+<!-- ================================================================= -->
+<div class="page">
+    <h1 class="section-title">Annexes</h1>
+
+    <h2>Annexe A — Rate Limiting Anti-Brute-Force</h2>
+    <p class="no-indent">Extrait de <code>routes/api.php</code> :</p>
+    <pre class="code-block">// Limite : 5 requêtes par minute par adresse IP
+Route::middleware(['throttle:5,1'])->group(function () {
+    Route::post('/pointage/valider', [PointageController::class, 'valider']);
+});</pre>
+
+    <h2>Annexe B — Transaction Atomique pour la Réservation</h2>
+    <p class="no-indent">Extrait de <code>CoursController.php</code> :</p>
+    <pre class="code-block">DB::transaction(function () use ($cours, $user) {
+    $cours = Cours::where('id', $cours->id)->lockForUpdate()->first();
+
+    if ($cours->inscrits >= $cours->places_max) {
+        throw new Exception('Cours complet', 409);
+    }
+
+    $cours->increment('inscrits');
+    Reservation::create(['user_id' => $user->id, 'cours_id' => $cours->id]);
+});</pre>
+
+    <h2>Annexe C — Arborescence du Projet</h2>
+    <pre class="code-block">fitzone/
+├── backend/                   # Projet Laravel 11
+│   ├── app/Http/Controllers/  # PointageController, CoursController...
+│   ├── app/Models/            # User, Abonnement, Cours, Visite...
+│   ├── routes/api.php         # Endpoints REST
+│   └── database/migrations/   # Schémas SQL versionnés
+└── frontend/                  # Projet React
+    └── src/
+        ├── pages/             # Dashboard, Cours, Muscles, Admin...
+        ├── components/        # Composants réutilisables
+        └── services/api.js    # Client Axios centralisé</pre>
+
+    <div class="page-footer">
+        <span>FITZONE — Rapport de Projet de Fin de Formation</span>
+        <span>Page 27</span>
+    </div>
+</div>
+
+<script>
+    mermaid.initialize({ startOnLoad: true, theme: 'default', securityLevel: 'loose' });
+</script>
+</body>
+</html>

@@ -61,6 +61,29 @@ const PaiementsPage = () => {
     }
   };
 
+  const handleValiderAnnee = async (userId) => {
+    if (!window.confirm(`Voulez-vous valider toute l'année ${selectedYear} pour cet abonné ? (Cela marquera les 12 mois comme Payés)`)) {
+      return;
+    }
+    try {
+      setUpdating(userId);
+      await paiementService.validerAnnuelle({
+        user_id: userId,
+        annee: selectedYear,
+        statut: 'paye',
+        methode: 'espece',
+        notes: `Règlement Annuel ${selectedYear}`,
+      });
+      show(`Année ${selectedYear} validée avec succès !`, 'success');
+      loadPaiements();
+    } catch (error) {
+      show("Erreur lors de la validation annuelle", 'error');
+      console.error(error);
+    } finally {
+      setUpdating(null);
+    }
+  };
+
   const badgeClass = (statut) => {
     if (statut === 'paye') return 'fz-badge paye';
     if (statut === 'impaye') return 'fz-badge impaye';
@@ -182,6 +205,9 @@ const PaiementsPage = () => {
                       </button>
                       <button className="fz-btn primary sm" style={{ marginLeft: 8 }} onClick={() => handleStatusChange(abonne.id, 'paye')} disabled={updating === abonne.id}>
                         {updating === abonne.id ? '...' : 'Payé'}
+                      </button>
+                      <button className="fz-btn sm" style={{ marginLeft: 8, background: '#10b981', color: '#fff', border: '1px solid #10b981' }} onClick={() => handleValiderAnnee(abonne.id)} disabled={updating === abonne.id}>
+                        {updating === abonne.id ? '...' : "Valider l'Année"}
                       </button>
                     </td>
                   </tr>

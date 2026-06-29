@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dossier de Conception Technique - FITZONE</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Mermaid.js -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --color-bg: #09090b;
+            --color-card: #18181b;
+            --color-primary: #ef4444;
+            --color-primary-hover: #f87171;
+            --color-text: #fafafa;
+            --color-text-muted: #a1a1aa;
+            --color-border: #27272a;
+            --color-success: #10b981;
+            --color-warning: #f59e0b;
+            --color-blue: #0284c7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.5;
+            font-size: 13px;
+        }
+
+        /* Page Layout for Web and Print */
+        .page {
+            width: 210mm;
+            height: 297mm;
+            margin: 20px auto;
+            background: var(--color-bg);
+            padding: 20mm 15mm;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            position: relative;
+            box-sizing: border-box;
+            page-break-after: always;
+            overflow: hidden;
+        }
+
+        /* Print optimization */
+        @media print {
+            :root {
+                --color-bg: #ffffff !important;
+                --color-card: #f4f4f5 !important;
+                --color-text: #09090b !important;
+                --color-text-muted: #4b5563 !important;
+                --color-border: #d4d4d8 !important;
+            }
+            * {
+                -webkit-print-color-adjust: economy !important;
+                print-color-adjust: economy !important;
+            }
+            body {
+                background-color: #ffffff !important;
+                color: #09090b !important;
+            }
+            .page {
+                margin: 0 !important;
+                border: none !important;
+                box-shadow: none !important;
+                width: 210mm !important;
+                height: 297mm !important;
+                padding: 15mm 12mm !important;
+                background-color: #ffffff !important;
+                color: #09090b !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            /* Diagrams print styles */
+            .diagram-container {
+                background-color: #ffffff !important;
+                border-color: #d4d4d8 !important;
+            }
+            .diagram-container svg rect {
+                fill: #ffffff !important;
+                stroke: #09090b !important;
+                stroke-width: 1.5px !important;
+            }
+            .diagram-container svg rect[fill="rgba(24, 24, 27, 0.4)"] {
+                fill: #f4f4f5 !important;
+                stroke: #09090b !important;
+                stroke-dasharray: 3 3 !important;
+            }
+            .diagram-container svg rect[fill="#ff758c"] {
+                fill: #e4e4e7 !important;
+                stroke: #09090b !important;
+            }
+            .diagram-container svg ellipse {
+                fill: #ffffff !important;
+                stroke: #09090b !important;
+                stroke-width: 1.5px !important;
+            }
+            .diagram-container svg circle {
+                fill: #e4e4e7 !important;
+                stroke: #09090b !important;
+                stroke-width: 2px !important;
+            }
+            .diagram-container svg line {
+                stroke: #09090b !important;
+                stroke-width: 1.5px !important;
+            }
+            .diagram-container svg path {
+                stroke: #09090b !important;
+                stroke-width: 1.5px !important;
+            }
+            .diagram-container svg text {
+                fill: #09090b !important;
+                font-weight: 600 !important;
+            }
+            .diagram-container svg pattern,
+            .diagram-container svg rect[fill="url(#grid)"] {
+                display: none !important;
+            }
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+
+        h1 {
+            font-size: 26px;
+            color: var(--color-text);
+            border-bottom: 2px solid var(--color-primary);
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 18px;
+            color: var(--color-primary);
+            margin-top: 25px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            font-size: 14px;
+            color: var(--color-text);
+            margin-top: 15px;
+            margin-bottom: 8px;
+            border-left: 3px solid var(--color-primary);
+            padding-left: 8px;
+        }
+
+        p {
+            color: var(--color-text-muted);
+            margin-bottom: 12px;
+            text-align: justify;
+            font-weight: 300;
+            font-size: 13px;
+        }
+
+        /* Section Banner */
+        .section-banner {
+            background-color: var(--color-blue);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-banner .number {
+            background-color: white;
+            color: var(--color-blue);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        /* Header & Footer */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--color-border);
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+        }
+
+        .logo {
+            font-family: 'Oswald', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--color-text);
+        }
+
+        .logo span {
+            color: var(--color-primary);
+        }
+
+        .subtitle {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--color-text-muted);
+            background: var(--color-card);
+            padding: 4px 12px;
+            border-radius: 4px;
+            border: 1px solid var(--color-border);
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 10mm;
+            left: 15mm;
+            right: 15mm;
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: var(--color-text-muted);
+            border-top: 1px solid var(--color-border);
+            padding-top: 8px;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+        }
+
+        th {
+            font-family: 'Oswald', sans-serif;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--color-text-muted);
+            background-color: rgba(255, 255, 255, 0.02);
+            border-bottom: 2px solid var(--color-border);
+            padding: 8px 10px;
+            text-align: left;
+        }
+
+        td {
+            padding: 8px 10px;
+            border-bottom: 1px solid var(--color-border);
+            font-size: 12px;
+            color: var(--color-text-muted);
+            font-weight: 300;
+        }
+
+        /* Sommaire Table */
+        .sommaire-table td {
+            font-size: 14px;
+            padding: 10px 0;
+            border: none;
+        }
+        .sommaire-table tr.main-title td {
+            font-weight: bold;
+            color: var(--color-text);
+            border-bottom: 1px solid var(--color-border);
+            text-transform: uppercase;
+            padding-top: 15px;
+        }
+        .sommaire-table tr.sub-title td {
+            padding-left: 25px;
+            color: var(--color-text-muted);
+        }
+
+        /* Diagrams wrapper */
+        .diagram-container {
+            width: 100%;
+            background: #111;
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: visible;
+        }
+
+        .diagram-container .mermaid {
+            width: 100%;
+            background: transparent !important;
+            transform: scale(1.05);
+            transform-origin: center center;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-pk {
+            background: #f59e0b;
+            color: #000;
+        }
+
+        .badge-fk {
+            background: var(--color-blue);
+            color: #fff;
+        }
+
+        .badge-primary {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--color-primary);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--color-success);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        /* Cover Page Styling */
+        .cover-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            text-align: center;
+            padding: 40mm 15mm 20mm 15mm !important;
+        }
+
+        .cover-title h1 {
+            font-size: 54px;
+            border: none;
+            margin-bottom: 5px;
+            letter-spacing: 3px;
+        }
+
+        .cover-title h1 span {
+            color: var(--color-primary);
+        }
+
+        .cover-subtitle {
+            font-size: 18px;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 50px;
+        }
+
+        .cover-details {
+            margin: 50px auto;
+            max-width: 450px;
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            padding: 25px;
+            border-radius: 8px;
+            text-align: left;
+        }
+
+        .cover-details td {
+            padding: 6px 0;
+            border: none;
+            font-size: 13px;
+        }
+
+        .cover-details td:first-child {
+            font-weight: 600;
+            color: var(--color-primary);
+            width: 140px;
+        }
+
+        /* Database MLD Grid (Image 2 style) */
+        .mld-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .mld-table-card {
+            background-color: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mld-table-card.wide {
+            grid-column: span 2;
+            margin: 0 auto;
+            width: 70%;
+        }
+
+        .mld-table-header {
+            background-color: #27272a;
+            color: white;
+            padding: 6px 12px;
+            font-family: 'Oswald', sans-serif;
+            font-weight: 600;
+            text-transform: uppercase;
+            text-align: center;
+            font-size: 12px;
+            border-bottom: 2px solid var(--color-border);
+            letter-spacing: 1px;
+        }
+
+        .mld-table-rows {
+            padding: 6px 0;
+        }
+
+        .mld-table-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 12px;
+            font-size: 11px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .mld-table-row:last-child {
+            border-bottom: none;
+        }
+
+        .mld-row-left {
+            display: flex;
+            gap: 15px;
+        }
+
+        .mld-row-type {
+            color: #71717a;
+            width: 45px;
+        }
+
+        .mld-row-name {
+            color: var(--color-text);
+            font-weight: 500;
+        }
+
+        .mld-row-right {
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================================================================= -->
+    <!-- PAGE 1: PAGE DE GARDE -->
+    <!-- ================================================================= -->
+    <div class="page cover-page">
+        <div>
+            <div class="cover-title" style="margin-top: 40px;">
+                <h1>FIT<span>ZONE</span></h1>
+            </div>
+            <div class="cover-subtitle">Dossier de Conception Technique</div>
+            <p style="text-align: center; max-width: 600px; margin: 0 auto;">
+                Système de gestion intégré pour salle de sport haut de gamme : Authentification, Abonnements, Réservations, Pointage par Code Personnel et Suivi des Paiements.
+            </p>
+        </div>
+
+        <div class="cover-details">
+            <table style="width: 100%;">
+                <tr>
+                    <td>Projet :</td>
+                    <td>FITZONE App</td>
+                </tr>
+                <tr>
+                    <td>Rôle :</td>
+                    <td>Architecte Logiciel / Concepteur</td>
+                </tr>
+                <tr>
+                    <td>Date de début :</td>
+                    <td>15 Avril 2026</td>
+                </tr>
+                <tr>
+                    <td>Date de livraison :</td>
+                    <td>28 Juin 2026</td>
+                </tr>
+                <tr>
+                    <td>Statut :</td>
+                    <td><span class="badge badge-success">Validé & Opérationnel</span></td>
+                </tr>
+                <tr>
+                    <td>Technologies :</td>
+                    <td>Laravel (Backend API), React (Frontend), MySQL</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="cover-footer">
+            FITZONE &copy; 2026 - Tous droits réservés.
+        </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- PAGE 2: SOMMAIRE -->
+    <!-- ================================================================= -->
+    <div class="page">
+        <div class="header">
+            <div class="logo">FIT<span>ZONE</span></div>
+            <div class="subtitle">Sommaire</div>
+        </div>
+
+        <h1 style="margin-bottom: 30px;">Sommaire</h1>
+
+        <table class="sommaire-table" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th style="font-size: 14px; color: var(--color-primary); background: none; border-bottom: 2px solid var(--color-border); padding-left: 0;">Rubriques</th>
+                    <th style="font-size: 14px; color: var(--color-primary); text-align: right; background: none; border-bottom: 2px solid var(--color-border); padding-right: 0;">Page</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="main-title">
+                    <td>1 Diagrammes UML</td>
+                    <td style="text-align: right;">3</td>
+                </tr>
+                <tr class="sub-title">
+                    <td>1.1 Diagramme de Cas d'Utilisation</td>
+                    <td style="text-align: right;">3</td>
+                </tr>
+                <tr class="sub-title">
+                    <td>1.2 Diagramme de Classes</td>
+                    <td style="text-align: right;">4</td>
+                </tr>
+                <tr class="sub-title">
+                    <td>1.3 Diagramme de Séquence</td>
+                    <td style="text-align: right;">5</td>
+                </tr>
+
+                <tr class="main-title">
+                    <td>2 Base de Données</td>
+                    <td style="text-align: right;">6</td>
+                </tr>
+                <tr class="sub-title">
+                    <td>2.1 MCD — Modèle Conceptuel</td>
+                    <td style="text-align: right;">6</td>
+                </tr>
+                <tr class="sub-title">
+                    <td>2.2 MLD — Modèle Logique</td>
+                    <td style="text-align: right;">7</td>
+                </tr>
+
+                <tr class="main-title">
+                    <td>3 Maquettes UI</td>
+                    <td style="text-align: right;">8</td>
+                </tr>
+                <tr class="sub-title">
+                    <td>3.1 Page d'Accueil (Hero)</td>
+                    <td style="text-align: right;">8</td>
+                </tr>
+                <tr class="sub-title">
+                    <td>3.2 Interface de Réservation</td>
+                    <td style="text-align: right;">9</td>
+                </tr>
+                <tr class="sub-title">
+                    <td>3.3 Dashboard Administration</td>
+                    <td style="text-align: right;">10</td>
+                </tr>
+
+                <tr class="main-title">
+                    <td>4 Architecture Technique</td>
+                    <td style="text-align: right;">11</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="footer">
+            <span>FITZONE - Dossier de Conception</span>
+            <span>Page 2 / 11</span>
+        </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- PAGE 3: 1 DIAGRAMMES UML - 1.1 CAS D'UTILISATION -->
+    <!-- ================================================================= -->
+    <div class="page">
+        <div class="header">
+            <div class="logo">FIT<span>ZONE</span></div>
+            <div class="subtitle">1. Diagrammes UML</div>
+        </div>
+
+        <div class="section-banner">
+            <div class="number">1</div>
+            Diagrammes UML
+        </div>
+
+        <p>
+            Les diagrammes UML ci-dessous modélisent les interactions entre les acteurs, les structures des entités logiques et le flux des interactions système.
+        </p>
+
+        <h2 style="font-size: 16px; margin-top: 15px;">1.1 — Diagramme de Cas d'Utilisation</h2>
+        <p>
+            Ce diagramme illustre les interactions entre les deux acteurs principaux — <strong>Membre</strong> et <strong>Administrateur</strong> — et les fonctionnalités exposées par le système.
+        </p>
+
+        <div class="diagram-container" style="padding: 15px; margin: 15px 0; background-color: #0b111e; border-radius: 8px; border: 1px solid #1e293b;">
+            <svg viewBox="0 0 800 480" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                <!-- Background Grid -->
+                <defs>
+                    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.02)" stroke-width="1"/>
+                    </pattern>
+                    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#0284c7" />
+                        <stop offset="100%" stop-color="#00f2fe" />
+                    </linearGradient>
+                    <linearGradient id="redGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#ef4444" />
+                        <stop offset="100%" stop-color="#ff758c" />
+                    </linearGradient>
+                    <linearGradient id="purpleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#8b5cf6" />
+                        <stop offset="100%" stop-color="#ec4899" />
+                    </linearGradient>
+                </defs>
+                <rect width="100%" height="100%" fill="#0b111e" rx="8"/>
+                <rect width="100%" height="100%" fill="url(#grid)" rx="8"/>
+
+                <!-- System Boundary Box -->
+                <rect x="180" y="20" width="440" height="440" rx="12" fill="rgba(24, 24, 27, 0.6)" stroke="#1e293b" stroke-width="2"/>
+                <text x="400" y="45" fill="#fafafa" font-family="'Oswald', sans-serif" font-size="14px" font-weight="700" letter-spacing="1px" text-anchor="middle">SYSTEME DE RESERVATION FITZONE</text>
+
+                <!-- Connections - Admin (Red on Left) -->
+                <path d="M 80 210 L 310 75" stroke="rgba(239, 68, 68, 0.4)" stroke-width="2" fill="none"/>
+                <path d="M 80 210 L 310 140" stroke="rgba(239, 68, 68, 0.6)" stroke-width="2" fill="none"/>
+                <path d="M 80 210 L 310 210" stroke="rgba(239, 68, 68, 0.6)" stroke-width="2" fill="none"/>
+                <path d="M 80 210 L 310 280" stroke="rgba(239, 68, 68, 0.6)" stroke-width="2" fill="none"/>
+                <path d="M 80 210 L 310 350" stroke="rgba(239, 68, 68, 0.6)" stroke-width="2" fill="none"/>
+                <path d="M 80 210 L 310 410" stroke="rgba(239, 68, 68, 0.6)" stroke-width="2" fill="none"/>
+
+                <!-- Connections - Membre (Blue on Right) -->
+                <path d="M 720 210 L 490 75" stroke="rgba(2, 132, 199, 0.4)" stroke-width="2" fill="none"/>
+                <path d="M 720 210 L 490 140" stroke="rgba(2, 132, 199, 0.6)" stroke-width="2" fill="none"/>
+                <path d="M 720 210 L 490 210" stroke="rgba(2, 132, 199, 0.6)" stroke-width="2" fill="none"/>
+                <path d="M 720 210 L 490 280" stroke="rgba(2, 132, 199, 0.6)" stroke-width="2" fill="none"/>
+                <path d="M 720 210 L 490 350" stroke="rgba(2, 132, 199, 0.6)" stroke-width="2" fill="none"/>
+
+                <!-- Actor: Admin (Left) -->
+                <g class="actor" transform="translate(0, 0)">
+                    <circle cx="80" cy="170" r="18" fill="url(#redGrad)" stroke="#0b111e" stroke-width="2"/>
+                    <line x1="80" y1="188" x2="80" y2="238" stroke="url(#redGrad)" stroke-width="4"/>
+                    <line x1="55" y1="205" x2="105" y2="205" stroke="url(#redGrad)" stroke-width="4" stroke-linecap="round"/>
+                    <line x1="80" y1="238" x2="60" y2="285" stroke="url(#redGrad)" stroke-width="4" stroke-linecap="round"/>
+                    <line x1="80" y1="238" x2="100" y2="285" stroke="url(#redGrad)" stroke-width="4" stroke-linecap="round"/>
+                    <text x="80" y="315" fill="#ff758c" font-family="'Inter', sans-serif" font-size="13px" font-weight="700" text-anchor="middle">Admin</text>
+                </g>
+
+                <!-- Actor: Membre (Right) -->
+                <g class="actor" transform="translate(0, 0)">
+                    <circle cx="720" cy="170" r="18" fill="url(#blueGrad)" stroke="#0b111e" stroke-width="2"/>
+                    <line x1="720" y1="188" x2="720" y2="238" stroke="url(#blueGrad)" stroke-width="4"/>
+                    <line x1="695" y1="205" x2="745" y2="205" stroke="url(#blueGrad)" stroke-width="4" stroke-linecap="round"/>
+                    <line x1="720" y1="238" x2="700" y2="285" stroke="url(#blueGrad)" stroke-width="4" stroke-linecap="round"/>
+                    <line x1="720" y1="238" x2="740" y2="285" stroke="url(#blueGrad)" stroke-width="4" stroke-linecap="round"/>
+                    <text x="720" y="315" fill="#00f2fe" font-family="'Inter', sans-serif" font-size="13px" font-weight="700" text-anchor="middle">Membre</text>
+                </g>
+
+                <!-- Use Cases -->
+                <!-- Shared Use Case -->
+                <g class="use-case">
+                    <rect x="310" y="55" width="180" height="40" rx="20" fill="#18181b" stroke="url(#purpleGrad)" stroke-width="2"/>
+                    <text x="400" y="80" fill="#fafafa" font-family="'Inter', sans-serif" font-size="11px" font-weight="600" text-anchor="middle">S'authentifier</text>
+                </g>
+
+                <!-- Admin Use Cases (Left Column) -->
+                <g class="use-case">
+                    <rect x="220" y="120" width="180" height="40" rx="20" fill="#18181b" stroke="url(#redGrad)" stroke-width="2"/>
+                    <text x="310" y="145" fill="#fafafa" font-family="'Inter', sans-serif" font-size="11px" font-weight="600" text-anchor="middle">Gérer les membres</text>
+                </g>
+                <g class="use-case">
+                    <rect x="220" y="190" width="180" height="40" rx="20" fill="#18181b" stroke="url(#redGrad)" stroke-width="2"/>
+                    <text x="310" y="215" fill="#fafafa" font-family="'Inter', sans-serif" font-size="11px" font-weight="600" text-anchor="middle">Configurer les cours</text>
+                </g>
+                <g class="use-case">
+                    <rect x="220" y="260" width="180" height="40" rx="20" fill="#18181b" stroke="url(#redGrad)" stroke-width="2"/>
+                    <text x="310" y="285" fill="#fafafa" font-family="'Inter', sans-serif" font-size="11px" font-weight="600" text-anchor="middle">Gérer les salles</text>
+                </g>
+                <g class="use-case">
+                    <rect x="220" y="330" width="180" height="40" rx="20" fill="#18181b" stroke="url(#redGrad)" stroke-width="2"/>
+                    <text x="310" y="355" fill="#fafafa" font-family="'Inter', sans-serif" font-size="11px" font-weight="600" text-anchor="middle">Enregistrer les visites</text>
+                </g>
+                <g class="use-case">
+                    <rect x="220" y="390" width="180" height="40" rx="20" fill="#18181b" stroke="url(#redGrad)" stroke-width="2"/>
+                    <text x="310" y="415" fill="#fafafa" font-family="'Inter', sans-serif" font-size="11px" font-weight="600" text-anchor="middle">Suivre les revenus</text>
+                </g>
+
+                <!-- Membre Use Cases (Right Column) -->
+                <g class="use-case">
+                    <rect x="400" y="120" width="180" height="40" rx="20" fill="#18181b" stroke="url(#blueGrad)" stroke-width="2"/>
+                    <text x="490" y="145" fill="#fafafa" font-family="'Inter', sans-serif" font-size="11px" font-weight="600" text-anchor="middle">Gérer son profil</text>
+                </g>
+                <g class="use-case">
+                    <rect x="400" y="190" width="180" height="40" rx="20" fill="#18181b" stroke="url(#blueGrad)" stroke-width="2"/>
+                    <text x="490" y="215" fill="#fafafa" font-family="'Inter', sans-serif" font-size="11px" font-weight="600" text-anchor="middle">Consulter planning</text>
+                </g>
+                <g class="use-case">
+                    <rect x="400" y="260" width="180" height="40" rx="20" fill="#18181b" stroke="url(#blueGrad)" stroke-width="2"/>
+                    <text x="490" y="285" fill="#fafafa" font-family="'Inter', sans-serif" font-size="11px" font-weight="600" text-anchor="middle">Réserver un cours</text>
+                </g>
+                <g class="use-case">
+                    <rect x="400" y="330" width="180" height="40" rx="20" fill="#18181b" stroke="url(#blueGrad)" stroke-width="2"/>
+                    <text x="490" y="355" fill="#fafafa" font-family="'Inter', sans-serif" font-size="10px" font-weight="600" text-anchor="middle">Consulter code pointage</text>
+                </g>
+            </svg>
+        </div>
+
+        <table style="width: 100%; margin-top: 15px;">
+            <thead>
+                <tr>
+                    <th style="width: 120px;">Acteur</th>
+                    <th>Fonctionnalités associées</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="color: var(--color-blue); font-weight: bold;">Membre</td>
+                    <td>S'authentifier, Gérer son profil, Consulter le planning, Réserver un cours, Consulter son code à 6 chiffres.</td>
+                </tr>
+                <tr>
+                    <td style="color: var(--color-primary); font-weight: bold;">Admin</td>
+                    <td>S'authentifier, Gérer les membres, Configurer les cours, Gérer les salles, Enregistrer les visites, Suivre les revenus.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="footer">
+            <span>FITZONE - Dossier de Conception</span>
+            <span>Page 3 / 11</span>
+        </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- PAGE 4: 1.2 DIAGRAMME DE CLASSES -->
+    <!-- ================================================================= -->
+    <div class="page">
+        <div class="header">
+            <div class="logo">FIT<span>ZONE</span></div>
+            <div class="subtitle">1. Diagrammes UML</div>
+        </div>
+
+        <h1>1.2 — Diagramme de Classes UML</h1>
+        <p>
+            Ce diagramme structure les entités du système de réservation et de pointage, définissant leurs propriétés et associations.
+        </p>
+
+        <div class="diagram-container" style="padding: 15px; margin: 15px 0; background-color: #0b111e; border-radius: 8px; border: 1px solid #1e293b;">
+            <svg viewBox="0 0 800 420" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                <!-- Background Grid -->
+                <rect width="100%" height="100%" fill="#0b111e" rx="8"/>
+                <rect width="100%" height="100%" fill="url(#grid)" rx="8"/>
+
+                <!-- Markers for Arrows -->
+                <defs>
+                    <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 0 L 10 5 L 0 10 z" fill="#00f2fe"/>
+                    </marker>
+                    <marker id="arrowRed" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 0 L 10 5 L 0 10 z" fill="#ff758c"/>
+                    </marker>
+                </defs>
+
+                <!-- Class: User (Left) -->
+                <g transform="translate(40, 110)">
+                    <rect width="180" height="180" rx="6" fill="#18181b" stroke="#0284c7" stroke-width="2"/>
+                    <rect width="180" height="30" rx="6" fill="url(#blueGrad)"/>
+                    <text x="90" y="20" fill="#0b111e" font-family="'Oswald', sans-serif" font-size="14px" font-weight="700" text-anchor="middle">User</text>
+                    
+                    <!-- Attributes -->
+                    <text x="10" y="50" fill="#fafafa" font-family="monospace" font-size="11px">+int id</text>
+                    <text x="10" y="68" fill="#fafafa" font-family="monospace" font-size="11px">+string name</text>
+                    <text x="10" y="86" fill="#fafafa" font-family="monospace" font-size="11px">+string email</text>
+                    <text x="10" y="104" fill="#fafafa" font-family="monospace" font-size="11px">+string role</text>
+                    <text x="10" y="122" fill="#fafafa" font-family="monospace" font-size="11px">+string code_pointage</text>
+                    
+                    <line x1="0" y1="135" x2="180" y2="135" stroke="#0284c7" stroke-dasharray="2 2"/>
+                    
+                    <!-- Methods -->
+                    <text x="10" y="152" fill="#fafafa" font-family="monospace" font-size="11px">+auth()</text>
+                    <text x="10" y="170" fill="#fafafa" font-family="monospace" font-size="11px">+getCodePointage()</text>
+                </g>
+
+                <!-- Class: Abonnement (Top Middle) -->
+                <g transform="translate(310, 20)">
+                    <rect width="180" height="150" rx="6" fill="#18181b" stroke="#0284c7" stroke-width="2"/>
+                    <rect width="180" height="30" rx="6" fill="url(#blueGrad)"/>
+                    <text x="90" y="20" fill="#0b111e" font-family="'Oswald', sans-serif" font-size="14px" font-weight="700" text-anchor="middle">Abonnement</text>
+                    
+                    <!-- Attributes -->
+                    <text x="10" y="50" fill="#fafafa" font-family="monospace" font-size="11px">+int id</text>
+                    <text x="10" y="68" fill="#fafafa" font-family="monospace" font-size="11px">+string type</text>
+                    <text x="10" y="86" fill="#fafafa" font-family="monospace" font-size="11px">+date date_debut</text>
+                    <text x="10" y="104" fill="#fafafa" font-family="monospace" font-size="11px">+date date_fin</text>
+                    <text x="10" y="122" fill="#fafafa" font-family="monospace" font-size="11px">+string statut</text>
+                    
+                    <line x1="0" y1="130" x2="180" y2="130" stroke="#0284c7" stroke-dasharray="2 2"/>
+                    
+                    <!-- Methods -->
+                    <text x="10" y="144" fill="#fafafa" font-family="monospace" font-size="11px">+renouveler()</text>
+                </g>
+
+                <!-- Class: Visite (Bottom Middle) -->
+                <g transform="translate(310, 220)">
+                    <rect width="180" height="110" rx="6" fill="#18181b" stroke="#0284c7" stroke-width="2"/>
+                    <rect width="180" height="30" rx="6" fill="url(#blueGrad)"/>
+                    <text x="90" y="20" fill="#0b111e" font-family="'Oswald', sans-serif" font-size="14px" font-weight="700" text-anchor="middle">Visite</text>
+                    
+                    <!-- Attributes -->
+                    <text x="10" y="50" fill="#fafafa" font-family="monospace" font-size="11px">+int id</text>
+                    <text x="10" y="68" fill="#fafafa" font-family="monospace" font-size="11px">+int user_id</text>
+                    <text x="10" y="86" fill="#fafafa" font-family="monospace" font-size="11px">+datetime date_visite</text>
+                </g>
+
+                <!-- Class: Cours (Top Right) -->
+                <g transform="translate(580, 50)">
+                    <rect width="180" height="150" rx="6" fill="#18181b" stroke="#0284c7" stroke-width="2"/>
+                    <rect width="180" height="30" rx="6" fill="url(#blueGrad)"/>
+                    <text x="90" y="20" fill="#0b111e" font-family="'Oswald', sans-serif" font-size="14px" font-weight="700" text-anchor="middle">Cours</text>
+                    
+                    <!-- Attributes -->
+                    <text x="10" y="50" fill="#fafafa" font-family="monospace" font-size="11px">+int id</text>
+                    <text x="10" y="68" fill="#fafafa" font-family="monospace" font-size="11px">+string titre</text>
+                    <text x="10" y="86" fill="#fafafa" font-family="monospace" font-size="11px">+datetime date_heure</text>
+                    <text x="10" y="104" fill="#fafafa" font-family="monospace" font-size="11px">+int duree</text>
+                    
+                    <line x1="0" y1="115" x2="180" y2="115" stroke="#0284c7" stroke-dasharray="2 2"/>
+                    
+                    <!-- Methods -->
+                    <text x="10" y="132" fill="#fafafa" font-family="monospace" font-size="11px">+validerCapacite()</text>
+                </g>
+
+                <!-- Class: Salle (Bottom Right) -->
+                <g transform="translate(580, 240)">
+                    <rect width="180" height="130" rx="6" fill="#18181b" stroke="#0284c7" stroke-width="2"/>
+                    <rect width="180" height="30" rx="6" fill="url(#blueGrad)"/>
+                    <text x="90" y="20" fill="#0b111e" font-family="'Oswald', sans-serif" font-size="14px" font-weight="700" text-anchor="middle">Salle</text>
+                    
+                    <!-- Attributes -->
+                    <text x="10" y="50" fill="#fafafa" font-family="monospace" font-size="11px">+int id</text>
+                    <text x="10" y="68" fill="#fafafa" font-family="monospace" font-size="11px">+string nom</text>
+                    <text x="10" y="86" fill="#fafafa" font-family="monospace" font-size="11px">+int capacite</text>
+                    
+                    <line x1="0" y1="100" x2="180" y2="100" stroke="#0284c7" stroke-dasharray="2 2"/>
+                    
+                    <!-- Methods -->
+                    <text x="10" y="118" fill="#fafafa" font-family="monospace" font-size="11px">+getDisponibilite()</text>
+                </g>
+
+                <!-- Associations (Lines & Multiplicities) -->
+                <!-- User to Abonnement -->
+                <path d="M 220 150 L 310 95" stroke="#00f2fe" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+                <text x="230" y="135" fill="#a1a1aa" font-family="'Inter', sans-serif" font-size="11px">1</text>
+                <text x="290" y="85" fill="#a1a1aa" font-family="'Inter', sans-serif" font-size="11px">0..*</text>
+                <text x="265" y="110" fill="#00f2fe" font-family="'Inter', sans-serif" font-size="10px" font-weight="500" text-anchor="middle">possède</text>
+
+                <!-- User to Visite -->
+                <path d="M 220 230 L 310 275" stroke="#00f2fe" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+                <text x="230" y="245" fill="#a1a1aa" font-family="'Inter', sans-serif" font-size="11px">1</text>
+                <text x="290" y="295" fill="#a1a1aa" font-family="'Inter', sans-serif" font-size="11px">0..*</text>
+                <text x="265" y="265" fill="#00f2fe" font-family="'Inter', sans-serif" font-size="10px" font-weight="500" text-anchor="middle">effectue</text>
+
+                <!-- User to Cours -->
+                <path d="M 220 180 Q 400 190 580 140" stroke="#00f2fe" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+                <text x="230" y="195" fill="#a1a1aa" font-family="'Inter', sans-serif" font-size="11px">*</text>
+                <text x="560" y="155" fill="#a1a1aa" font-family="'Inter', sans-serif" font-size="11px">*</text>
+                <text x="400" y="178" fill="#00f2fe" font-family="'Inter', sans-serif" font-size="10px" font-weight="500" text-anchor="middle">réserve</text>
+
+                <!-- Cours to Salle -->
+                <path d="M 670 200 L 670 240" stroke="#00f2fe" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+                <text x="655" y="215" fill="#a1a1aa" font-family="'Inter', sans-serif" font-size="11px">*</text>
+                <text x="655" y="235" fill="#a1a1aa" font-family="'Inter', sans-serif" font-size="11px">1</text>
+                <text x="730" y="224" fill="#00f2fe" font-family="'Inter', sans-serif" font-size="10px" font-weight="500" text-anchor="middle">se déroule dans</text>
+            </svg>
+        </div>
+
+        <h3 style="margin-top: 20px;">Détail des associations :</h3>
+        <ul>
+            <li><strong>User - Abonnement :</strong> Un membre possède une liste historique de contrats d'abonnement (1 à plusieurs).</li>
+            <li><strong>User - Cours :</strong> Les réservations de séances sont gérées par une relation de plusieurs à plusieurs.</li>
+            <li><strong>Cours - Salle :</strong> Chaque séance planifiée est affectée à une unique salle disposant d'une capacité maximale définie.</li>
+        </ul>
+
+        <div class="footer">
+            <span>FITZONE - Dossier de Conception</span>
+            <span>Page 4 / 11</span>
+        </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- PAGE 5: 1.3 DIAGRAMME DE SEQUENCE -->
+    <!-- ================================================================= -->
+    <div class="page">
+        <div class="header">
+            <div class="logo">FIT<span>ZONE</span></div>
+            <div class="subtitle">1. Diagrammes UML</div>
+        </div>
+
+        <h1>1.3 — Diagramme de Séquence (Pointage par Code)</h1>
+        <p>
+            Modélisation dynamique du processus de pointage physique aux portiques d'entrée de la salle à l'aide du code personnel à 6 chiffres.
+        </p>
+
+        <div class="diagram-container" style="padding: 15px; margin: 15px 0; background-color: #0b111e; border-radius: 8px; border: 1px solid #1e293b;">
+            <svg viewBox="0 0 800 450" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                <!-- Background Grid -->
+                <rect width="100%" height="100%" fill="#0b111e" rx="8"/>
+                <rect width="100%" height="100%" fill="url(#grid)" rx="8"/>
+
+                <!-- Markers for sequence arrows -->
+                <defs>
+                    <marker id="seqArrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 0 L 10 5 L 0 10 z" fill="#00f2fe"/>
+                    </marker>
+                    <marker id="seqArrowReturn" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 0 L 10 5 L 0 10 z" fill="#a1a1aa"/>
+                    </marker>
+                </defs>
+
+                <!-- Participant Lifelines -->
+                <g stroke="#1e293b" stroke-width="2" stroke-dasharray="4 4">
+                    <line x1="100" y1="60" x2="100" y2="410" />
+                    <line x1="280" y1="60" x2="280" y2="410" />
+                    <line x1="480" y1="60" x2="480" y2="410" />
+                    <line x1="680" y1="60" x2="680" y2="410" />
+                </g>
+
+                <!-- Participant Headers -->
+                <g font-family="'Oswald', sans-serif" font-size="12px" font-weight="700" text-anchor="middle" fill="#0b111e">
+                    <!-- Membre -->
+                    <rect x="30" y="20" width="140" height="30" rx="4" fill="url(#blueGrad)"/>
+                    <text x="100" y="40">Membre</text>
+                    
+                    <!-- Admin / Clavier -->
+                    <rect x="210" y="20" width="140" height="30" rx="4" fill="url(#blueGrad)"/>
+                    <text x="280" y="40">Clavier / Portique</text>
+                    
+                    <!-- API Backend (Laravel) -->
+                    <rect x="410" y="20" width="140" height="30" rx="4" fill="url(#blueGrad)"/>
+                    <text x="480" y="40">API (Laravel)</text>
+                    
+                    <!-- Base MySQL -->
+                    <rect x="610" y="20" width="140" height="30" rx="4" fill="url(#blueGrad)"/>
+                    <text x="680" y="40">Base MySQL</text>
+                </g>
+
+                <!-- Messages & Activations -->
+                <!-- 1. Code fourni -->
+                <path d="M 100 90 L 280 90" stroke="#00f2fe" stroke-width="1.5" fill="none" marker-end="url(#seqArrow)"/>
+                <text x="190" y="85" fill="#fafafa" font-family="'Inter', sans-serif" font-size="10px" text-anchor="middle">1. Saisit le code (6 chiffres)</text>
+
+                <!-- 2. POST Validation -->
+                <path d="M 280 120 L 480 120" stroke="#00f2fe" stroke-width="1.5" fill="none" marker-end="url(#seqArrow)"/>
+                <text x="380" y="115" fill="#fafafa" font-family="'Inter', sans-serif" font-size="10px" text-anchor="middle">2. POST /api/pointage/valider</text>
+
+                <!-- 3. Query -->
+                <path d="M 480 150 L 680 150" stroke="#00f2fe" stroke-width="1.5" fill="none" marker-end="url(#seqArrow)"/>
+                <text x="580" y="145" fill="#fafafa" font-family="'Inter', sans-serif" font-size="10px" text-anchor="middle">3. SELECT * FROM users...</text>
+
+                <!-- 4. Result -->
+                <path d="M 680 180 L 480 180" stroke="#a1a1aa" stroke-width="1.5" stroke-dasharray="2 2" fill="none" marker-end="url(#seqArrowReturn)"/>
+                <text x="580" y="175" fill="#a1a1aa" font-family="'Inter', sans-serif" font-size="10px" text-anchor="middle">4. Infos Membre</text>
+
+                <!-- ALT BOX -->
+                <rect x="40" y="195" width="700" height="210" rx="6" fill="rgba(24, 24, 27, 0.4)" stroke="#ff758c" stroke-width="1" stroke-dasharray="3 3"/>
+                <rect x="40" y="195" width="220" height="20" rx="3" fill="#ff758c"/>
+                <text x="50" y="209" fill="#0b111e" font-family="'Inter', sans-serif" font-size="10px" font-weight="700">ALT : Code incorrect OU inactif</text>
+
+                <!-- 5. Denied -->
+                <path d="M 480 230 L 280 230" stroke="#ff758c" stroke-width="1.5" stroke-dasharray="2 2" fill="none" marker-end="url(#arrowRed)"/>
+                <text x="380" y="225" fill="#ff758c" font-family="'Inter', sans-serif" font-size="10px" text-anchor="middle">5. HTTP 400 Access Denied</text>
+
+                <!-- 6. Physical Denied -->
+                <path d="M 280 255 L 100 255" stroke="#ff758c" stroke-width="1.5" stroke-dasharray="2 2" fill="none" marker-end="url(#arrowRed)"/>
+                <text x="190" y="250" fill="#ff758c" font-family="'Inter', sans-serif" font-size="10px" text-anchor="middle">6. Refus physique (Signal Rouge)</text>
+
+                <!-- Separation line -->
+                <line x1="40" y1="275" x2="740" y2="275" stroke="#ff758c" stroke-width="1" stroke-dasharray="1 4"/>
+                <text x="50" y="292" fill="#00f2fe" font-family="'Inter', sans-serif" font-size="10px" font-weight="700">[ Sinon : Code valide &amp; Actif ]</text>
+
+                <!-- 7. Insert Visite -->
+                <path d="M 480 310 L 680 310" stroke="#00f2fe" stroke-width="1.5" fill="none" marker-end="url(#seqArrow)"/>
+                <text x="580" y="305" fill="#fafafa" font-family="'Inter', sans-serif" font-size="10px" text-anchor="middle">7. INSERT INTO visites</text>
+
+                <!-- 8. DB OK -->
+                <path d="M 680 335 L 480 335" stroke="#a1a1aa" stroke-width="1.5" stroke-dasharray="2 2" fill="none" marker-end="url(#seqArrowReturn)"/>
+                <text x="580" y="330" fill="#a1a1aa" font-family="'Inter', sans-serif" font-size="10px" text-anchor="middle">8. Succès</text>
+
+                <!-- 9. HTTP 200 -->
+                <path d="M 480 360 L 280 360" stroke="#00f2fe" stroke-width="1.5" stroke-dasharray="2 2" fill="none" marker-end="url(#seqArrowReturn)"/>
+                <text x="380" y="355" fill="#fafafa" font-family="'Inter', sans-serif" font-size="10px" text-anchor="middle">9. HTTP 200 Access Granted</text>
+
+                <!-- 10. Open -->
+                <path d="M 280 385 L 100 385" stroke="#00f2fe" stroke-width="1.5" stroke-dasharray="2 2" fill="none" marker-end="url(#seqArrowReturn)"/>
+                <text x="190" y="380" fill="#fafafa" font-family="'Inter', sans-serif" font-size="10px" text-anchor="middle">10. Ouverture physique (Accès Vert)</text>
+            </svg>
+        </div>
+
+        <h3 style="margin-top: 15px;">Sécurité du pointage :</h3>
+        <p>
+            Le code de pointage est généré aléatoirement et hashé côté backend. L'appel à l'API de validation est protégé par un middleware administrateur pour éviter les tentatives de brute-force externes.
+        </p>
+
+        <div class="footer">
+            <span>FITZONE - Dossier de Conception</span>
+            <span>Page 5 / 11</span>
+        </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- PAGE 6: 2 BASE DE DONNEES - 2.1 MCD -->
+    <!-- ================================================================= -->
+    <div class="page">
+        <div class="header">
+            <div class="logo">FIT<span>ZONE</span></div>
+            <div class="subtitle">2. Base de Données</div>
+        </div>
+
+        <div class="section-banner">
+            <div class="number">2</div>
+            Base de Données
+        </div>
+
+        <h2 style="font-size: 16px;">2.1 — MCD : Modèle Conceptuel de Données</h2>
+        <p>
+            Le modèle conceptuel formalise la structure logique de stockage des données de la plateforme FITZONE et définit les règles d'intégrité référentielle.
+        </p>
+
+        <div class="diagram-container" style="padding: 15px; margin: 15px 0; background-color: #0b111e; border-radius: 8px; border: 1px solid #1e293b; display: block;">
+            <svg viewBox="0 0 900 500" style="width: 100%; height: auto; display: block;" xmlns="http://www.w3.org/2000/svg">
+                <!-- Background Grid -->
+                <rect width="100%" height="100%" fill="#0b111e" rx="8"/>
+                <rect width="100%" height="100%" fill="url(#grid)" rx="8"/>
+
+                <!-- Entities -->
+                <!-- USERS Entity (Center) -->
+                <g transform="translate(370, 200)">
+                    <rect width="160" height="100" rx="5" fill="#18181b" stroke="#0284c7" stroke-width="2"/>
+                    <rect width="160" height="25" rx="5" fill="url(#blueGrad)"/>
+                    <text x="80" y="17" fill="#0b111e" font-family="'Oswald', sans-serif" font-size="12px" font-weight="700" text-anchor="middle">USERS</text>
+                    <text x="10" y="42" fill="#fafafa" font-family="monospace" font-size="10px" text-decoration="underline">id</text>
+                    <text x="10" y="58" fill="#fafafa" font-family="monospace" font-size="10px">name</text>
+                    <text x="10" y="74" fill="#fafafa" font-family="monospace" font-size="10px">email</text>
+                    <text x="10" y="90" fill="#fafafa" font-family="monospace" font-size="10px">code_pointage</text>
+                </g>
+
+                <!-- ABONNEMENTS Entity (Top) -->
+                <g transform="translate(370, 15)">
+                    <rect width="160" height="80" rx="5" fill="#18181b" stroke="#0284c7" stroke-width="2"/>
+                    <rect width="160" height="25" rx="5" fill="url(#blueGrad)"/>
+                    <text x="80" y="17" fill="#0b111e" font-family="'Oswald', sans-serif" font-size="12px" font-weight="700" text-anchor="middle">ABONNEMENTS</text>
+                    <text x="10" y="42" fill="#fafafa" font-family="monospace" font-size="10px" text-decoration="underline">id</text>
+                    <text x="10" y="58" fill="#fafafa" font-family="monospace" font-size="10px">type</text>
+                    <text x="10" y="74" fill="#fafafa" font-family="monospace" font-size="10px">statut</text>
+                </g>
+
+                <!-- PAIEMENTS Entity (Left) -->
+                <g transform="translate(40, 205)">
+                    <rect width="160" height="90" rx="5" fill="#18181b" stroke="#0284c7" stroke-width="2"/>
+                    <rect width="160" height="25" rx="5" fill="url(#blueGrad)"/>
+                    <text x="80" y="17" fill="#0b111e" font-family="'Oswald', sans-serif" font-size="12px" font-weight="700" text-anchor="middle">PAIEMENTS</text>
+                    <text x="10" y="42" fill="#fafafa" font-family="monospace" font-size="10px" text-decoration="underline">id</text>
+                    <text x="10" y="58" fill="#fafafa" font-family="monospace" font-size="10px">montant</text>
+                    <text x="10" y="74" fill="#fafafa" font-family="monospace" font-size="10px">statut</text>
+                </g>
+
+                <!-- VISITES Entity (Bottom) -->
+                <g transform="translate(370, 395)">
+                    <rect width="160" height="80" rx="5" fill="#18181b" stroke="#0284c7" stroke-width="2"/>
+                    <rect width="160" height="25" rx="5" fill="url(#blueGrad)"/>
+                    <text x="80" y="17" fill="#0b111e" font-family="'Oswald', sans-serif" font-size="12px" font-weight="700" text-anchor="middle">VISITES</text>
+                    <text x="10" y="42" fill="#fafafa" font-family="monospace" font-size="10px" text-decoration="underline">id</text>
+                    <text x="10" y="58" fill="#fafafa" font-family="monospace" font-size="10px">date_visite</text>
+                </g>
+
+                <!-- COURS Entity (Right Top) -->
+                <g transform="translate(690, 205)">
+                    <rect width="160" height="90" rx="5" fill="#18181b" stroke="#0284c7" stroke-width="2"/>
+                    <rect width="160" height="25" rx="5" fill="url(#blueGrad)"/>
+                    <text x="80" y="17" fill="#0b111e" font-family="'Oswald', sans-serif" font-size="12px" font-weight="700" text-anchor="middle">COURS</text>
+                    <text x="10" y="42" fill="#fafafa" font-family="monospace" font-size="10px" text-decoration="underline">id</text>
+                    <text x="10" y="58" fill="#fafafa" font-family="monospace" font-size="10px">titre</text>
+                    <text x="10" y="74" fill="#fafafa" font-family="monospace" font-size="10px">date_heure</text>
+                </g>
+
+                <!-- SALLES Entity (Right Bottom) -->
+                <g transform="translate(690, 395)">
+                    <rect width="160" height="80" rx="5" fill="#18181b" stroke="#0284c7" stroke-width="2"/>
+                    <rect width="160" height="25" rx="5" fill="url(#blueGrad)"/>
+                    <text x="80" y="17" fill="#0b111e" font-family="'Oswald', sans-serif" font-size="12px" font-weight="700" text-anchor="middle">SALLES</text>
+                    <text x="10" y="42" fill="#fafafa" font-family="monospace" font-size="10px" text-decoration="underline">id</text>
+                    <text x="10" y="58" fill="#fafafa" font-family="monospace" font-size="10px">nom</text>
+                    <text x="10" y="74" fill="#fafafa" font-family="monospace" font-size="10px">capacite</text>
+                </g>
+
+                <!-- Associations (Ovals) & Cardinalities -->
+                <!-- Users to Abonnements -->
+                <line x1="450" y1="200" x2="450" y2="95" stroke="#a1a1aa" stroke-width="1.5"/>
+                <g transform="translate(450, 145)">
+                    <ellipse rx="45" ry="15" fill="#18181b" stroke="url(#purpleGrad)" stroke-width="1.5"/>
+                    <text x="0" y="4" fill="#fafafa" font-family="'Inter', sans-serif" font-size="10px" font-weight="600" text-anchor="middle">possède</text>
+                </g>
+                <text x="465" y="185" fill="#a1a1aa" font-family="'Inter', sans-serif" font-size="10px" font-weight="600">0,N</text>
+                <text x="465" y="115" fill="#a1a1aa" font-family="'Inter', sans-serif" font-size="10px" font-weight="600">1,1</text>
+
+                <!-- Users to Paiements -->
+                <line x1="370" y1="250" x2="200" y2="250" stroke="#a1a1aa" stroke-width="1.5"/>
+                <g transform="translate(285, 250)">
+                    <ellipse rx="42" ry="15" fill="#18181b" stroke="url(#purpleGrad)" stroke-width="1.5"/>
+                    <text x="0" y="4" fill="#fafafa" font-family="'Inter', sans-serif" font-size="10px" font-weight="600" text-anchor="middle">règle</text>
+                </g>
+                <text x="340" y="242" fill="#a1a1aa" font-family="'Inter', sans-serif" font-size="10px" font-weight="600">0,N</text>
+                <text x="215" y="242" fill="#a1a1aa" font-family="'Inter', sans-serif" font-size="10px" font-weight="600">1,1</text>
+
+                <!-- Users to Visites -->
+                <line x1="450" y1="300" x2="450" y2="395" stroke="#a1a1aa" stroke-width="1.5"/>
+                <g transform="translate(450, 350)">
+                    <ellipse rx="45" ry="15" fill="#18181b" stroke="url(#purpleGrad)" stroke-width="1.5"/>
+                    <text x="0" y="4" fill="#fafafa" font-family="'Inter', sans-serif" font-size="10px" font-weight="600" text-anchor="middle">effectue</text>
+                </g>
+                <text x="465" y="320" fill="#a1a1aa" font-family="'Inter', sans-serif" font-size="10px" font-weight="600">0,N</text>
+                <text x="465" y="385" fill="#a1a1aa" font-family="'Inter', sans-serif" font-size="10px" font-weight="600">1,1</text>
+
+                <!-- Users to Cours -->
+                <line x1="530" y1="250" x2="690" y2="250" stroke="#a1a1aa" stroke-width="1.5"/>
+                <g transform="translate(610, 250)">
+                    <ellipse rx="42" ry="15" fill="#18181b" stroke="url(#purpleGrad)" stroke-width="1.5"/>
+                    <text x="0" y="4" fill="#fafafa" font-family="'Inter', sans-serif" font-size="10px" font-weight="600" text-anchor="middle">réserve</text>
+                </g>
+                <text x="545" y="242" fill="#a1a1aa" font-family="'Inter', sans-serif" font-size="10px" font-weight="600">0,N</text>
+                <text x="665" y="242" fill="#a1a1aa" font-family="'Inter', sans-serif" font-size="10px" font-weight="600">0,N</text>
+
+                <!-- Cours to Salles -->
+                <line x1="770" y1="295" x2="770" y2="395" stroke="#a1a1aa" stroke-width="1.5"/>
+                <g transform="translate(770, 345)">
+                    <ellipse rx="45" ry="15" fill="#18181b" stroke="url(#purpleGrad)" stroke-width="1.5"/>
+                    <text x="0" y="4" fill="#fafafa" font-family="'Inter', sans-serif" font-size="9px" font-weight="600" text-anchor="middle">se déroule</text>
+                </g>
+                <text x="785" y="315" fill="#a1a1aa" font-family="'Inter', sans-serif" font-size="10px" font-weight="600">1,1</text>
+                <text x="785" y="385" fill="#a1a1aa" font-family="'Inter', sans-serif" font-size="10px" font-weight="600">0,N</text>
+            </svg>
+        </div>
+
+        <table style="width: 100%; margin-top: 15px;">
+            <thead>
+                <tr>
+                    <th>Entité</th>
+                    <th>Description de l'entité</th>
+                    <th>Cardinalité avec l'utilisateur</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="font-weight: bold; color: var(--color-text);">USER</td>
+                    <td>Représente les membres abonnés ainsi que les administrateurs.</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold; color: var(--color-text);">ABONNEMENT</td>
+                    <td>Représente le contrat d'accès acheté par un membre.</td>
+                    <td>1 USER &rarr; 0..* ABONNEMENT</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold; color: var(--color-text);">VISITE</td>
+                    <td>Enregistrement du passage aux portiques de pointage.</td>
+                    <td>1 USER &rarr; 0..* VISITE</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold; color: var(--color-text);">PAIEMENT</td>
+                    <td>Suivi financier des cotisations mensuelles.</td>
+                    <td>1 USER &rarr; 0..* PAIEMENT</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="footer">
+            <span>FITZONE - Dossier de Conception</span>
+            <span>Page 6 / 11</span>
+        </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- PAGE 7: 2.2 MLD -->
+    <!-- ================================================================= -->
+    <div class="page">
+        <div class="header">
+            <div class="logo">FIT<span>ZONE</span></div>
+            <div class="subtitle">2. Base de Données</div>
+        </div>
+
+        <h1>2.2 — MLD : Modèle Logique de Données</h1>
+        <p>
+            Représentation relationnelle avec les clés primaires (PK) et les clés étrangères (FK) pour l'ensemble des tables de notre base de données MySQL.
+        </p>
+
+        <!-- Elegant DB visual columns mapping -->
+        <div class="mld-grid">
+            
+            <!-- Table USERS -->
+            <div class="mld-table-card">
+                <div class="mld-table-header">USERS</div>
+                <div class="mld-table-rows">
+                    <div class="mld-table-row">
+                        <div class="mld-row-left"><span class="mld-row-type">int</span> <span class="mld-row-name">id</span></div>
+                        <div class="mld-row-right"><span class="badge badge-pk">PK</span></div>
+                    </div>
+                    <div class="mld-table-row">
+                        <div class="mld-row-left"><span class="mld-row-type">string</span> <span class="mld-row-name">name</span></div>
+                    </div>
+                    <div class="mld-table-row">
+                        <div class="mld-row-left"><span class="mld-row-type">string</span> <span class="mld-row-name">email</span></div>
+                    </div>
+                    <div class="mld-table-row">
+                        <div class="mld-row-left"><span class="mld-row-type">string</span> <span class="mld-row-name">password</span></div>
+                    </div>
+                    <div class="mld-table-row">
+                        <div class="mld-row-left"><span class="mld-row-type">string</span> <span class="mld-row-name">role</span></div>
+                    </div>
+                    <div class="mld-table-row">
+                        <div class="mld-row-left"><span class="mld-row-type">string</span> <span class="mld-row-name">code_pointage</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table SALLES -->
+            <div class="mld-table-card">
+                <div class="mld-table-header">SALLES</div>
+                <div class="mld-table-rows">
+                    <div class="mld-table-row">
+                        <div class="mld-row-left"><span class="mld-row-type">int</span> <span class="mld-row-name">id</span></div>
+                        <div class="mld-row-right"><span class="badge badge-pk">PK</span></div>
+                    </div>
+                    <div class="mld-table-row">
+                        <div class="mld-row-left"><span class="mld-row-type">string</span> <span class="mld-row-name">nom</span></div>
+                    </div>
+                    <div class="mld-table-row">
+                        <div class="mld-row-left"><span class="mld-row-type">int</span> <span class="mld-row-name">capacite</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table COURS -->
+            <div class="mld-table-card">
+                <div class="mld-table-header">COURS</div>
+                <div class="mld-table-rows">
+                    <div class="mld-table-row">
+                        <div class="mld-row-left"><span class="mld-row-type">int</span> <span class="mld-row-name">id</span></div>
+                        <div class="mld-row-right"><span class="badge badge-pk">PK</span></div>
+                    </div>
+                    <div class="mld-table-row">
+                        <div class="mld-row-left"><span class="mld-row-type">int</span> <span class="mld-row-name">salle_id</span></div>
+                        <div class="mld-row-right"><span class="badge badge-fk">FK</span></div>
+                    </div>
+                    <div class="mld-table-row">
+                        <div class="mld-row-left"><span class="mld-row-type">string</span> <span class="mld-row-name">titre</span></div>
+                    </div>
+                    <div class="mld-table-row">
+                        <div class="mld-row-left"><span class="mld-row-type">datetime</span> <span class="mld-row-name">date_heure</span></div>
+                    </div>
+                    <div class="mld-table-row">
+                        <div class="mld-row-left"><span class="mld-row-type">int</span> <span class="mld-row-name">duree</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table ABONNEMENTS -->
+            <div class="mld-table-card">
+                <div class="mld-table-header">ABONNEMENTS</div>
+                <div class="mld-table-rows">
+                    <div class="mld-table-row">
+                        <div class="mld-row-left"><span class="mld-row-type">int</span> <span class="mld-row-name">id</span></div>
+                        <div class="mld-row-right"><span class="badge badge-pk">PK</span></div>
+                    </div>
+                    <div class="mld-table-row">
+                        <div class="mld-row-left"><span class="mld-row-type">int</span> <span class="mld-row-name">user_id</span></div>
+                        <div class="mld-row-right"><span class="badge badge-fk">FK</span></div>
+                    </div>
+                    <div class="mld-table-row">
+                        <div class="mld-row-left"><span class="mld-row-type">string</span> <span class="mld-row-name">type</span></div>
+                    </div>
+                    <div class="mld-table-row">
+                        <div class="mld-row-left"><span class="mld-row-type">date</span> <span class="mld-row-name">date_debut</span></div>
+                    </div>
+                    <div class="mld-table-row">
+                        <div class="mld-row-left"><span class="mld-row-type">date</span> <span class="mld-row-name">date_fin</span></div>
+                    </div>
+                    <div class="mld-table-row">
+                        <div class="mld-row-left"><span class="mld-row-type">string</span> <span class="mld-row-name">statut</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table VISITES (Wide or Centered) -->
+            <div class="mld-table-card wide">
+                <div class="mld-table-header">VISITES</div>
+                <div class="mld-table-rows">
+                    <div class="mld-table-row">
+                        <div class="mld-row-left"><span class="mld-row-type">int</span> <span class="mld-row-name">id</span></div>
+                        <div class="mld-row-right"><span class="badge badge-pk">PK</span></div>
+                    </div>
+                    <div class="mld-table-row">
+                        <div class="mld-row-left"><span class="mld-row-type">int</span> <span class="mld-row-name">user_id</span></div>
+                        <div class="mld-row-right"><span class="badge badge-fk">FK</span></div>
+                    </div>
+                    <div class="mld-table-row">
+                        <div class="mld-row-left"><span class="mld-row-type">datetime</span> <span class="mld-row-name">date_visite</span></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer">
+            <span>FITZONE - Dossier de Conception</span>
+            <span>Page 7 / 11</span>
+        </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- PAGE 8: 3 MAQUETTES UI - 3.1 HOMEPAGE -->
+    <!-- ================================================================= -->
+    <div class="page">
+        <div class="header">
+            <div class="logo">FIT<span>ZONE</span></div>
+            <div class="subtitle">3. Maquettes UI</div>
+        </div>
+
+        <div class="section-banner">
+            <div class="number">3</div>
+            Maquettes UI
+        </div>
+
+        <h2 style="font-size: 16px;">3.1 — Page d'Accueil (Hero Section)</h2>
+        <p>
+            Ci-dessous la maquette graphique de la section principale (Hero) du site public de FITZONE, mettant en valeur l'identité visuelle de la marque et l'inscription.
+        </p>
+
+        <div style="text-align: center; margin-top: 10px;">
+            <img src="screen_home.png" style="width: 100%; height: 160mm; object-fit: contain; background-color: #000; border-radius: 6px; border: 1px solid var(--color-border);" alt="Homepage Mockup">
+        </div>
+
+        <div class="footer">
+            <span>FITZONE - Dossier de Conception</span>
+            <span>Page 8 / 11</span>
+        </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- PAGE 9: 3.2 BOOKING INTERFACE -->
+    <!-- ================================================================= -->
+    <div class="page">
+        <div class="header">
+            <div class="logo">FIT<span>ZONE</span></div>
+            <div class="subtitle">3. Maquettes UI</div>
+        </div>
+
+        <h1>3.2 — Interface de Réservation</h1>
+        <p>
+            Interface web dédiée aux abonnés pour consulter le planning de la semaine, visualiser la disponibilité des cours et effectuer une réservation.
+        </p>
+
+        <div style="text-align: center; margin-top: 10px;">
+            <img src="screen_cours.png" style="width: 100%; height: 160mm; object-fit: contain; background-color: #000; border-radius: 6px; border: 1px solid var(--color-border);" alt="Booking Mockup">
+        </div>
+
+        <div class="footer">
+            <span>FITZONE - Dossier de Conception</span>
+            <span>Page 9 / 11</span>
+        </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- PAGE 10: 3.3 DASHBOARD ADMINISTRATION -->
+    <!-- ================================================================= -->
+    <div class="page">
+        <div class="header">
+            <div class="logo">FIT<span>ZONE</span></div>
+            <div class="subtitle">3. Maquettes UI</div>
+        </div>
+
+        <h1>3.3 — Dashboard d'Administration</h1>
+        <p>
+            Vue d'ensemble de l'interface de gestion pour l'administrateur de FITZONE. Elle permet le contrôle en temps réel du pointage des membres, le suivi des cotisations et des statistiques.
+        </p>
+
+        <div style="text-align: center; margin-top: 10px;">
+            <img src="screen_dashboard.png" style="width: 100%; height: 160mm; object-fit: contain; background-color: #000; border-radius: 6px; border: 1px solid var(--color-border);" alt="Dashboard Mockup">
+        </div>
+
+        <div class="footer">
+            <span>FITZONE - Dossier de Conception</span>
+            <span>Page 10 / 11</span>
+        </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- PAGE 11: 4 ARCHITECTURE TECHNIQUE -->
+    <!-- ================================================================= -->
+    <div class="page">
+        <div class="header">
+            <div class="logo">FIT<span>ZONE</span></div>
+            <div class="subtitle">4. Architecture Technique</div>
+        </div>
+
+        <div class="section-banner">
+            <div class="number">4</div>
+            Architecture Technique
+        </div>
+
+        <h2 style="font-size: 16px;">4.1 — Description de l'Architecture</h2>
+        <p>
+            L'application <strong>FITZONE</strong> repose sur une architecture découplée avec une séparation stricte des responsabilités (Client-Serveur). Cette approche garantit flexibilité, sécurité et fluidité dans les flux applicatifs.
+        </p>
+
+        <h3>Composants du socle technique :</h3>
+        <ul>
+            <li><strong>Frontend (React Client) :</strong> Application Single Page (SPA) hautement interactive utilisant des routes protégées, des services Axios structurés et une gestion globale du statut d'authentification utilisateur via Context API.</li>
+            <li><strong>Backend (Laravel REST API) :</strong> API robuste exposant des points d'accès sécurisés. La couche sécurité repose sur des jetons JWT cryptés qui identifient de manière unique le membre ou l'administrateur.</li>
+            <li><strong>Base de Données (MySQL) :</strong> Stockage persistant hautement optimisé pour les jointures et indexé pour les requêtes rapides requises lors de la validation physique du code de pointage par les membres.</li>
+        </ul>
+
+        <h3 style="margin-top: 15px;">Conclusion du Dossier de Conception :</h3>
+        <p>
+            Ce dossier présente la structure logicielle, conceptuelle et visuelle complète développée pour le projet <strong>FITZONE</strong> de mi-avril à fin juin 2026. La conception assure une base solide, validée et documentée pour toutes les phases de maintenance futures et d'évolution fonctionnelle de l'application.
+        </p>
+
+        <div class="footer">
+            <span>FITZONE - Dossier de Conception</span>
+            <span>Page 11 / 11</span>
+        </div>
+    </div>
+
+    <!-- Script to render Mermaid in Headless mode -->
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#ef4444',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#27272a',
+                lineColor: '#a1a1aa',
+                secondaryColor: '#18181b',
+                tertiaryColor: '#18181b',
+                mainBkg: '#18181b',
+                nodeBorder: '#ef4444'
+            }
+        });
+    </script>
+</body>
+</html>

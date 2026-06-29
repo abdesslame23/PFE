@@ -221,4 +221,55 @@ class PaiementController extends Controller
 
         return response()->json($users);
     }
+
+    public function validerAnneeEntiere(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'annee'   => 'required|integer|min:2020',
+            'statut'  => 'required|in:paye,impaye',
+            'methode' => 'nullable|string',
+            'notes'   => 'nullable|string',
+        ]);
+
+        $userId = $request->user_id;
+        $annee = $request->annee;
+        $statut = $request->statut;
+        $methode = $request->methode;
+        $notes = $request->notes ?? 'Règlement Annuel';
+
+        $paiements = [];
+        for ($mois = 1; $mois <= 12; $mois++) {
+            $paiement = Paiement::where('user_id', $userId)
+                               ->where('mois', $mois)
+                               ->where('annee', $annee)
+                               ->first();
+
+            if ($paiement) {
+                $paiement->update([
+                    'statut' => $statut,
+                    'date_paiement' => $statut === 'paye' ? now()->toDateString() : null,
+                    'methode' => $methode,
+                    'notes' => $notes,
+                ]);
+            } else {
+                $paiement = Paiement::create([
+                    'user_id' => $userId,
+                    'mois' => $mois,
+                    'annee' => $annee,
+                    'montant' => 350.00,
+                    'statut' => $statut,
+                    'date_paiement' => $statut === 'paye' ? now()->toDateString() : null,
+                    'methode' => $methode,
+                    'notes' => $notes,
+                ]);
+            }
+            $paiements[] = $paiement;
+        }
+
+        return response()->json([
+            'message' => 'Année entière validée.',
+            'paiements' => $paiements
+        ]);
+    }
 }

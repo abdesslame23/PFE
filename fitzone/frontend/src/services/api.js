@@ -70,6 +70,7 @@ export const paiementService = {
   recap: (params) => api.get('/paiements/recap', { params }),
   gestion: (params) => api.get('/paiements/gestion', { params }),
   marquerMensuel: (data) => api.post('/paiements/mensuel', data),
+  validerAnnuelle: (data) => api.post('/paiements/annuel', data),
   create: (data) => api.post('/paiements/store', data),
   marquerPaye: (id) => api.post(`/paiements/${id}/payer`),
   update: (id, data) => api.put(`/paiements/${id}`, data),
