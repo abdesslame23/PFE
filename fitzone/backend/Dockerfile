@@ -19,6 +19,9 @@ WORKDIR /var/www/html
 # Copy application code
 COPY . .
 
+# Delete local vendor folder if it was copied to avoid compilation conflicts
+RUN rm -rf vendor
+
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
